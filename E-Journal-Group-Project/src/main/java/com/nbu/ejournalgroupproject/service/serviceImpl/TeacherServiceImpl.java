@@ -32,8 +32,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public TeacherDTO getTeacher(Long teacherId) {
        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(EntityNotFoundException::new);
-       TeacherDTO teacherDTO = teacherMapper.TeacherEntityToDto(teacher);
-       return teacherDTO;
+       return teacherMapper.TeacherEntityToDto(teacher);
     }
 
     @Override

@@ -35,8 +35,7 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     public SchoolDTO getSchool(Long id) {
         School school = schoolRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        SchoolDTO schoolDTO = schoolMapper.SchoolEntityToDto(school);
-        return schoolDTO;
+        return schoolMapper.SchoolEntityToDto(school);
     }
 
     @Override

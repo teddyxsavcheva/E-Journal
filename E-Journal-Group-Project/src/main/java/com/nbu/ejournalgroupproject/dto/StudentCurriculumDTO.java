@@ -1,6 +1,5 @@
 package com.nbu.ejournalgroupproject.dto;
 
-import com.nbu.ejournalgroupproject.model.StudentCurriculumHasTeacherAndDiscipline;
 
 public class StudentCurriculumDTO {
     private Long id;

@@ -1,8 +1,5 @@
 package com.nbu.ejournalgroupproject.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nbu.ejournalgroupproject.model.School;
-import com.nbu.ejournalgroupproject.model.StudentCurriculumHasTeacherAndDiscipline;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
 import lombok.AllArgsConstructor;
 import lombok.Data;

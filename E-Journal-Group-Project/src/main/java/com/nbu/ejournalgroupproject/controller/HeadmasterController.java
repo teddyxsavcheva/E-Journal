@@ -1,12 +1,9 @@
 package com.nbu.ejournalgroupproject.controller;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
-import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -6,14 +6,12 @@ import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
 import com.nbu.ejournalgroupproject.repository.HeadmasterRepository;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
-import com.nbu.ejournalgroupproject.repository.TeacherRepository;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.InstanceNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +20,7 @@ import java.util.stream.Collectors;
 public class HeadmasterServiceImpl implements HeadmasterService {
 
     @Autowired
-    private final HeadmasterRepository headmasterRepository;;
+    private final HeadmasterRepository headmasterRepository;
 
     @Autowired
     private final SchoolRepository schoolRepository;

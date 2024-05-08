@@ -1,14 +1,11 @@
 package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.TeacherDTO;
-import com.nbu.ejournalgroupproject.model.Teacher;
 import com.nbu.ejournalgroupproject.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.nbu.ejournalgroupproject.dto;
 
-import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.SchoolType;
 import lombok.AllArgsConstructor;
 import lombok.Data;

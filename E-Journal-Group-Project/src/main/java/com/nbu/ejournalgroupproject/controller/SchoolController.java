@@ -1,6 +1,5 @@
 package com.nbu.ejournalgroupproject.controller;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.nbu.ejournalgroupproject.dto.SchoolDTO;
 import com.nbu.ejournalgroupproject.service.SchoolService;
 import jakarta.persistence.EntityNotFoundException;

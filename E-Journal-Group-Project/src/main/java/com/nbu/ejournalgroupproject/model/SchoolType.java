@@ -1,5 +1,6 @@
 package com.nbu.ejournalgroupproject.model;
-
+//moe
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nbu.ejournalgroupproject.enums.SchoolTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class SchoolType {
     @Enumerated(EnumType.STRING)
     private SchoolTypeEnum schoolTypeEnum;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "schoolType")
     private List<School> schools;
+
+
 }

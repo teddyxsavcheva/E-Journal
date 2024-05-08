@@ -1,7 +1,6 @@
 package com.nbu.ejournalgroupproject.service;
 
 import com.nbu.ejournalgroupproject.dto.SchoolDTO;
-import com.nbu.ejournalgroupproject.model.School;
 
 import java.util.List;
 

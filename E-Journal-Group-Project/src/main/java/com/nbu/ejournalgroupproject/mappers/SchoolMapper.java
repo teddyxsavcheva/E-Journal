@@ -2,14 +2,12 @@ package com.nbu.ejournalgroupproject.mappers;
 
 import com.nbu.ejournalgroupproject.dto.SchoolDTO;
 import com.nbu.ejournalgroupproject.dto.TeacherDTO;
-import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
 import com.nbu.ejournalgroupproject.model.Teacher;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
