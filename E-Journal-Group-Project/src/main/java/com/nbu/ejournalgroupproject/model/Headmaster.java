@@ -23,6 +23,7 @@ public class Headmaster {
     private String email;
 
     @OneToOne
+    @JoinColumn(name = "school_id")
     private School school;
 
 }
