@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "discipline_type")
 @Entity
 public class DisciplineType {
-
+    //TODO: Think about validations.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

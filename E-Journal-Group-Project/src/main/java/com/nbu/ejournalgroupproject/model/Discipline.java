@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "discipline")
 @Entity
 public class Discipline {
-
+    //TODO: Think about validations.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
