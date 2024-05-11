@@ -21,6 +21,7 @@ public class GradeType {
     private Long id;
 
     @Column(name = "grade_type_enum")
+    @Enumerated(EnumType.STRING)
     private GradeTypeEnum gradeTypeEnum;
 
     @OneToMany(mappedBy = "gradeType")

@@ -32,7 +32,6 @@ public class School {
     @OneToMany(mappedBy = "school")
     private List<Teacher> teachers;
 
-    // TO-DO: To fix how this looks like in the database
     @OneToOne(mappedBy = "school")
     private Headmaster headmaster;
 

@@ -21,6 +21,7 @@ public class DisciplineType {
     private Long id;
 
     @Column(name = "discipline_type_enum")
+    @Enumerated(EnumType.STRING)
     private DisciplineTypeEnum disciplineTypeEnum;
 
     @OneToMany(mappedBy = "disciplineType")
