@@ -2,7 +2,6 @@ package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.DisciplineTypeDTO;
 import com.nbu.ejournalgroupproject.mappers.DisciplineTypeMapper;
-import com.nbu.ejournalgroupproject.model.Discipline;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
 import com.nbu.ejournalgroupproject.repository.DisciplineTypeRepository;
 import com.nbu.ejournalgroupproject.service.DisciplineTypeService;

@@ -22,7 +22,6 @@ public class DisciplineServiceImpl implements DisciplineService {
     private final DisciplineTypeRepository disciplineTypeRepository;
     private final DisciplineMapper disciplineMapper;
 
-
     @Override
     public List<DisciplineDTO> getAllDisciplines() {
 
