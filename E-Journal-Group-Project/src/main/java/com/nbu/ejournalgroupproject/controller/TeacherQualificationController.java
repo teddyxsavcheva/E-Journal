@@ -31,7 +31,7 @@ public class TeacherQualificationController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TeacherQualificationDto> createTeacherQualification(TeacherQualificationDto teacherQualificationDto) {
+    public ResponseEntity<TeacherQualificationDto> createTeacherQualification(@RequestBody TeacherQualificationDto teacherQualificationDto) {
 
         TeacherQualificationDto createdDto = teacherQualificationService.createTeacherQualification(teacherQualificationDto);
 
@@ -40,7 +40,7 @@ public class TeacherQualificationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TeacherQualificationDto> updateTeacherQualification(TeacherQualificationDto teacherQualificationDto, @PathVariable Long id) {
+    public ResponseEntity<TeacherQualificationDto> updateTeacherQualification(@RequestBody TeacherQualificationDto teacherQualificationDto, @PathVariable Long id) {
 
         TeacherQualificationDto updatedDto = teacherQualificationService.updateTeacherQualification(teacherQualificationDto, id);
 

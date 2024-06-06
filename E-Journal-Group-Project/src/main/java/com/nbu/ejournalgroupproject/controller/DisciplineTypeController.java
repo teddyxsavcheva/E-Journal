@@ -34,6 +34,7 @@ public class DisciplineTypeController {
     public ResponseEntity<DisciplineTypeDto> updateDisciplineType(@RequestBody DisciplineTypeDto disciplineTypeDto, @PathVariable Long id) {
 
         DisciplineTypeDto updatedDto = disciplineTypeService.updateDisciplineType(disciplineTypeDto, id);
+
         return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
 
     }
@@ -42,6 +43,7 @@ public class DisciplineTypeController {
     public ResponseEntity<DisciplineTypeDto> createDisciplineType(@RequestBody DisciplineTypeDto disciplineTypeDto) {
 
         DisciplineTypeDto createdDto = disciplineTypeService.createDisciplineType(disciplineTypeDto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDto);
 
     }
@@ -50,6 +52,7 @@ public class DisciplineTypeController {
     public ResponseEntity<HttpStatus> deleteDisciplineType(@PathVariable Long id) {
 
         disciplineTypeService.deleteDisciplineType(id);
+
         return ResponseEntity.ok(HttpStatus.OK);
 
     }

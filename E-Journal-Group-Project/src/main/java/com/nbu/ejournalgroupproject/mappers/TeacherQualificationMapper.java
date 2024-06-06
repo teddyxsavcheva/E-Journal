@@ -23,6 +23,7 @@ public class TeacherQualificationMapper {
         TeacherQualification teacherQualification = new TeacherQualification();
 
         teacherQualification.setQualificationEnum(teacherQualificationDto.getQualificationEnum());
+
         return teacherQualification;
 
     }

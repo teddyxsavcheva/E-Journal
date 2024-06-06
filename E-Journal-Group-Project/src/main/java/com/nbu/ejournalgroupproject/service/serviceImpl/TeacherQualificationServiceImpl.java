@@ -57,7 +57,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
         TeacherQualification teacherQualification = teacherQualificationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id + " + id));
 
-        teacherQualification.setQualificationEnum(teacherQualification.getQualificationEnum());
+        teacherQualification.setQualificationEnum(dto.getQualificationEnum());
 
         return teacherQualificationMapper.convertToDto(teacherQualificationRepository.save(teacherQualification));
     }
