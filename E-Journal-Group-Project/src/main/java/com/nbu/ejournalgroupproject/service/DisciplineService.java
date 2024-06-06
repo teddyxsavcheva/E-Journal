@@ -1,20 +1,20 @@
 package com.nbu.ejournalgroupproject.service;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineDto;
 
 import java.util.List;
 
 public interface DisciplineService {
 
-    List<DisciplineDTO> getAllDisciplines();
+    List<DisciplineDto> getAllDisciplines();
 
-    DisciplineDTO getDisciplineById(Long id);
+    DisciplineDto getDisciplineById(Long id);
 
-    void createDiscipline(DisciplineDTO disciplineDTO);
+    DisciplineDto createDiscipline(DisciplineDto disciplineDTO);
 
-    void updateDiscipline(DisciplineDTO disciplineDTO, Long id);
+    DisciplineDto updateDiscipline(DisciplineDto disciplineDTO, Long id);
 
     void deleteDiscipline(Long id);
 
-    void validateDisciplineDTO(DisciplineDTO disciplineDTO);
+    void validateDisciplineDTO(DisciplineDto disciplineDTO);
 }

@@ -1,5 +1,6 @@
 package com.nbu.ejournalgroupproject.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,11 +8,13 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class DisciplineDTO {
+@AllArgsConstructor
+public class DisciplineDto {
 
-    //TODO: Think about validations.
     private Long id;
+
     private String name;
+
     private Long disciplineTypeId;
 
 }

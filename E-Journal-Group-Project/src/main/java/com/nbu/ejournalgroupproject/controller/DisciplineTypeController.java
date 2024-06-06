@@ -1,6 +1,6 @@
 package com.nbu.ejournalgroupproject.controller;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineTypeDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineTypeDto;
 import com.nbu.ejournalgroupproject.service.DisciplineTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,29 +17,33 @@ public class DisciplineTypeController {
     private final DisciplineTypeService disciplineTypeService;
 
     @GetMapping("/")
-    public ResponseEntity<List<DisciplineTypeDTO>> getAllDisciplineType() {
+    public ResponseEntity<List<DisciplineTypeDto>> getAllDisciplineType() {
 
         return ResponseEntity.ok(disciplineTypeService.getAllDisciplineTypes());
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DisciplineTypeDTO> getDisciplineTypeById(@PathVariable Long id) {
+    public ResponseEntity<DisciplineTypeDto> getDisciplineTypeById(@PathVariable Long id) {
 
         return ResponseEntity.ok(disciplineTypeService.getDisciplineTypeById(id));
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateDisciplineType(@RequestBody DisciplineTypeDTO disciplineTypeDTO, @PathVariable Long id) {
+    public ResponseEntity<DisciplineTypeDto> updateDisciplineType(@RequestBody DisciplineTypeDto disciplineTypeDto, @PathVariable Long id) {
 
-        disciplineTypeService.updateDisciplineType(disciplineTypeDTO, id);
-        return ResponseEntity.ok(HttpStatus.OK);
+        DisciplineTypeDto updatedDto = disciplineTypeService.updateDisciplineType(disciplineTypeDto, id);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+
     }
 
     @PostMapping("/")
-    public ResponseEntity<HttpStatus> createDisciplineType(@RequestBody DisciplineTypeDTO disciplineTypeDTO) {
+    public ResponseEntity<DisciplineTypeDto> createDisciplineType(@RequestBody DisciplineTypeDto disciplineTypeDto) {
 
-        disciplineTypeService.createDisciplineType(disciplineTypeDTO);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        DisciplineTypeDto createdDto = disciplineTypeService.createDisciplineType(disciplineTypeDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDto);
+
     }
 
     @DeleteMapping("/{id}")
@@ -47,6 +51,7 @@ public class DisciplineTypeController {
 
         disciplineTypeService.deleteDisciplineType(id);
         return ResponseEntity.ok(HttpStatus.OK);
+
     }
 
 }

@@ -1,27 +1,27 @@
 package com.nbu.ejournalgroupproject.mappers;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineTypeDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineTypeDto;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DisciplineTypeMapper {
 
-    public DisciplineTypeDTO convertToDto(DisciplineType disciplineType) {
+    public DisciplineTypeDto convertToDto(DisciplineType disciplineType) {
 
-        DisciplineTypeDTO disciplineTypeDTO = new DisciplineTypeDTO();
+        DisciplineTypeDto disciplineTypeDto = new DisciplineTypeDto();
 
-        disciplineTypeDTO.setId(disciplineType.getId());
-        disciplineTypeDTO.setDisciplineType(disciplineType.getDisciplineTypeEnum());
+        disciplineTypeDto.setId(disciplineType.getId());
+        disciplineTypeDto.setDisciplineType(disciplineType.getDisciplineTypeEnum());
 
-        return disciplineTypeDTO;
+        return disciplineTypeDto;
     }
 
-    public DisciplineType convertToEntity(DisciplineTypeDTO disciplineDTO) {
+    public DisciplineType convertToEntity(DisciplineTypeDto disciplineTypeDto) {
 
         DisciplineType disciplineType = new DisciplineType();
 
-        disciplineType.setDisciplineTypeEnum(disciplineDTO.getDisciplineType());
+        disciplineType.setDisciplineTypeEnum(disciplineTypeDto.getDisciplineType());
 
         return disciplineType;
     }

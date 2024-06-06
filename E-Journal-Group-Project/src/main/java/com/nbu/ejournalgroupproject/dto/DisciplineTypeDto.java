@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.dto;
 
 import com.nbu.ejournalgroupproject.enums.DisciplineTypeEnum;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,10 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DisciplineTypeDTO {
+@AllArgsConstructor
+public class DisciplineTypeDto {
 
-    //TODO: Think about validations.
     private Long id;
+
     private DisciplineTypeEnum disciplineType;
 
 }

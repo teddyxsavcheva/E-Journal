@@ -1,6 +1,6 @@
 package com.nbu.ejournalgroupproject.controller;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineDto;
 import com.nbu.ejournalgroupproject.service.DisciplineService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,29 +17,29 @@ public class DisciplineController {
     private DisciplineService disciplineService;
 
     @GetMapping("/")
-    public ResponseEntity<List<DisciplineDTO>> getAllDisciplines() {
+    public ResponseEntity<List<DisciplineDto>> getAllDisciplines() {
 
         return ResponseEntity.ok(disciplineService.getAllDisciplines());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DisciplineDTO> getDisciplineById(@PathVariable Long id) {
+    public ResponseEntity<DisciplineDto> getDisciplineById(@PathVariable Long id) {
 
         return ResponseEntity.ok(disciplineService.getDisciplineById(id));
     }
 
     @PostMapping("/")
-    public ResponseEntity<HttpStatus> createDiscipline(@RequestBody DisciplineDTO disciplineDTO) {
+    public ResponseEntity<DisciplineDto> createDiscipline(@RequestBody DisciplineDto disciplineDto) {
 
-        disciplineService.createDiscipline(disciplineDTO);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        DisciplineDto createdDisciplineDto = disciplineService.createDiscipline(disciplineDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDisciplineDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateDiscipline(@RequestBody DisciplineDTO disciplineDTO, @PathVariable Long id) {
+    public ResponseEntity<DisciplineDto> updateDiscipline(@RequestBody DisciplineDto disciplineDto, @PathVariable Long id) {
 
-        disciplineService.updateDiscipline(disciplineDTO, id);
-        return ResponseEntity.ok(HttpStatus.OK);
+        DisciplineDto updatedDisciplineDto = disciplineService.updateDiscipline(disciplineDto, id);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDisciplineDto);
     }
 
     @DeleteMapping("/{id}")

@@ -1,18 +1,21 @@
 package com.nbu.ejournalgroupproject.service;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineTypeDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineTypeDto;
 
 import java.util.List;
 
 public interface DisciplineTypeService {
 
-    List<DisciplineTypeDTO> getAllDisciplineTypes();
+    List<DisciplineTypeDto> getAllDisciplineTypes();
 
-    DisciplineTypeDTO getDisciplineTypeById(Long id);
+    DisciplineTypeDto getDisciplineTypeById(Long id);
 
-    void createDisciplineType(DisciplineTypeDTO disciplineTypeDTO);
+    DisciplineTypeDto createDisciplineType(DisciplineTypeDto disciplineTypeDTO);
 
-    void updateDisciplineType(DisciplineTypeDTO disciplineTypeDTO, Long id);
+    DisciplineTypeDto updateDisciplineType(DisciplineTypeDto disciplineTypeDTO, Long id);
 
     void deleteDisciplineType(Long id);
+
+    void validateDisciplineTypeDTO(DisciplineTypeDto disciplineTypeDTO);
+
 }

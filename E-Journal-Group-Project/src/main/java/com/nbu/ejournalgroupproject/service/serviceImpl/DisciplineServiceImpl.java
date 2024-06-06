@@ -1,6 +1,6 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineDto;
 import com.nbu.ejournalgroupproject.mappers.DisciplineMapper;
 import com.nbu.ejournalgroupproject.model.Discipline;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
@@ -23,52 +23,54 @@ public class DisciplineServiceImpl implements DisciplineService {
     private final DisciplineMapper disciplineMapper;
 
     @Override
-    public List<DisciplineDTO> getAllDisciplines() {
+    public List<DisciplineDto> getAllDisciplines() {
 
         List<Discipline> disciplines = disciplineRepository.findAll();
-
-        if (disciplines.isEmpty()) {
-            throw new EntityNotFoundException("No Disciplines found");
-        }
 
         return disciplines.stream()
                 .map(disciplineMapper::convertToDto)
                 .collect(Collectors.toList());
+
     }
 
     @Override
-    public DisciplineDTO getDisciplineById(Long id) {
+    public DisciplineDto getDisciplineById(Long id) {
 
         Discipline discipline = disciplineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + id));
 
         return disciplineMapper.convertToDto(discipline);
+
     }
 
     @Override
-    public void createDiscipline(DisciplineDTO disciplineDTO) {
+    public DisciplineDto createDiscipline(DisciplineDto disciplineDto) {
 
-        validateDisciplineDTO(disciplineDTO);
+        validateDisciplineDTO(disciplineDto);
 
-        disciplineRepository.save(disciplineMapper.convertToEntity(disciplineDTO));
+        Discipline discipline = disciplineMapper.convertToEntity(disciplineDto);
+
+        return disciplineMapper.convertToDto(disciplineRepository.save(discipline));
+
     }
 
     @Override
-    public void updateDiscipline(DisciplineDTO disciplineDTO, Long id) {
+    public DisciplineDto updateDiscipline(DisciplineDto disciplineDto, Long id) {
 
-        validateDisciplineDTO(disciplineDTO);
+        validateDisciplineDTO(disciplineDto);
 
         Discipline existingDiscipline = disciplineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + id));
 
-        existingDiscipline.setName(disciplineDTO.getName());
+        existingDiscipline.setName(disciplineDto.getName());
 
-        DisciplineType newDisciplineType = disciplineTypeRepository.findById(disciplineDTO.getDisciplineTypeId())
-                .orElseThrow(() -> new EntityNotFoundException("No DisciplineType found with id " + disciplineDTO.getDisciplineTypeId()));
+        DisciplineType newDisciplineType = disciplineTypeRepository.findById(disciplineDto.getDisciplineTypeId())
+                .orElseThrow(() -> new EntityNotFoundException("No DisciplineType found with id " + disciplineDto.getDisciplineTypeId()));
 
         existingDiscipline.setDisciplineType(newDisciplineType);
 
-        disciplineRepository.save(existingDiscipline);
+        return disciplineMapper.convertToDto(disciplineRepository.save(existingDiscipline));
+
     }
 
     @Override
@@ -78,19 +80,19 @@ public class DisciplineServiceImpl implements DisciplineService {
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + id));
 
         disciplineRepository.delete(discipline);
+
     }
 
     @Override
-    public void validateDisciplineDTO(DisciplineDTO disciplineDTO) {
+    public void validateDisciplineDTO(DisciplineDto disciplineDto) {
 
-        if (disciplineDTO.getName() == null || disciplineDTO.getName().isEmpty()) {
+        if (disciplineDto.getName() == null || disciplineDto.getName().isEmpty()) {
             throw new IllegalArgumentException("The discipline name cannot be null or empty.");
         }
 
-        if (disciplineDTO.getDisciplineTypeId() == null || disciplineDTO.getDisciplineTypeId() == 0) {
+        if (disciplineDto.getDisciplineTypeId() == null || disciplineDto.getDisciplineTypeId() == 0) {
             throw new IllegalArgumentException("The discipline type ID cannot be null or zero.");
         }
+
     }
-
-
 }

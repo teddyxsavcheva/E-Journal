@@ -1,6 +1,6 @@
 package com.nbu.ejournalgroupproject.mappers;
 
-import com.nbu.ejournalgroupproject.dto.DisciplineDTO;
+import com.nbu.ejournalgroupproject.dto.DisciplineDto;
 import com.nbu.ejournalgroupproject.model.Discipline;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
 import com.nbu.ejournalgroupproject.repository.DisciplineTypeRepository;
@@ -14,36 +14,41 @@ public class DisciplineMapper {
 
     private final DisciplineTypeRepository disciplineTypeRepository;
 
-    public DisciplineDTO convertToDto(Discipline discipline) {
+    public DisciplineDto convertToDto(Discipline discipline) {
 
-        DisciplineDTO disciplineDTO = new DisciplineDTO();
+        DisciplineDto disciplineDto = new DisciplineDto();
 
-        disciplineDTO.setId(discipline.getId());
-        disciplineDTO.setName(discipline.getName());
+        disciplineDto.setId(discipline.getId());
+        disciplineDto.setName(discipline.getName());
         // New method, because I want to give the DTO only the id
-        setDisciplineTypeIdInDisciplineDTO(discipline, disciplineDTO);
+        // but I also want to check if the id is the correct one
+        setDisciplineTypeIdInDisciplineDto(discipline, disciplineDto);
 
-        return disciplineDTO;
+        return disciplineDto;
     }
 
-    public Discipline convertToEntity(DisciplineDTO disciplineDTO) {
+    public Discipline convertToEntity(DisciplineDto disciplineDto) {
 
         Discipline discipline = new Discipline();
 
-        discipline.setName(disciplineDTO.getName());
+        discipline.setName(disciplineDto.getName());
 
-        DisciplineType disciplineType = disciplineTypeRepository.findById(disciplineDTO.getDisciplineTypeId())
-                .orElseThrow(() -> new EntityNotFoundException("No DisciplineType found with id " + disciplineDTO.getDisciplineTypeId()));
+        DisciplineType disciplineType = disciplineTypeRepository.findById(disciplineDto.getDisciplineTypeId())
+                .orElseThrow(() -> new EntityNotFoundException("No DisciplineType found with id " + disciplineDto.getDisciplineTypeId()));
 
         discipline.setDisciplineType(disciplineType);
 
         return discipline;
     }
 
-    public void setDisciplineTypeIdInDisciplineDTO(Discipline discipline, DisciplineDTO disciplineDTO) {
-        if (discipline.getDisciplineType() != null) {
-            disciplineDTO.setDisciplineTypeId(discipline.getDisciplineType().getId());
+    public void setDisciplineTypeIdInDisciplineDto(Discipline discipline, DisciplineDto disciplineDto) {
+
+        DisciplineType disciplineType = discipline.getDisciplineType();
+
+        if (disciplineType != null && disciplineTypeRepository.existsById(disciplineType.getId())) {
+            disciplineDto.setDisciplineTypeId(disciplineType.getId());
         }
+
     }
 
 
