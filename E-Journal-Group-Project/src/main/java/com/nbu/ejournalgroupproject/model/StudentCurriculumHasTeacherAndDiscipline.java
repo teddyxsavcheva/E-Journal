@@ -28,4 +28,5 @@ public class StudentCurriculumHasTeacherAndDiscipline {
     @ManyToOne
     @JoinColumn(name = "student_curriculum_id")
     private StudentCurriculum studentCurriculum;
+
 }

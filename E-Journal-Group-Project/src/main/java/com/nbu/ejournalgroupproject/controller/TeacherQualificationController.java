@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@RequestMapping("/teacherQualifications")
+@RequestMapping("/teacher-qualifications")
 @RestController
 public class TeacherQualificationController {
 

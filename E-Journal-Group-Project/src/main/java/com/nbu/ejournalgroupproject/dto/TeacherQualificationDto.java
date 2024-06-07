@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,5 +17,8 @@ public class TeacherQualificationDto {
     private Long id;
 
     private TeacherQualificationEnum qualificationEnum;
+
+    // TODO: Many-to-Many logic
+    //private Set<Long> disciplineIds;
 
 }

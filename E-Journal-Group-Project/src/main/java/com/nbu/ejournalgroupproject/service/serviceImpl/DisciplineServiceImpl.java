@@ -91,7 +91,7 @@ public class DisciplineServiceImpl implements DisciplineService {
         }
 
         if (disciplineDto.getDisciplineTypeId() == null || disciplineDto.getDisciplineTypeId() == 0) {
-            throw new IllegalArgumentException("The discipline type ID cannot be null or zero.");
+            throw new IllegalArgumentException("The discipline type id cannot be null or zero.");
         }
 
     }

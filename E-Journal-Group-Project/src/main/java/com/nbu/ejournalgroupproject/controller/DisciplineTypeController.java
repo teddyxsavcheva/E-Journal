@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@RequestMapping("/disciplineTypes")
+@RequestMapping("/discipline-types")
 @RestController
 public class DisciplineTypeController {
 

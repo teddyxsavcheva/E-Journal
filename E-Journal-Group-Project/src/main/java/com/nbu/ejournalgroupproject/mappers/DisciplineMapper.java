@@ -20,8 +20,7 @@ public class DisciplineMapper {
 
         disciplineDto.setId(discipline.getId());
         disciplineDto.setName(discipline.getName());
-        // New method, because I want to give the DTO only the id
-        // but I also want to check if the id is the correct one
+        // New method, because I also want to check if the id is present in the DB
         setDisciplineTypeIdInDisciplineDto(discipline, disciplineDto);
 
         return disciplineDto;
@@ -49,6 +48,9 @@ public class DisciplineMapper {
             disciplineDto.setDisciplineTypeId(disciplineType.getId());
         }
 
+        else {
+            throw new EntityNotFoundException("No DisciplineType found with id " + disciplineType.getId());
+        }
     }
 
 
