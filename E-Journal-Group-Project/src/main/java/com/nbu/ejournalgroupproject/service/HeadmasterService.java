@@ -11,10 +11,10 @@ public interface HeadmasterService {
 
     HeadmasterDTO getHeadmasterBySchoolID(Long id);
 
-    void createHeadmaster(HeadmasterDTO headmasterDTO);
+    HeadmasterDTO createHeadmaster(HeadmasterDTO headmasterDTO);
 
-    boolean deleteHeadmaster(Long id);
+    void deleteHeadmaster(Long id);
 
-    void updateHeadmaster(Long id, HeadmasterDTO headmasterDTO);
+    HeadmasterDTO updateHeadmaster(Long id, HeadmasterDTO headmasterDTO);
 
 }

@@ -2,7 +2,6 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,78 +10,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
+@RequestMapping("/headmaster")
 @RestController
 public class HeadmasterController {
     private final HeadmasterService headmasterService;
 
-    @GetMapping(value = {"/headmaster"})
+    @GetMapping(value = {"/"})
     @ResponseBody
     public ResponseEntity<List<HeadmasterDTO>> getHeadmasters(){
-        try{
-            List<HeadmasterDTO> headmasters = headmasterService.getHeadmasters();
-            return new ResponseEntity<>(headmasters, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(headmasterService.getHeadmasters());
     }
 
-    @GetMapping(value = {"/headmaster/{id}"})
+    @GetMapping(value = {"/{id}"})
     @ResponseBody
     public ResponseEntity<HeadmasterDTO> getHeadmasterById(@PathVariable Long id){
-        try{
-            HeadmasterDTO headmasterDTO = headmasterService.getHeadmaster(id);
-            return new ResponseEntity<>(headmasterDTO, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(headmasterService.getHeadmaster(id));
     }
 
-    @GetMapping(value = {"/headmaster/school_id/{id}"})
+    @GetMapping(value = {"/school_id/{id}"})
     @ResponseBody
     public ResponseEntity<HeadmasterDTO> getHeadmasterBySchoolId(@PathVariable long id){
-        try{
-            HeadmasterDTO headmasterDTO = headmasterService.getHeadmasterBySchoolID(id);
-            return new ResponseEntity<>(headmasterDTO, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(headmasterService.getHeadmasterBySchoolID(id));
     }
 
-    @PostMapping(value = "/headmaster")
+    @PostMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<String> createHeadmaster(@RequestBody HeadmasterDTO headmasterDTO){
-        try {
-            headmasterService.createHeadmaster(headmasterDTO);
-            return new ResponseEntity<>("Headmaster created successfully", HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<HeadmasterDTO> createHeadmaster(@RequestBody HeadmasterDTO headmasterDTO){
+        HeadmasterDTO newHeadmaster = headmasterService.createHeadmaster(headmasterDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newHeadmaster);
     }
 
-    @DeleteMapping(value = "/headmaster/{id}")
+    @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<String> deleteHeadmaster(@PathVariable Long id){
-        try{
-            if(headmasterService.deleteHeadmaster(id)){
-                return new ResponseEntity<>("Headmaster deleted successfully", HttpStatus.OK);
-            }
-            else{
-                throw new EntityNotFoundException("Headmaster not found.");
-            }
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<HttpStatus> deleteHeadmaster(@PathVariable Long id) {
+        headmasterService.deleteHeadmaster(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping(value = {"/headmaster/{id}"})
+
+    @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<String> updateHeadmaster(@PathVariable Long id, @RequestBody HeadmasterDTO headmasterDTO){
-        try{
-            headmasterService.updateHeadmaster(id, headmasterDTO);
-            return new ResponseEntity<>("Headmaster updated successfully.", HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<HeadmasterDTO> updateHeadmaster(@PathVariable Long id, @RequestBody HeadmasterDTO headmasterDTO){
+        HeadmasterDTO newHeadmaster = headmasterService.updateHeadmaster(id, headmasterDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newHeadmaster);
     }
-
 }

@@ -29,57 +29,62 @@ public class HeadmasterServiceImpl implements HeadmasterService {
     private final HeadmasterMapper headmasterMapper;
 
 
-
     @Override
     public List<HeadmasterDTO> getHeadmasters() {
         List<Headmaster> headmasters = headmasterRepository.findAll();
         return headmasters
                 .stream()
-                .map(headmasterMapper::HeadmasterEntityToDto)
+                .map(headmasterMapper::mapEntityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public HeadmasterDTO getHeadmaster(Long id) {
-        Headmaster headmaster = headmasterRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        return headmasterMapper.HeadmasterEntityToDto(headmaster);
+        Headmaster headmaster = headmasterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Headmaster with id " + id + " not found"));
+        return headmasterMapper.mapEntityToDto(headmaster);
     }
 
     @Override
     public HeadmasterDTO getHeadmasterBySchoolID(Long id) {
        Headmaster headmaster = headmasterRepository.findBySchoolId(id);
-       return headmasterMapper.HeadmasterEntityToDto(headmaster);
+       return headmasterMapper.mapEntityToDto(headmaster);
     }
 
     @Override
-    public void createHeadmaster(HeadmasterDTO headmasterDTO) {
-        Headmaster headmaster = headmasterMapper.HeadmasterDtoToEntity(headmasterDTO);
-        headmasterRepository.save(headmaster);
+    public HeadmasterDTO createHeadmaster(HeadmasterDTO headmasterDTO) {
+        Headmaster headmaster = headmasterMapper.mapDtoToEntity(headmasterDTO);
+        return headmasterMapper.mapEntityToDto(headmasterRepository.save(headmaster));
     }
 
     @Override
-    public boolean deleteHeadmaster(Long id) {
-        try{
-            getHeadmaster(id);
-        } catch (Exception e){
-            return false;
-        }
-        headmasterRepository.deleteById(id);
-        return true;
-    }
-
-    @Override
-    public void updateHeadmaster(Long id, HeadmasterDTO newHeadmaster){
-        Headmaster existingHeadmaster = headmasterRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public HeadmasterDTO updateHeadmaster(Long id, HeadmasterDTO newHeadmaster) {
+        Headmaster existingHeadmaster = headmasterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Headmaster with id " + id + " not found"));
 
         existingHeadmaster.setName(newHeadmaster.getName());
         existingHeadmaster.setEmail(newHeadmaster.getEmail());
-        if (newHeadmaster.getSchoolId() != null) {
-            School school = schoolRepository.findById(newHeadmaster.getSchoolId())
-                    .orElseThrow(() -> new EntityNotFoundException("School with id " + newHeadmaster.getSchoolId() + " not found"));
+
+        updateHeadmasterSchool(existingHeadmaster, newHeadmaster);
+
+        return headmasterMapper.mapEntityToDto(headmasterRepository.save(existingHeadmaster));
+    }
+
+    private void updateHeadmasterSchool(Headmaster existingHeadmaster, HeadmasterDTO newHeadmaster) {
+        Long schoolId = newHeadmaster.getSchoolId();
+        if (schoolId != null) {
+            School school = schoolRepository.findById(schoolId)
+                    .orElseThrow(() -> new EntityNotFoundException("School with id " + schoolId + " not found"));
             existingHeadmaster.setSchool(school);
         }
+    }
 
-        headmasterRepository.save(existingHeadmaster);
+    @Override
+    public void deleteHeadmaster(Long id) {
+        Headmaster headmaster = headmasterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Headmaster with id " + id + " not found"));
+
+        headmasterRepository.delete(headmaster);
     }
 }
+

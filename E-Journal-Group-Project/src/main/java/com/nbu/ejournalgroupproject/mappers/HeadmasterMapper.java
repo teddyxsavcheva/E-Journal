@@ -5,7 +5,6 @@ import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
 @Service
 public class HeadmasterMapper {
 
-    private final ModelMapper modelMapper = new ModelMapper();
+//    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private final SchoolRepository schoolRepository;
@@ -24,7 +23,7 @@ public class HeadmasterMapper {
         this.schoolRepository = schoolRepository;
     }
 
-    public HeadmasterDTO HeadmasterEntityToDto(Headmaster headmaster){
+    public HeadmasterDTO mapEntityToDto(Headmaster headmaster){
         HeadmasterDTO headmasterDTO = new HeadmasterDTO();
         headmasterDTO.setId(headmaster.getId());
         headmasterDTO.setName(headmaster.getName());
@@ -36,15 +35,13 @@ public class HeadmasterMapper {
         return headmasterDTO;
     }
 
-    public Headmaster HeadmasterDtoToEntity(HeadmasterDTO headmasterDTO){
+    public Headmaster mapDtoToEntity(HeadmasterDTO headmasterDTO){
         Headmaster headmaster = new Headmaster();
         headmaster.setId(headmasterDTO.getId());
         headmaster.setName(headmasterDTO.getName());
         headmaster.setEmail(headmasterDTO.getEmail());
         mapSchoolIdToHeadmaster(headmasterDTO, headmaster);
 
-//        Headmaster headmaster = modelMapper.map(headmasterDTO, Headmaster.class);
-//        mapSchoolIdToEntity(headmasterDTO, headmaster);
         return headmaster;
     }
 
