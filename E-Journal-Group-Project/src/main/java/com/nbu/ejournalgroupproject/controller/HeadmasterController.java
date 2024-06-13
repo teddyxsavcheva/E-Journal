@@ -39,7 +39,7 @@ public class HeadmasterController {
 
     @GetMapping(value = {"/headmaster/school_id/{id}"})
     @ResponseBody
-    public ResponseEntity<HeadmasterDTO> findHeadmasterBySchool(@PathVariable long id){
+    public ResponseEntity<HeadmasterDTO> getHeadmasterBySchoolId(@PathVariable long id){
         try{
             HeadmasterDTO headmasterDTO = headmasterService.getHeadmasterBySchoolID(id);
             return new ResponseEntity<>(headmasterDTO, HttpStatus.OK);

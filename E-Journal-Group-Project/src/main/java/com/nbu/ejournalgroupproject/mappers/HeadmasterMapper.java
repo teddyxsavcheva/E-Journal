@@ -25,18 +25,30 @@ public class HeadmasterMapper {
     }
 
     public HeadmasterDTO HeadmasterEntityToDto(Headmaster headmaster){
-        HeadmasterDTO headmasterDTO = modelMapper.map(headmaster, HeadmasterDTO.class);
-        mapSchoolEntityToId(headmaster, headmasterDTO);
+        HeadmasterDTO headmasterDTO = new HeadmasterDTO();
+        headmasterDTO.setId(headmaster.getId());
+        headmasterDTO.setName(headmaster.getName());
+        headmasterDTO.setEmail(headmaster.getEmail());
+        mapSchoolIdToHeadmasterDTO(headmaster, headmasterDTO);
+
+//        HeadmasterDTO headmasterDTO = modelMapper.map(headmaster, HeadmasterDTO.class);
+//        mapSchoolEntityToId(headmaster, headmasterDTO);
         return headmasterDTO;
     }
 
     public Headmaster HeadmasterDtoToEntity(HeadmasterDTO headmasterDTO){
-        Headmaster headmaster = modelMapper.map(headmasterDTO, Headmaster.class);
-        mapSchoolIdToEntity(headmasterDTO, headmaster);
+        Headmaster headmaster = new Headmaster();
+        headmaster.setId(headmasterDTO.getId());
+        headmaster.setName(headmasterDTO.getName());
+        headmaster.setEmail(headmasterDTO.getEmail());
+        mapSchoolIdToHeadmaster(headmasterDTO, headmaster);
+
+//        Headmaster headmaster = modelMapper.map(headmasterDTO, Headmaster.class);
+//        mapSchoolIdToEntity(headmasterDTO, headmaster);
         return headmaster;
     }
 
-    public void mapSchoolIdToEntity(HeadmasterDTO headmasterDTO, Headmaster headmaster){
+    public void mapSchoolIdToHeadmaster(HeadmasterDTO headmasterDTO, Headmaster headmaster){
         if(headmasterDTO.getSchoolId() != null){
             Optional<School> schoolOptional = schoolRepository.findById(headmasterDTO.getSchoolId());
 
@@ -48,7 +60,7 @@ public class HeadmasterMapper {
         }
     }
 
-    public void mapSchoolEntityToId(Headmaster headmaster, HeadmasterDTO headmasterDTO){
+    public void mapSchoolIdToHeadmasterDTO(Headmaster headmaster, HeadmasterDTO headmasterDTO){
         if(headmaster.getSchool() != null){
             headmasterDTO.setSchoolId(headmaster.getSchool().getId());
         }
