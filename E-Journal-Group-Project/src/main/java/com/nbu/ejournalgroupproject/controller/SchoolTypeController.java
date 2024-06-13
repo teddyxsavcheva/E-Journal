@@ -19,56 +19,34 @@ public class SchoolTypeController {
     @RequestMapping(value = {"/"})
     @ResponseBody
     public ResponseEntity<List<SchoolTypeDTO>> getSchoolTypes(){
-        try{
-            List<SchoolTypeDTO> schoolTypes = schoolTypeService.getAllSchoolTypes();
-            return new ResponseEntity<>(schoolTypes, HttpStatus.OK);
-        } catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(schoolTypeService.getAllSchoolTypes());
     }
 
     @RequestMapping(value = {"/{id}"})
     @ResponseBody
     public ResponseEntity<SchoolTypeDTO> getSchoolTypeById(@PathVariable Long id){
-        try{
-            SchoolTypeDTO schoolType = schoolTypeService.getSchoolTypeById(id);
-            return new ResponseEntity<>(schoolType, HttpStatus.OK);
-        } catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(schoolTypeService.getSchoolTypeById(id));
     }
 
     @PostMapping(value = {"/"})
     @ResponseBody
     public ResponseEntity<SchoolTypeDTO> createSchoolType(@RequestBody SchoolTypeDTO schoolTypeDTO){
-        try {
-            SchoolTypeDTO newSchoolTypeDTO1 = schoolTypeService.createSchoolType(schoolTypeDTO);
-            return new ResponseEntity<>(newSchoolTypeDTO1, HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        SchoolTypeDTO newSchoolType = schoolTypeService.createSchoolType(schoolTypeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newSchoolType);
     }
 
     @PutMapping(value={"/{id}"})
     @ResponseBody
     public ResponseEntity<SchoolTypeDTO> updateSchoolType(@PathVariable Long id, @RequestBody SchoolTypeDTO schoolTypeDTO){
-        try{
-            SchoolTypeDTO newSchoolTypeDTO= schoolTypeService.updateSchoolType(id, schoolTypeDTO);
-            return new ResponseEntity<>(newSchoolTypeDTO, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        SchoolTypeDTO newSchoolType = schoolTypeService.updateSchoolType(id, schoolTypeDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(newSchoolType);
     }
 
     @DeleteMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<String> deleteSchoolType(@PathVariable Long id){
-        try{
-            schoolTypeService.deleteSchoolType(id);
-            return new ResponseEntity<>("SchoolType deleted successfully", HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<HttpStatus> deleteSchoolType(@PathVariable Long id){
+        schoolTypeService.deleteSchoolType(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 

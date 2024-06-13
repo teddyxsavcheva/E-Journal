@@ -67,7 +67,7 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
     public void validateSchoolTypeDTO(SchoolTypeDTO schoolTypeDTO) {
 
         if (schoolTypeDTO.getSchoolType() == null) {
-            throw new IllegalArgumentException("The School Type Field cannot be null");
+            throw new IllegalArgumentException("The School Type cannot be null");
         }
 
     }
