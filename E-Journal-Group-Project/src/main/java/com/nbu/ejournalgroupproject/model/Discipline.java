@@ -40,6 +40,7 @@ public class Discipline {
             joinColumns=@JoinColumn(name="discipline_id"),
             inverseJoinColumns=@JoinColumn(name="teacher_qualification_id")
     )
+    // TODO: Set?
     private List<TeacherQualification> teacherQualifications;
 
 }

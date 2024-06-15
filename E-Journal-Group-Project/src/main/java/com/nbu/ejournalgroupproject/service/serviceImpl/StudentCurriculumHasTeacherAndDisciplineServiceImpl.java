@@ -2,10 +2,7 @@ package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.StudentCurriculumHasTeacherAndDisciplineDto;
 import com.nbu.ejournalgroupproject.mappers.CurriculumHasTeacherAndDisciplineMapper;
-import com.nbu.ejournalgroupproject.model.Discipline;
-import com.nbu.ejournalgroupproject.model.StudentCurriculum;
-import com.nbu.ejournalgroupproject.model.StudentCurriculumHasTeacherAndDiscipline;
-import com.nbu.ejournalgroupproject.model.Teacher;
+import com.nbu.ejournalgroupproject.model.*;
 import com.nbu.ejournalgroupproject.repository.DisciplineRepository;
 import com.nbu.ejournalgroupproject.repository.StudentCurriculumHasTeacherAndDisciplineRepository;
 import com.nbu.ejournalgroupproject.repository.StudentCurriculumRepository;
@@ -27,8 +24,6 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     private final StudentCurriculumRepository studentCurriculumRepository;
     private final CurriculumHasTeacherAndDisciplineMapper mapper;
 
-    //TODO: Develop logic for the teacher qualification and discipline - if the teacher doesn't have the qualification,
-    // it can't be picked for the discipline
     @Override
     public List<StudentCurriculumHasTeacherAndDisciplineDto> getAllCurriculumHasTeacherAndDiscipline() {
 
@@ -49,7 +44,6 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         return mapper.convertToDto(entity);
     }
 
-    // TODO: Fix the duplicate code in those two methods - create new methods that will reduce those ones
     @Override
     public StudentCurriculumHasTeacherAndDisciplineDto createCurriculumHasTeacherAndDiscipline(StudentCurriculumHasTeacherAndDisciplineDto dto) {
 
@@ -57,22 +51,10 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
         StudentCurriculumHasTeacherAndDiscipline entity = new StudentCurriculumHasTeacherAndDiscipline();
 
-        Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
-                .orElseThrow(() -> new EntityNotFoundException("No Discipline with id " + dto.getDisciplineId()));
-
-        entity.setDiscipline(discipline);
-
-        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
-                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + dto.getTeacherId()));
-
-        entity.setTeacher(teacher);
-
-        StudentCurriculum curriculum = studentCurriculumRepository.findById(dto.getCurriculumId())
-                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + dto.getCurriculumId()));
-
-        entity.setStudentCurriculum(curriculum);
+        populateAndValidateEntity(entity, dto);
 
         return mapper.convertToDto(repository.save(entity));
+
     }
 
     @Override
@@ -83,20 +65,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         StudentCurriculumHasTeacherAndDiscipline entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + dto.getId()));
 
-        Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
-                .orElseThrow(() -> new EntityNotFoundException("No Discipline with id " + dto.getDisciplineId()));
-
-        entity.setDiscipline(discipline);
-
-        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
-                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + dto.getTeacherId()));
-
-        entity.setTeacher(teacher);
-
-        StudentCurriculum curriculum = studentCurriculumRepository.findById(dto.getCurriculumId())
-                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + dto.getCurriculumId()));
-
-        entity.setStudentCurriculum(curriculum);
+        populateAndValidateEntity(entity, dto);
 
         return mapper.convertToDto(repository.save(entity));
     }
@@ -108,6 +77,26 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
                         .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + id));
 
         repository.deleteById(id);
+    }
+
+    private void populateAndValidateEntity(StudentCurriculumHasTeacherAndDiscipline entity, StudentCurriculumHasTeacherAndDisciplineDto dto) {
+
+        // Checking if the teacher is qualified for the discipline before adding the pair in the curriculum
+        if (!teacherRepository.isTeacherQualifiedForDiscipline(dto.getTeacherId(), dto.getDisciplineId())) {
+            throw new IllegalArgumentException("The teacher is not qualified for the discipline.");
+        }
+
+        Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
+                .orElseThrow(() -> new EntityNotFoundException("No Discipline with id " + dto.getDisciplineId()));
+        entity.setDiscipline(discipline);
+
+        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
+                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + dto.getTeacherId()));
+        entity.setTeacher(teacher);
+
+        StudentCurriculum curriculum = studentCurriculumRepository.findById(dto.getCurriculumId())
+                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + dto.getCurriculumId()));
+        entity.setStudentCurriculum(curriculum);
     }
 
     @Override
