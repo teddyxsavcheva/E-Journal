@@ -17,4 +17,8 @@ public interface DisciplineService {
     void deleteDiscipline(Long id);
 
     void validateDisciplineDTO(DisciplineDto disciplineDTO);
+
+    DisciplineDto addQualificationToDiscipline(Long disciplineId, Long qualificationId);
+
+    DisciplineDto removeQualificationFromDiscipline(Long disciplineId, Long qualificationId);
 }

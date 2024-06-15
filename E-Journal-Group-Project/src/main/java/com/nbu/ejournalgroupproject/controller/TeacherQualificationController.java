@@ -55,4 +55,30 @@ public class TeacherQualificationController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    // Add and Remove teachers and disciplines in m:n tables
+
+    @PostMapping("/{qualificationId}/teachers/{teacherId}")
+    public ResponseEntity<TeacherQualificationDto> addTeacherToQualification(@PathVariable Long qualificationId, @PathVariable Long teacherId) {
+        TeacherQualificationDto updatedDto = teacherQualificationService.addTeacherToQualification(qualificationId, teacherId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedDto);
+    }
+
+    @DeleteMapping("/{qualificationId}/teachers/{teacherId}")
+    public ResponseEntity<TeacherQualificationDto> removeTeacherFromQualification(@PathVariable Long qualificationId, @PathVariable Long teacherId) {
+        TeacherQualificationDto updatedDto = teacherQualificationService.removeTeacherFromQualification(qualificationId, teacherId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+
+    @PostMapping("/{qualificationId}/disciplines/{disciplineId}")
+    public ResponseEntity<TeacherQualificationDto> addDisciplineToQualification(@PathVariable Long qualificationId, @PathVariable Long disciplineId) {
+        TeacherQualificationDto updatedDto = teacherQualificationService.addDisciplineToQualification(qualificationId, disciplineId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedDto);
+    }
+
+    @DeleteMapping("/{qualificationId}/disciplines/{disciplineId}")
+    public ResponseEntity<TeacherQualificationDto> removeDisciplineFromQualification(@PathVariable Long qualificationId, @PathVariable Long disciplineId) {
+        TeacherQualificationDto updatedDto = teacherQualificationService.removeDisciplineFromQualification(qualificationId, disciplineId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+
 }

@@ -61,7 +61,7 @@ public class CurriculumHasTeacherAndDisciplineMapper {
 
         Discipline discipline = entity.getDiscipline();
 
-        if (discipline.getId() != null && disciplineRepository.existsById(discipline.getId())) {
+        if (disciplineRepository.existsById(discipline.getId())) {
             dto.setDisciplineId(discipline.getId());
         }
         else {
@@ -74,7 +74,7 @@ public class CurriculumHasTeacherAndDisciplineMapper {
 
         Teacher teacher = entity.getTeacher();
 
-        if (teacher.getId() != null && teacherRepository.existsById(teacher.getId())) {
+        if (teacherRepository.existsById(teacher.getId())) {
             dto.setTeacherId(teacher.getId());
         }
         else {
@@ -87,7 +87,7 @@ public class CurriculumHasTeacherAndDisciplineMapper {
 
         StudentCurriculum curriculum = entity.getStudentCurriculum();
 
-        if (curriculum.getId() != null && curriculumRepository.existsById(curriculum.getId())) {
+        if (curriculumRepository.existsById(curriculum.getId())) {
             dto.setCurriculumId(curriculum.getId());
         }
         else {

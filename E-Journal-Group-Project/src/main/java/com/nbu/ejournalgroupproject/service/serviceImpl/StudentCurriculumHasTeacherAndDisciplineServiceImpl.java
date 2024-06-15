@@ -51,7 +51,19 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
         StudentCurriculumHasTeacherAndDiscipline entity = new StudentCurriculumHasTeacherAndDiscipline();
 
-        populateAndValidateEntity(entity, dto);
+        validateTeacherDisciplineRelation(entity, dto);
+
+        Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
+                .orElseThrow(() -> new EntityNotFoundException("No Discipline with id " + dto.getDisciplineId()));
+        entity.setDiscipline(discipline);
+
+        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
+                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + dto.getTeacherId()));
+        entity.setTeacher(teacher);
+
+        StudentCurriculum curriculum = studentCurriculumRepository.findById(dto.getCurriculumId())
+                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + dto.getCurriculumId()));
+        entity.setStudentCurriculum(curriculum);
 
         return mapper.convertToDto(repository.save(entity));
 
@@ -65,7 +77,19 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         StudentCurriculumHasTeacherAndDiscipline entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + dto.getId()));
 
-        populateAndValidateEntity(entity, dto);
+        validateTeacherDisciplineRelation(entity, dto);
+
+        Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
+                .orElseThrow(() -> new EntityNotFoundException("No Discipline with id " + dto.getDisciplineId()));
+        entity.setDiscipline(discipline);
+
+        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
+                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + dto.getTeacherId()));
+        entity.setTeacher(teacher);
+
+        StudentCurriculum curriculum = studentCurriculumRepository.findById(dto.getCurriculumId())
+                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + dto.getCurriculumId()));
+        entity.setStudentCurriculum(curriculum);
 
         return mapper.convertToDto(repository.save(entity));
     }
@@ -79,24 +103,13 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         repository.deleteById(id);
     }
 
-    private void populateAndValidateEntity(StudentCurriculumHasTeacherAndDiscipline entity, StudentCurriculumHasTeacherAndDisciplineDto dto) {
+    private void validateTeacherDisciplineRelation(StudentCurriculumHasTeacherAndDiscipline entity, StudentCurriculumHasTeacherAndDisciplineDto dto) {
 
         // Checking if the teacher is qualified for the discipline before adding the pair in the curriculum
         if (!teacherRepository.isTeacherQualifiedForDiscipline(dto.getTeacherId(), dto.getDisciplineId())) {
             throw new IllegalArgumentException("The teacher is not qualified for the discipline.");
         }
 
-        Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
-                .orElseThrow(() -> new EntityNotFoundException("No Discipline with id " + dto.getDisciplineId()));
-        entity.setDiscipline(discipline);
-
-        Teacher teacher = teacherRepository.findById(dto.getTeacherId())
-                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + dto.getTeacherId()));
-        entity.setTeacher(teacher);
-
-        StudentCurriculum curriculum = studentCurriculumRepository.findById(dto.getCurriculumId())
-                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + dto.getCurriculumId()));
-        entity.setStudentCurriculum(curriculum);
     }
 
     @Override

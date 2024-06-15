@@ -49,4 +49,18 @@ public class DisciplineController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    // Add and Remove methods for the m:n table
+
+    @PostMapping("/{disciplineId}/qualifications/{qualificationId}")
+    public ResponseEntity<DisciplineDto > addQualificationToDiscipline(@PathVariable Long disciplineId, @PathVariable Long qualificationId) {
+        DisciplineDto createdDisciplineDto = disciplineService.addQualificationToDiscipline(disciplineId, qualificationId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdDisciplineDto);
+    }
+
+    @DeleteMapping("/{disciplineId}/qualifications/{qualificationId}")
+    public ResponseEntity<DisciplineDto > removeQualificationFromDiscipline(@PathVariable Long disciplineId, @PathVariable Long qualificationId) {
+        DisciplineDto updatedDisciplineDto = disciplineService.removeQualificationFromDiscipline(disciplineId, qualificationId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDisciplineDto);
+    }
+
 }

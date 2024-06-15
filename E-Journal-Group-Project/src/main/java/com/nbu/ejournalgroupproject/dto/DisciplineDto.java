@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,6 +20,6 @@ public class DisciplineDto {
     private Long disciplineTypeId;
 
     // TODO: Many-to-Many logic
-    //private Set<Long> teacherQualificationIds;
+    private List<Long> teacherQualificationIds;
 
 }

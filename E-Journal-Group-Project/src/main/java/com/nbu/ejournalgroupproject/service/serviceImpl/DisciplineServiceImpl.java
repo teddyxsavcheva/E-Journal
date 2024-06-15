@@ -4,8 +4,10 @@ import com.nbu.ejournalgroupproject.dto.DisciplineDto;
 import com.nbu.ejournalgroupproject.mappers.DisciplineMapper;
 import com.nbu.ejournalgroupproject.model.Discipline;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
+import com.nbu.ejournalgroupproject.model.TeacherQualification;
 import com.nbu.ejournalgroupproject.repository.DisciplineRepository;
 import com.nbu.ejournalgroupproject.repository.DisciplineTypeRepository;
+import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
 import com.nbu.ejournalgroupproject.service.DisciplineService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class DisciplineServiceImpl implements DisciplineService {
 
     private final DisciplineRepository disciplineRepository;
+    private final TeacherQualificationRepository teacherQualificationRepository;
     private final DisciplineTypeRepository disciplineTypeRepository;
     private final DisciplineMapper disciplineMapper;
 
@@ -48,6 +51,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
         validateDisciplineDTO(disciplineDto);
 
+        // In the convertToEntity method we check the DisciplineType as well
         Discipline discipline = disciplineMapper.convertToEntity(disciplineDto);
 
         return disciplineMapper.convertToDto(disciplineRepository.save(discipline));
@@ -93,6 +97,36 @@ public class DisciplineServiceImpl implements DisciplineService {
         if (disciplineDto.getDisciplineTypeId() == null || disciplineDto.getDisciplineTypeId() == 0) {
             throw new IllegalArgumentException("The discipline type id cannot be null or zero.");
         }
+
+    }
+
+    @Override
+    public DisciplineDto  addQualificationToDiscipline(Long disciplineId, Long qualificationId) {
+
+        Discipline discipline = disciplineRepository.findById(disciplineId)
+                .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + disciplineId));
+
+        TeacherQualification qualification = teacherQualificationRepository.findById(qualificationId)
+                .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id " + qualificationId));
+
+        discipline.getTeacherQualifications().add(qualification);
+
+        return disciplineMapper.convertToDto(disciplineRepository.save(discipline));
+
+    }
+
+    @Override
+    public DisciplineDto  removeQualificationFromDiscipline(Long disciplineId, Long qualificationId) {
+
+        Discipline discipline = disciplineRepository.findById(disciplineId)
+                .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + disciplineId));
+
+        TeacherQualification qualification = teacherQualificationRepository.findById(qualificationId)
+                .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id " + qualificationId));
+
+        discipline.getTeacherQualifications().remove(qualification);
+
+        return disciplineMapper.convertToDto(disciplineRepository.save(discipline));
 
     }
 }

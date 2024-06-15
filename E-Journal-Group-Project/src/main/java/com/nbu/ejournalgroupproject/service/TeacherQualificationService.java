@@ -18,4 +18,12 @@ public interface TeacherQualificationService {
 
     void validateTeacherQualificationDto(TeacherQualificationDto dto);
 
+    TeacherQualificationDto addTeacherToQualification(Long qualificationId, Long teacherId);
+
+    TeacherQualificationDto removeTeacherFromQualification(Long qualificationId, Long teacherId);
+
+    TeacherQualificationDto addDisciplineToQualification(Long qualificationId, Long disciplineId);
+
+    TeacherQualificationDto removeDisciplineFromQualification(Long qualificationId, Long disciplineId);
+
 }
