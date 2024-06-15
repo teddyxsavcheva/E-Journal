@@ -22,6 +22,7 @@ public class AbsenceStatus {
     private Long id;
 
     @Column(name = "absence_status_enum")
+    @Enumerated(EnumType.STRING)
     private AbsenceStatusEnum absenceStatusEnum;
 
     @OneToMany(mappedBy = "absenceStatus")

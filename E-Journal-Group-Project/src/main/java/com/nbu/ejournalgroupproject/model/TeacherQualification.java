@@ -21,6 +21,7 @@ public class TeacherQualification {
     private Long id;
 
     @Column(name = "teacher_qualification_enum")
+    @Enumerated(EnumType.STRING)
     private TeacherQualificationEnum qualificationEnum;
 
     @ManyToMany
