@@ -2,7 +2,6 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.TeacherDTO;
 import com.nbu.ejournalgroupproject.service.TeacherService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,69 +10,61 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
+@RequestMapping("/teacher")
 @RestController
 public class TeacherController {
 
     private final TeacherService teacherService;
 
-    @RequestMapping(value = {"/teacher"})
+    @RequestMapping(value = {"/"})
     @ResponseBody
     public ResponseEntity<List<TeacherDTO>> getTeachers(){
-        try{
-            List<TeacherDTO> teachers = teacherService.getTeachers();
-            return new ResponseEntity<>(teachers, HttpStatus.OK);
-        } catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(teacherService.getTeachers());
     }
 
-    @PostMapping(value = {"/teacher"})
+    @RequestMapping(value = {"/school-id/{id}"})
     @ResponseBody
-    public ResponseEntity<String> createTeacher(@RequestBody TeacherDTO newTeacher){
-        try{
-            teacherService.createTeacher(newTeacher);
-            return new ResponseEntity<>("Teacher created successfully", HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<List<TeacherDTO>> getTeachersFromSchoolId(@PathVariable Long id){
+        return ResponseEntity.ok(teacherService.getTeachersFromSchool(id));
     }
 
-    @RequestMapping(value = {"/teacher/from_school/{id}"})
-    @ResponseBody
-    public ResponseEntity<List<TeacherDTO>> getTeachersFromSchool(@PathVariable Long id){
-        try{
-            List<TeacherDTO> teachers = teacherService.getTeachersFromSchool(id);
-            return new ResponseEntity<>(teachers, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(value={"teacher/{id}"})
+    @RequestMapping(value={"/{id}"})
     @ResponseBody
     public ResponseEntity<TeacherDTO> getTeacher(@PathVariable Long id){
-        try {
-            TeacherDTO teacher = teacherService.getTeacher(id);
-            return new ResponseEntity<>(teacher, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(teacherService.getTeacherById(id));
     }
 
-    @DeleteMapping(value = {"/teacher/{id}"})
+    @PostMapping(value = {"/"})
     @ResponseBody
-    public ResponseEntity<String> deleteTeacher(@PathVariable Long id){
-        try{
-            if (teacherService.deleteTeacher(id)){
-                return new ResponseEntity<>("Teacher deleted seccessfully", HttpStatus.OK);
-            }
-            else{
-                throw new EntityNotFoundException("Teacher not found.");
-            }
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<TeacherDTO> createTeacher(@RequestBody TeacherDTO newTeacher){
+        TeacherDTO teacherDTO = teacherService.createTeacher(newTeacher);
+        return ResponseEntity.status(HttpStatus.CREATED).body(teacherDTO);
+    }
+
+    @PutMapping(value = {"{id}"})
+    @ResponseBody
+    public ResponseEntity<TeacherDTO> updateTeacher(@RequestBody TeacherDTO teacherDTO, @PathVariable Long id) {
+        TeacherDTO updatedTeacherDTO = teacherService.updateTeacher(id, teacherDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedTeacherDTO);
+    }
+
+    @DeleteMapping(value = {"{id}"})
+    @ResponseBody
+    public ResponseEntity<HttpStatus> deleteTeacher(@PathVariable Long id){
+        teacherService.deleteTeacher(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
+    @PostMapping("/{teacherId}/qualifications/{qualificationId}")
+    public ResponseEntity<TeacherDTO> addQualificationToTeacher(@PathVariable Long teacherId, @PathVariable Long qualificationId) {
+        TeacherDTO updatedDto = teacherService.addQualificationToTeacher(teacherId, qualificationId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedDto);
+    }
+
+    @DeleteMapping("/{teacherId}/qualifications/{qualificationId}")
+    public ResponseEntity<TeacherDTO> removeQualificationFromTeacher(@PathVariable Long teacherId, @PathVariable Long qualificationId) {
+        TeacherDTO updatedDto = teacherService.deleteQualificationFromTeacher(teacherId, qualificationId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
 }

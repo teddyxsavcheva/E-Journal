@@ -6,15 +6,23 @@ import java.util.List;
 
 
 public interface TeacherService {
-    void createTeacher(TeacherDTO teacherDTO);
-
-    TeacherDTO getTeacher(Long teacherId);
     List<TeacherDTO> getTeachersFromSchool(Long SchoolId);
+
     List<TeacherDTO> getTeachers();
 
-    void updateTeacher(Long teacherId, TeacherDTO teacherDTO);
+    TeacherDTO getTeacherById(Long teacherId);
 
-    boolean deleteTeacher(Long teacherId);
+    TeacherDTO createTeacher(TeacherDTO teacherDTO);
+
+    TeacherDTO updateTeacher(Long teacherId, TeacherDTO teacherDTO);
+
+    void deleteTeacher(Long teacherId);
+
+    void validateTeacherDTO(TeacherDTO teacherDTO);
+
+    TeacherDTO addQualificationToTeacher(Long teacherID, Long qualificationId);
+
+    TeacherDTO deleteQualificationFromTeacher(Long teacherID, Long qualificationId);
 
 
 
