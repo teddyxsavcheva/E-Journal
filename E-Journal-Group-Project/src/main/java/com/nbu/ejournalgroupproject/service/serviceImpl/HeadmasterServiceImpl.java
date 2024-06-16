@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
+import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
 import com.nbu.ejournalgroupproject.mappers.HeadmasterMapper;
 import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
@@ -53,12 +54,15 @@ public class HeadmasterServiceImpl implements HeadmasterService {
 
     @Override
     public HeadmasterDTO createHeadmaster(HeadmasterDTO headmasterDTO) {
+        validateHeadmasterDTO(headmasterDTO);
         Headmaster headmaster = headmasterMapper.mapDtoToEntity(headmasterDTO);
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(headmaster));
     }
 
     @Override
     public HeadmasterDTO updateHeadmaster(Long id, HeadmasterDTO newHeadmaster) {
+        validateHeadmasterDTO(newHeadmaster);
+
         Headmaster existingHeadmaster = headmasterRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Headmaster with id " + id + " not found"));
 
@@ -86,5 +90,21 @@ public class HeadmasterServiceImpl implements HeadmasterService {
 
         headmasterRepository.delete(headmaster);
     }
+
+    @Override
+    public void validateHeadmasterDTO(HeadmasterDTO headmasterDTO) {
+        if (headmasterDTO.getSchoolId() == null) {
+            throw new IllegalArgumentException("The School cannot be null.");
+        }
+
+        if (headmasterDTO.getName() == null) {
+            throw new IllegalArgumentException("The Headmaster name cannot be null.");
+        }
+
+        if (headmasterDTO.getEmail() == null) {
+            throw new IllegalArgumentException("The Headmaster email cannot be null.");
+        }
+    }
+
 }
 

@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.service;
 
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
+import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface HeadmasterService {
 
     HeadmasterDTO updateHeadmaster(Long id, HeadmasterDTO headmasterDTO);
 
+    void validateHeadmasterDTO(HeadmasterDTO headmasterDTO);
 }

@@ -14,9 +14,6 @@ import java.util.Optional;
 @Service
 public class HeadmasterMapper {
 
-//    private final ModelMapper modelMapper = new ModelMapper();
-
-    @Autowired
     private final SchoolRepository schoolRepository;
 
     public HeadmasterMapper(SchoolRepository schoolRepository) {
@@ -30,8 +27,6 @@ public class HeadmasterMapper {
         headmasterDTO.setEmail(headmaster.getEmail());
         mapSchoolIdToHeadmasterDTO(headmaster, headmasterDTO);
 
-//        HeadmasterDTO headmasterDTO = modelMapper.map(headmaster, HeadmasterDTO.class);
-//        mapSchoolEntityToId(headmaster, headmasterDTO);
         return headmasterDTO;
     }
 
@@ -61,5 +56,6 @@ public class HeadmasterMapper {
         if(headmaster.getSchool() != null){
             headmasterDTO.setSchoolId(headmaster.getSchool().getId());
         }
+        else throw new EntityNotFoundException("School not found");
     }
 }
