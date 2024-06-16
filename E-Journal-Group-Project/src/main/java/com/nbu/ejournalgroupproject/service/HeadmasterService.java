@@ -1,7 +1,6 @@
 package com.nbu.ejournalgroupproject.service;
 
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
-import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
 
 import java.util.List;
 

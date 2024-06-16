@@ -1,7 +1,6 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
-import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
 import com.nbu.ejournalgroupproject.mappers.HeadmasterMapper;
 import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
