@@ -7,8 +7,6 @@ import com.nbu.ejournalgroupproject.model.TeacherQualification;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +16,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class TeacherMapper {
-//    private final ModelMapper modelMapper = new ModelMapper();
 
     private final SchoolRepository schoolRepository;
 
@@ -45,7 +42,12 @@ public class TeacherMapper {
         teacher.setName(teacherDTO.getName());
         teacher.setEmail(teacherDTO.getEmail());
 
-        teacher.setSchool(schoolRepository.findById(teacherDTO.getSchoolId()).orElseGet(null));
+        if (teacherDTO.getSchoolId() != null) {
+            teacher.setSchool(schoolRepository.findById(teacherDTO.getSchoolId())
+                    .orElseThrow(() -> new EntityNotFoundException("School with id " + teacherDTO.getSchoolId() + " not found")));
+        } else {
+            teacher.setSchool(null);
+        }
 
         if (teacherDTO.getTeacherQualificationIds() != null) {
             List<TeacherQualification> qualifications = teacherDTO.getTeacherQualificationIds().stream()
