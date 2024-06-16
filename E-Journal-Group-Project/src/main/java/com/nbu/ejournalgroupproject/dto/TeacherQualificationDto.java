@@ -3,7 +3,7 @@ package com.nbu.ejournalgroupproject.dto;
 import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;q
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
