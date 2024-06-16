@@ -3,7 +3,6 @@ package com.nbu.ejournalgroupproject.mappers;
 import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
 import com.nbu.ejournalgroupproject.model.SchoolClass;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
-import com.nbu.ejournalgroupproject.repository.StudentCurriculumRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class SchoolClassMapper {
-    private final StudentCurriculumRepository studentCurriculumRepository;
     private final SchoolRepository schoolRepository;
 
     public SchoolClassDTO mapEntityToDto(SchoolClass schoolClass){
