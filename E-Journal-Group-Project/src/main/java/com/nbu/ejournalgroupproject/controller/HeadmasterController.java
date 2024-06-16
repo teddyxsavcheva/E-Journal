@@ -52,6 +52,6 @@ public class HeadmasterController {
     @ResponseBody
     public ResponseEntity<HeadmasterDTO> updateHeadmaster(@PathVariable Long id, @RequestBody HeadmasterDTO headmasterDTO){
         HeadmasterDTO newHeadmaster = headmasterService.updateHeadmaster(id, headmasterDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newHeadmaster);
+        return ResponseEntity.status(HttpStatus.OK).body(newHeadmaster);
     }
 }
