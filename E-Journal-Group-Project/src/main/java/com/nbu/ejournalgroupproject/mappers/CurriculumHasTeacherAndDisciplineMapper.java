@@ -61,11 +61,14 @@ public class CurriculumHasTeacherAndDisciplineMapper {
 
         Discipline discipline = entity.getDiscipline();
 
-        if (disciplineRepository.existsById(discipline.getId())) {
-            dto.setDisciplineId(discipline.getId());
-        }
-        else {
-            throw new EntityNotFoundException("No Discipline found with id " + discipline.getId());
+        if (discipline != null) {
+            if (disciplineRepository.existsById(discipline.getId())) {
+                dto.setDisciplineId(discipline.getId());
+            } else {
+                throw new EntityNotFoundException("No Discipline found with id " + discipline.getId());
+            }
+        } else {
+            throw new EntityNotFoundException("Discipline object is null for entity with id " + entity.getId());
         }
 
     }

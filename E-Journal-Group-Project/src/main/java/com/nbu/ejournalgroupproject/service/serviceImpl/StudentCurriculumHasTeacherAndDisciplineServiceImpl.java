@@ -10,10 +10,14 @@ import com.nbu.ejournalgroupproject.repository.TeacherRepository;
 import com.nbu.ejournalgroupproject.service.StudentCurriculumHasTeacherAndDisciplineService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+// TODO: Ask Kostadinova what happens with the curriculum if I remove needed qualification from a teacher?
 @AllArgsConstructor
 @Service
 public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements StudentCurriculumHasTeacherAndDisciplineService {
@@ -23,6 +27,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     private final DisciplineRepository disciplineRepository;
     private final StudentCurriculumRepository studentCurriculumRepository;
     private final CurriculumHasTeacherAndDisciplineMapper mapper;
+    private static final Logger logger = LoggerFactory.getLogger(StudentCurriculumHasTeacherAndDisciplineServiceImpl.class);
 
     @Override
     public List<StudentCurriculumHasTeacherAndDisciplineDto> getAllCurriculumHasTeacherAndDiscipline() {
@@ -31,7 +36,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
         return list.stream()
                 .map(mapper::convertToDto)
-                .toList();
+                .collect(Collectors.toList());
 
     }
 

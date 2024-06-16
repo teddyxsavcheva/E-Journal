@@ -19,7 +19,6 @@ public class DisciplineDto {
 
     private Long disciplineTypeId;
 
-    // TODO: Many-to-Many logic
     private List<Long> teacherQualificationIds;
 
 }
