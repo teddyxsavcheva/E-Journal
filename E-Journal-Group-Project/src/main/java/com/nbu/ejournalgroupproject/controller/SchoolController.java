@@ -2,7 +2,6 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.SchoolDTO;
 import com.nbu.ejournalgroupproject.service.SchoolService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,56 +10,43 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
+@RequestMapping("/school")
 @RestController
 public class SchoolController {
 
     private final SchoolService schoolService;
 
-    @RequestMapping(value = {"/school"})
+    @GetMapping(value = {"/"})
     @ResponseBody
     public ResponseEntity<List<SchoolDTO>> getSchools(){
-        try{
-            List<SchoolDTO> schools = schoolService.getSchools();
-            return new ResponseEntity<>(schools, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(schoolService.getSchools());
     }
 
-    @RequestMapping(value = {"school/{id}"})
+    @RequestMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<SchoolDTO> getSchool(@PathVariable long id){
-        try{
-            SchoolDTO school = schoolService.getSchool(id);
-            return new ResponseEntity<>(school, HttpStatus.OK);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<SchoolDTO> getSchoolById(@PathVariable long id){
+        return ResponseEntity.ok(schoolService.getSchool(id));
     }
 
-    @PostMapping(value={"/school"})
+    @PostMapping(value={"/"})
     @ResponseBody
-    public ResponseEntity<String> createSchool(@RequestBody SchoolDTO newSchool){
-        try{
-            schoolService.createSchool(newSchool);
-            return new ResponseEntity<>("School created successfully", HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<SchoolDTO> createSchool(@RequestBody SchoolDTO newSchool){
+        SchoolDTO schoolDTO = schoolService.createSchool(newSchool);
+        return ResponseEntity.status(HttpStatus.CREATED).body(schoolDTO);
     }
 
-    @DeleteMapping(value = {"/school/{id}"})
+    @DeleteMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<String> deleteSchool(@PathVariable Long id){
-        try{
-            if(schoolService.deleteSchool(id)){
-                return new ResponseEntity<>("School deleted successfully.", HttpStatus.OK);
-            } else {
-                throw new EntityNotFoundException("School not found.");
-            }
-        } catch (Exception e){
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<HttpStatus> deleteSchool(@PathVariable Long id){
+        schoolService.deleteSchool(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping(value = {"/{id}"})
+    @ResponseBody
+    public ResponseEntity<SchoolDTO> updateSchool(@PathVariable Long id, @RequestBody SchoolDTO schoolDTO){
+        SchoolDTO newSchool = schoolService.updateSchool(id, schoolDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(newSchool);
     }
 }
 

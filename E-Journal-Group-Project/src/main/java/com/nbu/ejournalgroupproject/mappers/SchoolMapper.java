@@ -1,57 +1,46 @@
 package com.nbu.ejournalgroupproject.mappers;
 
 import com.nbu.ejournalgroupproject.dto.SchoolDTO;
-import com.nbu.ejournalgroupproject.dto.TeacherDTO;
 import com.nbu.ejournalgroupproject.model.School;
-import com.nbu.ejournalgroupproject.model.Teacher;
-import org.modelmapper.ModelMapper;
+import com.nbu.ejournalgroupproject.repository.SchoolTypeRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@AllArgsConstructor
 @Service
 public class SchoolMapper {
 
-    private final ModelMapper modelMapper = new ModelMapper();
-    private final TeacherMapper teacherMapper;
+    private final SchoolTypeRepository schoolTypeRepository;
 
-    public SchoolMapper(TeacherMapper teacherMapper) {
-        this.teacherMapper = teacherMapper;
-    }
+    public SchoolDTO mapEntityToDto(School school) {
+        SchoolDTO schoolDTO = new SchoolDTO();
+        schoolDTO.setId(school.getId());
+        schoolDTO.setName(school.getName());
+        schoolDTO.setAddress(school.getAddress());
+        mapSchoolTypeToSchoolDTO(school, schoolDTO);
 
-    public SchoolDTO SchoolEntityToDto(School school){
-        SchoolDTO schoolDTO = modelMapper.map(school, SchoolDTO.class);
-        List<TeacherDTO> teacherDTOS = school.getTeachers()
-                .stream()
-                .map(teacherMapper::TeacherEntityToDto)
-                .collect(Collectors.toList());
-        schoolDTO.setTeachers(teacherDTOS);
-
-        //TODO TEDI -> TOVA VUOBSHTE TRYABVA LI MI -> RABOTI I BEZ NEGO
-//        if(school.getHeadmaster() != null){
-//            schoolDTO.setHeadmasterId(school.getHeadmaster().getId());
-//        }
-//        else{
-//            throw new EntityNotFoundException("Headmaster with ID " + school.getHeadmaster().getId() + "not found." );
-//        }
         return schoolDTO;
     }
 
-    public School SchoolDtoToEntity(SchoolDTO schoolDTO){
-        School school = modelMapper.map(schoolDTO, School.class);
-        List<Teacher> teachers = schoolDTO.getTeachers()
-                .stream()
-                .map(teacherMapper::TeacherDtoToEntity)
-                .collect(Collectors.toList());
-        school.setTeachers(teachers);
+    public School mapDtoToEntity(SchoolDTO schoolDTO) {
+        School school = new School();
+        school.setId(schoolDTO.getId());
+        school.setName(schoolDTO.getName());
+        school.setAddress(schoolDTO.getAddress());
+        mapSchoolTypeToSchool(schoolDTO, school);
 
         return school;
     }
 
-//    public void mapHeadmasterIdToEntity(SchoolDTO schoolDTO, School school){
-//        if(schoolDTO.getHeadmasterId() != null){
-//            Optional<Headmaster> headmasterOptional = headmasterRepository.findById(schoolDTO.getHeadmasterId()); //TODO TODO DOVURSHI GO
-//        }
-//    }
+    public void mapSchoolTypeToSchool(SchoolDTO schoolDTO, School school) {
+        if (schoolDTO.getSchoolTypeId() != null) {
+            school.setSchoolType(schoolTypeRepository.findById(schoolDTO.getSchoolTypeId())
+                    .orElseThrow(() -> new EntityNotFoundException("School type with id " + schoolDTO.getSchoolTypeId() + " not found")));
+        }
+    }
+
+    public void mapSchoolTypeToSchoolDTO(School school, SchoolDTO schoolDTO) {
+        schoolDTO.setSchoolTypeId(school.getSchoolType().getId());
+    }
 }

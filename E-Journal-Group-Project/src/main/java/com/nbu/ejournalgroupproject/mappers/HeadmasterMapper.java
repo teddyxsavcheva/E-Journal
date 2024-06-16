@@ -5,19 +5,16 @@ import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-
+@AllArgsConstructor
 @Service
 public class HeadmasterMapper {
 
     private final SchoolRepository schoolRepository;
-
-    public HeadmasterMapper(SchoolRepository schoolRepository) {
-        this.schoolRepository = schoolRepository;
-    }
 
     public HeadmasterDTO mapEntityToDto(Headmaster headmaster){
         HeadmasterDTO headmasterDTO = new HeadmasterDTO();

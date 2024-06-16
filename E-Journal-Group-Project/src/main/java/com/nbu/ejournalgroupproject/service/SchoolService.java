@@ -9,9 +9,11 @@ public interface SchoolService {
 
     SchoolDTO getSchool(Long id);
 
-    void createSchool(SchoolDTO schoolDTO);
+    SchoolDTO createSchool(SchoolDTO schoolDTO);
 
-    boolean deleteSchool(Long schoolId);
+    SchoolDTO updateSchool(Long id, SchoolDTO schoolDTO);
+
+    void deleteSchool(Long schoolId);
 
 
 
