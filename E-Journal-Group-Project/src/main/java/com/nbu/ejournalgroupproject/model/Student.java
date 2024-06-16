@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,9 +38,9 @@ public class Student {
     private List<Absence> absences;
 
     @ManyToMany
-    @JoinTable(name="caregivers_have_students",
-            joinColumns=@JoinColumn(name="student_id"),
-            inverseJoinColumns=@JoinColumn(name="caregiver_id")
+    @JoinTable(name = "student_caregiver",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "caregiver_id")
     )
-    private List<Caregiver> caregivers;
+    private Set<Caregiver> caregivers = new HashSet<>();
 }

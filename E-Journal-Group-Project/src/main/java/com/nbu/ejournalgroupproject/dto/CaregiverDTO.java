@@ -1,20 +1,17 @@
 package com.nbu.ejournalgroupproject.dto;
 
+import com.nbu.ejournalgroupproject.model.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentDTO {
+public class CaregiverDTO {
     private Long id;
     private String name;
-    private int numberInClass;
-    private Long schoolClassId;
-    private List<Long> gradeIds;
-    private List<Long> absenceIds;
-    private List<Long> caregiverIds;
+    private String email;
+    private List<Student> students;
 }

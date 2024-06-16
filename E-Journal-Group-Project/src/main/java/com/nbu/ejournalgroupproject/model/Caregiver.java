@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,6 +31,6 @@ public class Caregiver {
             joinColumns=@JoinColumn(name="caregiver_id"),
             inverseJoinColumns=@JoinColumn(name="student_id")
     )
-    private List<Student> students;
+    private Set<Student> students = new HashSet<>();
 
 }
