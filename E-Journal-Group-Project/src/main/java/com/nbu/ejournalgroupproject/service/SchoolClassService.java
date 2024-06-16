@@ -11,13 +11,10 @@ public interface SchoolClassService {
 
     SchoolClassDTO createSchoolClass(SchoolClassDTO schoolClassDTO);
 
-//    SchoolClassDTO updateSchoolClass(Long id, SchoolClassDTO schoolClassDTO);
+    SchoolClassDTO updateSchoolClass(Long id, SchoolClassDTO schoolClassDTO);
 
     void deleteSchoolClass(Long id);
 
     void validateSchoolClassDTO(SchoolClassDTO schoolClassDTO);
 
-    SchoolClassDTO addStudentById(Long id);
-
-    SchoolClassDTO removeStudentById(Long id);
 }

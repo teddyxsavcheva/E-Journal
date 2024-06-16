@@ -37,9 +37,8 @@ public class SchoolClassController {
     @PutMapping(value = {"/{id}"})
     @ResponseBody
     public ResponseEntity<SchoolClassDTO> updateSchoolClass(@PathVariable Long id, @RequestBody SchoolClassDTO schoolClassDTO){
-//        SchoolClassDTO newSchoolClass = schoolClassService.updateSchoolClass(id, schoolClassDTO);
-//        return ResponseEntity.status(HttpStatus.OK).body(newSchoolClass);
-        return null;
+        SchoolClassDTO newSchoolClass = schoolClassService.updateSchoolClass(id, schoolClassDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(newSchoolClass);
     }
 
     @DeleteMapping(value = "/{id}")
