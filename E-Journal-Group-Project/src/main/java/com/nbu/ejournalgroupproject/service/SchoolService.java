@@ -15,6 +15,7 @@ public interface SchoolService {
 
     void deleteSchool(Long schoolId);
 
+    void validateSchoolDTO(SchoolDTO schoolDTO);
 
 
 }

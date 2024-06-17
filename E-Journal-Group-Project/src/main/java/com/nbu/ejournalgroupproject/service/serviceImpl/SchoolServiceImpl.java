@@ -67,7 +67,8 @@ public class SchoolServiceImpl implements SchoolService {
         schoolRepository.delete(school);
     }
 
-    private void validateSchoolDTO(SchoolDTO schoolDTO) {
+    @Override
+    public void validateSchoolDTO(SchoolDTO schoolDTO) {
         if (schoolDTO.getName() == null) {
             throw new IllegalArgumentException("School name cannot be null.");
         }
