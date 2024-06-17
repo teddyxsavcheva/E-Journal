@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.mappers;
 
 import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
+import com.nbu.ejournalgroupproject.model.School;
 import com.nbu.ejournalgroupproject.model.SchoolClass;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,48 +19,35 @@ public class SchoolClassMapper {
         schoolClassDTO.setId(schoolClass.getId());
         schoolClassDTO.setName(schoolClass.getName());
         schoolClassDTO.setYear(schoolClass.getYear());
-        mapSchoolIdToSchoolClassDto(schoolClass, schoolClassDTO);
-//        mapStudentCurriculumToSchoolClassDto(schoolClass, schoolClassDTO);
+        schoolClassDTO.setSchoolId(getSchoolId(schoolClass));
 
         return schoolClassDTO;
     }
+
 
     public SchoolClass mapDtoToEntity(SchoolClassDTO schoolClassDTO) {
         SchoolClass schoolClass = new SchoolClass();
         schoolClass.setId(schoolClassDTO.getId());
         schoolClass.setName(schoolClassDTO.getName());
         schoolClass.setYear(schoolClassDTO.getYear());
-        mapSchoolIdToSchoolClassEntity(schoolClassDTO, schoolClass);
-//        mapStudentCurriculumToSchoolClassEntity(schoolClassDTO, schoolClass);
+        schoolClass.setSchool(getSchool(schoolClassDTO));
         return schoolClass;
     }
 
-    private void mapSchoolIdToSchoolClassDto(SchoolClass schoolClass, SchoolClassDTO schoolClassDTO) {
+
+    private Long getSchoolId(SchoolClass schoolClass) {
         if (schoolClass.getSchool() != null) {
-            schoolClassDTO.setSchoolId(schoolClass.getSchool().getId());
+            return schoolClass.getSchool().getId();
         }
-        else throw new EntityNotFoundException("School not found.");
-
+        else throw new IllegalArgumentException("School cannot be null");
     }
 
-//    private void mapStudentCurriculumToSchoolClassDto(SchoolClass schoolClass, SchoolClassDTO schoolClassDTO) {
-//        if (schoolClass.getStudentCurriculums() != null) {
-//            schoolClassDTO.setStudentCurriculumId(schoolClass.getStudentCurriculums().getId());
-//        }
-//    }
-
-    private void mapSchoolIdToSchoolClassEntity(SchoolClassDTO schoolClassDTO, SchoolClass schoolClass) {
+    private School getSchool(SchoolClassDTO schoolClassDTO) {
         if (schoolClassDTO.getSchoolId() != null) {
-            schoolClass.setSchool(schoolRepository.findById(schoolClassDTO.getSchoolId())
-                    .orElseThrow(() -> new EntityNotFoundException("School not found")));
+            return schoolRepository.findById(schoolClassDTO.getSchoolId())
+                    .orElseThrow(() -> new EntityNotFoundException("School not found"));
         }
+        else throw new IllegalArgumentException("School cannot be null");
     }
-
-//    private void mapStudentCurriculumToSchoolClassEntity(SchoolClassDTO schoolClassDTO, SchoolClass schoolClass) {
-//        if (schoolClassDTO.getStudentCurriculumId() != null) {
-//            schoolClass.setStudentCurriculums(studentCurriculumRepository.findById(schoolClassDTO.getStudentCurriculumId())
-//                    .orElseThrow(() -> new EntityNotFoundException("Student Curriculum not found")));
-//        }
-//    }
 }
 

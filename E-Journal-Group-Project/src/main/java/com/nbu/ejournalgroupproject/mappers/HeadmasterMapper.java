@@ -8,8 +8,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @AllArgsConstructor
 @Service
 public class HeadmasterMapper {
@@ -21,37 +19,37 @@ public class HeadmasterMapper {
         headmasterDTO.setId(headmaster.getId());
         headmasterDTO.setName(headmaster.getName());
         headmasterDTO.setEmail(headmaster.getEmail());
-        mapSchoolIdToHeadmasterDTO(headmaster, headmasterDTO);
+
+        headmasterDTO.setSchoolId(getSchoolId(headmaster));
 
         return headmasterDTO;
     }
+
 
     public Headmaster mapDtoToEntity(HeadmasterDTO headmasterDTO){
         Headmaster headmaster = new Headmaster();
         headmaster.setId(headmasterDTO.getId());
         headmaster.setName(headmasterDTO.getName());
         headmaster.setEmail(headmasterDTO.getEmail());
-        mapSchoolIdToHeadmaster(headmasterDTO, headmaster);
+
+        headmaster.setSchool(getSchool(headmasterDTO));
 
         return headmaster;
     }
 
-    public void mapSchoolIdToHeadmaster(HeadmasterDTO headmasterDTO, Headmaster headmaster){
-        if(headmasterDTO.getSchoolId() != null){
-            Optional<School> schoolOptional = schoolRepository.findById(headmasterDTO.getSchoolId());
-
-            if(schoolOptional.isPresent()){
-                headmaster.setSchool(schoolOptional.get());
-            } else {
-                throw new EntityNotFoundException("School with ID " + headmasterDTO.getSchoolId() + " is not found");
-            }
+    private School getSchool(HeadmasterDTO headmasterDTO) {
+        if (headmasterDTO.getSchoolId() != null) {
+            return schoolRepository.findById(headmasterDTO.getSchoolId())
+                    .orElseThrow(() -> new EntityNotFoundException("School with id " + headmasterDTO.getSchoolId() + " not found"));
         }
+        else throw new IllegalArgumentException("School cannot be null");
     }
 
-    public void mapSchoolIdToHeadmasterDTO(Headmaster headmaster, HeadmasterDTO headmasterDTO){
+    private Long getSchoolId(Headmaster headmaster) {
         if(headmaster.getSchool() != null){
-            headmasterDTO.setSchoolId(headmaster.getSchool().getId());
+            return headmaster.getSchool().getId();
         }
-        else throw new EntityNotFoundException("School not found");
+        else throw new IllegalArgumentException("School cannot be null");
     }
+
 }

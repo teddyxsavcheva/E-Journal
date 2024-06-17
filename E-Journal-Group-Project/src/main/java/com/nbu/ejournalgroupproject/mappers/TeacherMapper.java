@@ -20,21 +20,17 @@ public class TeacherMapper {
     private final SchoolRepository schoolRepository;
 
     public TeacherDTO EntityToDto(Teacher teacher) {
-        TeacherDTO dto = new TeacherDTO();
-        dto.setId(teacher.getId());
-        dto.setName(teacher.getName());
-        dto.setEmail(teacher.getEmail());
-        dto.setSchoolId(teacher.getSchool() != null ? teacher.getSchool().getId() : null);
+        TeacherDTO teacherDTO = new TeacherDTO();
+        teacherDTO.setId(teacher.getId());
+        teacherDTO.setName(teacher.getName());
+        teacherDTO.setEmail(teacher.getEmail());
 
-        if (teacher.getTeacherQualifications() != null) {
-            List<Long> qualificationIds = teacher.getTeacherQualifications().stream()
-                    .map(TeacherQualification::getId)
-                    .collect(Collectors.toList());
-            dto.setTeacherQualificationIds(qualificationIds);
-        }
+        teacherDTO.setSchoolId(getSchoolId(teacher));
+        teacherDTO.setTeacherQualificationIds(getTeacherQualificationIds(teacher));
 
-        return dto;
+        return teacherDTO;
     }
+
 
     public Teacher DtoToEntity(TeacherDTO teacherDTO) {
         Teacher teacher = new Teacher();
@@ -42,32 +38,41 @@ public class TeacherMapper {
         teacher.setName(teacherDTO.getName());
         teacher.setEmail(teacherDTO.getEmail());
 
-        if (teacherDTO.getSchoolId() != null) {
-            teacher.setSchool(schoolRepository.findById(teacherDTO.getSchoolId())
-                    .orElseThrow(() -> new EntityNotFoundException("School with id " + teacherDTO.getSchoolId() + " not found")));
-        } else {
-            teacher.setSchool(null);
-        }
-
-        if (teacherDTO.getTeacherQualificationIds() != null) {
-            List<TeacherQualification> qualifications = teacherDTO.getTeacherQualificationIds().stream()
-                    .map(id -> {
-                        TeacherQualification qualification = new TeacherQualification();
-                        qualification.setId(id);
-                        return qualification;
-                    })
-                    .collect(Collectors.toList());
-            teacher.setTeacherQualifications(qualifications);
-        }
+        teacher.setSchool(getSchool(teacherDTO));
+        teacher.setTeacherQualifications(getQualifications(teacherDTO));
 
         return teacher;
     }
 
-//    public void mapSchoolEntityToId(Teacher teacher, TeacherDTO teacherDTO){
-//        if (teacher.getSchool() != null){
-//            teacherDTO.setSchoolId(teacher.getSchool().getId());
-//        }
-//    }
+    public Long getSchoolId(Teacher teacher) {
+        return teacher.getSchool() != null ? teacher.getSchool().getId() : null;
+    }
+
+    public School getSchool(TeacherDTO teacherDTO) {
+        if (teacherDTO.getSchoolId() != null) {
+            return schoolRepository.findById(teacherDTO.getSchoolId())
+                    .orElseThrow(() -> new EntityNotFoundException("School with id " + teacherDTO.getSchoolId() + " not found"));
+        } else {
+            return null;
+        }
+    }
+
+    //TODO can Teacher Qualifications be null
+    public List<Long> getTeacherQualificationIds(Teacher teacher) {
+        return teacher.getTeacherQualifications().stream()
+                .map(TeacherQualification::getId)
+                .collect(Collectors.toList());
+    }
+
+    public List<TeacherQualification> getQualifications(TeacherDTO teacherDTO) {
+        return teacherDTO.getTeacherQualificationIds() != null ? teacherDTO.getTeacherQualificationIds().stream()
+                .map(id -> {
+                    TeacherQualification qualification = new TeacherQualification();
+                    qualification.setId(id);
+                    return qualification;
+                })
+                .collect(Collectors.toList()) : null;
+    }
 
     public void mapSchoolIdToEntity(TeacherDTO teacherDTO, Teacher teacher){
 
@@ -77,8 +82,4 @@ public class TeacherMapper {
             schoolOptional.ifPresent(teacher::setSchool);
         }
     }
-
-
-
-
 }
