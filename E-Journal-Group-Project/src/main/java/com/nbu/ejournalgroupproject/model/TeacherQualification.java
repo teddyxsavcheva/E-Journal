@@ -2,11 +2,12 @@ package com.nbu.ejournalgroupproject.model;
 
 import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ public class TeacherQualification {
     @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "Teacher qualification enum must not be null")
     @Column(name = "teacher_qualification_enum")
     @Enumerated(EnumType.STRING)
     private TeacherQualificationEnum qualificationEnum;
@@ -29,13 +31,13 @@ public class TeacherQualification {
             joinColumns=@JoinColumn(name="teacher_qualification_id"),
             inverseJoinColumns=@JoinColumn(name="teacher_id")
     )
-    private List<Teacher> teachers;
+    private Set<Teacher> teachers;
 
     @ManyToMany
     @JoinTable(name="disciplines_have_teacher_qualifications",
             joinColumns=@JoinColumn(name="teacher_qualification_id"),
             inverseJoinColumns=@JoinColumn(name="discipline_id")
     )
-    private List<Discipline> disciplines;
+    private Set<Discipline> disciplines;
 
 }

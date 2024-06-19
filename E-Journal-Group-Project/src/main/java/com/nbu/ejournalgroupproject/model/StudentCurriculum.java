@@ -22,6 +22,7 @@ public class StudentCurriculum {
     @Column(name = "semester")
     private int semester;
 
+    // TODO: We need to check if the year in the curriculum matches the year from the school class
     @Column(name = "year")
     private int year;
 
