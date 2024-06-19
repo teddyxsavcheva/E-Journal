@@ -60,19 +60,26 @@ public class TeacherMapper {
 
     //TODO can Teacher Qualifications be null
     public List<Long> getTeacherQualificationIds(Teacher teacher) {
+        if (teacher.getTeacherQualifications() == null) {
+            return List.of();
+        }
         return teacher.getTeacherQualifications().stream()
                 .map(TeacherQualification::getId)
                 .collect(Collectors.toList());
     }
 
+
     public Set<TeacherQualification> getQualifications(TeacherDTO teacherDTO) {
-        return teacherDTO.getTeacherQualificationIds() != null ? teacherDTO.getTeacherQualificationIds().stream()
+        if (teacherDTO.getTeacherQualificationIds() == null) {
+            return Set.of(); // Return an empty set instead of null
+        }
+        return teacherDTO.getTeacherQualificationIds().stream()
                 .map(id -> {
                     TeacherQualification qualification = new TeacherQualification();
                     qualification.setId(id);
                     return qualification;
                 })
-                .collect(Collectors.toSet()) : null;
+                .collect(Collectors.toSet());
     }
 
     public void mapSchoolIdToEntity(TeacherDTO teacherDTO, Teacher teacher){

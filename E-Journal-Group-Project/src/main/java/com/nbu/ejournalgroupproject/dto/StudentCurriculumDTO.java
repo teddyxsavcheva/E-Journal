@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class StudentCurriculumDTO {
     private Long id;
 
-    @Min(value = 1, message = "Semester must be at least 1") //TODO [1,?]
+    @Min(value = 1, message = "Semester must be at least 1")//TODO [1,?]
     private int semester;
 
     @Min(value = 1, message = "Year must be at least 1")

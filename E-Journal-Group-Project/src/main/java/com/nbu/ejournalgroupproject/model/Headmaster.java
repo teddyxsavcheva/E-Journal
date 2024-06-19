@@ -3,6 +3,7 @@ package com.nbu.ejournalgroupproject.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,7 @@ public class Headmaster {
     @Column(name = "email")
     private String email;
 
-    @NotBlank(message = "School ID cannot be null")
+    @NotNull(message = "School ID cannot be null")
     @OneToOne
     @JoinColumn(name = "school_id")
     private School school;

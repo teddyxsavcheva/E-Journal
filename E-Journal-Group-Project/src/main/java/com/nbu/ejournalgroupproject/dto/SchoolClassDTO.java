@@ -15,7 +15,7 @@ public class SchoolClassDTO {
     private Long id;
 
     @NotBlank(message = "Address must not be blank")
-    @Size(min = 2, max = 100, message = "Address must be between 2 and 100 characters")
+    @Size(min = 1, max = 100, message = "Address must be between 1 and 100 characters")
     private String name;
 
     @Min(value = 2000, message = "Year must be greater than or equal to 2000")
