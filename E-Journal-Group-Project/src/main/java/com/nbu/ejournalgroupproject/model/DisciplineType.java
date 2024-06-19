@@ -26,7 +26,6 @@ public class DisciplineType {
     @Enumerated(EnumType.STRING)
     private DisciplineTypeEnum disciplineTypeEnum;
 
-    @NotNull(message = "Disciplines list must not be null")
     @OneToMany(mappedBy = "disciplineType")
     private List<Discipline> discipline;
 
