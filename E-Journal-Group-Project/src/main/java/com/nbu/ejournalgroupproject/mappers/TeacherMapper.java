@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -64,14 +65,14 @@ public class TeacherMapper {
                 .collect(Collectors.toList());
     }
 
-    public List<TeacherQualification> getQualifications(TeacherDTO teacherDTO) {
+    public Set<TeacherQualification> getQualifications(TeacherDTO teacherDTO) {
         return teacherDTO.getTeacherQualificationIds() != null ? teacherDTO.getTeacherQualificationIds().stream()
                 .map(id -> {
                     TeacherQualification qualification = new TeacherQualification();
                     qualification.setId(id);
                     return qualification;
                 })
-                .collect(Collectors.toList()) : null;
+                .collect(Collectors.toSet()) : null;
     }
 
     public void mapSchoolIdToEntity(TeacherDTO teacherDTO, Teacher teacher){

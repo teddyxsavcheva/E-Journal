@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
 import com.nbu.ejournalgroupproject.repository.TeacherRepository;
 import com.nbu.ejournalgroupproject.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,14 +50,14 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDTO createTeacher(TeacherDTO teacherDTO) {
+    public TeacherDTO createTeacher(@Valid TeacherDTO teacherDTO) {
         validateTeacherDTO(teacherDTO);
         Teacher teacher = teacherMapper.DtoToEntity(teacherDTO);
         return teacherMapper.EntityToDto(teacherRepository.save(teacher));
     }
 
     @Override
-    public TeacherDTO updateTeacher(Long teacherId, TeacherDTO teacherDTO) {
+    public TeacherDTO updateTeacher(Long teacherId, @Valid TeacherDTO teacherDTO) {
         validateTeacherDTO(teacherDTO);
         Teacher existingTeacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher with id " + teacherId + " not found"));
@@ -67,19 +68,6 @@ public class TeacherServiceImpl implements TeacherService {
         Teacher updatedTeacher = teacherRepository.save(existingTeacher);
         return teacherMapper.EntityToDto(updatedTeacher);
     }
-
-//        // Update the teacher qualifications
-//        if (teacherDTO.getTeacherQualificationIds() != null) {
-//            List<TeacherQualification> qualifications = teacherDTO.getTeacherQualificationIds().stream()
-//                    .map(id -> {
-//                        // Retrieve or create TeacherQualification by id
-//                        return qualificationRepository.findById(id)
-//                                .orElseThrow(() -> new EntityNotFoundException("Qualification with id " + id + " not found"));
-//                    })
-//                    .collect(Collectors.toList());
-//            existingTeacher.setTeacherQualifications(qualifications);
-//        }
-
 
     @Override
     public void deleteTeacher(Long teacherId) {

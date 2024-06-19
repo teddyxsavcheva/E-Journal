@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.SchoolTypeDTO;
 import com.nbu.ejournalgroupproject.service.SchoolTypeService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +31,14 @@ public class SchoolTypeController {
 
     @PostMapping(value = {"/"})
     @ResponseBody
-    public ResponseEntity<SchoolTypeDTO> createSchoolType(@RequestBody SchoolTypeDTO schoolTypeDTO){
+    public ResponseEntity<SchoolTypeDTO> createSchoolType(@RequestBody @Valid SchoolTypeDTO schoolTypeDTO){
         SchoolTypeDTO newSchoolType = schoolTypeService.createSchoolType(schoolTypeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSchoolType);
     }
 
     @PutMapping(value={"/{id}"})
     @ResponseBody
-    public ResponseEntity<SchoolTypeDTO> updateSchoolType(@PathVariable Long id, @RequestBody SchoolTypeDTO schoolTypeDTO){
+    public ResponseEntity<SchoolTypeDTO> updateSchoolType(@PathVariable Long id, @RequestBody @Valid SchoolTypeDTO schoolTypeDTO){
         SchoolTypeDTO newSchoolType = schoolTypeService.updateSchoolType(id, schoolTypeDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newSchoolType);
     }

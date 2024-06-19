@@ -7,6 +7,7 @@ import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import com.nbu.ejournalgroupproject.repository.SchoolTypeRepository;
 import com.nbu.ejournalgroupproject.service.SchoolService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +39,14 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public SchoolDTO createSchool(SchoolDTO schoolDTO) {
+    public SchoolDTO createSchool(@Valid SchoolDTO schoolDTO) {
         validateSchoolDTO(schoolDTO);
         School school = schoolMapper.mapDtoToEntity(schoolDTO);
         return schoolMapper.mapEntityToDto(schoolRepository.save(school));
     }
 
     @Override
-    public SchoolDTO updateSchool(Long id, SchoolDTO newSchool) {
+    public SchoolDTO updateSchool(Long id, @Valid SchoolDTO newSchool) {
         validateSchoolDTO(newSchool);
 
         School existingSchool = schoolRepository.findById(id)
@@ -75,8 +76,8 @@ public class SchoolServiceImpl implements SchoolService {
         if (schoolDTO.getAddress() == null) {
             throw new IllegalArgumentException("School address cannot be null.");
         }
-        if (schoolDTO.getSchoolTypeId() == null) {
-            throw new IllegalArgumentException("School Type cannot be null.");
+        if (schoolDTO.getSchoolTypeId() == 0) {
+            throw new IllegalArgumentException("School Type ID cannot be zero.");
         }
 
     }

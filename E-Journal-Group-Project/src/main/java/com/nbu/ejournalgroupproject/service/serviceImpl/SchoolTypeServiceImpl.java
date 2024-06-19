@@ -6,6 +6,7 @@ import com.nbu.ejournalgroupproject.model.SchoolType;
 import com.nbu.ejournalgroupproject.repository.SchoolTypeRepository;
 import com.nbu.ejournalgroupproject.service.SchoolTypeService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -34,8 +35,8 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
     }
 
     @Override
-    public SchoolTypeDTO createSchoolType(SchoolTypeDTO schoolTypeDTO) {
-        validateSchoolTypeDTO(schoolTypeDTO);
+    public SchoolTypeDTO createSchoolType(@Valid SchoolTypeDTO schoolTypeDTO) {
+//        validateSchoolTypeDTO(schoolTypeDTO);
 
         SchoolType schoolType = schoolTypeMapper.mapDtoToEntity(schoolTypeDTO);
         return schoolTypeMapper.mapEntityToDto(schoolTypeRepository.save(schoolType));
@@ -43,8 +44,8 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
     }
 
     @Override
-    public SchoolTypeDTO updateSchoolType(Long id, SchoolTypeDTO schoolTypeDTO) {
-        validateSchoolTypeDTO(schoolTypeDTO);
+    public SchoolTypeDTO updateSchoolType(Long id, @Valid SchoolTypeDTO schoolTypeDTO) {
+//        validateSchoolTypeDTO(schoolTypeDTO);
 
         SchoolType schoolType = schoolTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("SchoolType with id " + schoolTypeDTO.getId() + " not found"));
@@ -63,12 +64,12 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
         schoolTypeRepository.delete(schoolType);
     }
 
-    @Override
-    public void validateSchoolTypeDTO(SchoolTypeDTO schoolTypeDTO) {
-
-        if (schoolTypeDTO.getSchoolType() == null) {
-            throw new IllegalArgumentException("The School Type cannot be null");
-        }
-
-    }
+//    @Override
+//    public void validateSchoolTypeDTO(SchoolTypeDTO schoolTypeDTO) {
+//
+//        if (schoolTypeDTO.getSchoolType() == null) {
+//            throw new IllegalArgumentException("The School Type cannot be null");
+//        }
+//
+//    }
 }

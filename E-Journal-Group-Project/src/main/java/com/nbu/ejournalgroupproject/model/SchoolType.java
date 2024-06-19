@@ -1,8 +1,9 @@
 package com.nbu.ejournalgroupproject.model;
-//moe
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nbu.ejournalgroupproject.enums.SchoolTypeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,8 +22,9 @@ public class SchoolType {
     @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "School Type must not be null")
     @Column(name = "school_type_enum")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) //unique proveri
     private SchoolTypeEnum schoolTypeEnum;
 
     @JsonIgnore

@@ -7,6 +7,7 @@ import com.nbu.ejournalgroupproject.repository.SchoolClassRepository;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import com.nbu.ejournalgroupproject.service.SchoolClassService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
     }
 
     @Override
-    public SchoolClassDTO createSchoolClass(SchoolClassDTO schoolClassDTO) {
+    public SchoolClassDTO createSchoolClass(@Valid SchoolClassDTO schoolClassDTO) {
         validateSchoolClassDTO(schoolClassDTO);
 
 
@@ -47,7 +48,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
     }
 
     @Override
-    public SchoolClassDTO updateSchoolClass(Long id, SchoolClassDTO newSchoolClass) {
+    public SchoolClassDTO updateSchoolClass(Long id, @Valid SchoolClassDTO newSchoolClass) {
         validateSchoolClassDTO(newSchoolClass);
 
         SchoolClass existingSchoolClass = schoolClassRepository.findById(id)
@@ -56,12 +57,8 @@ public class SchoolClassServiceImpl implements SchoolClassService {
         existingSchoolClass.setName(newSchoolClass.getName());
         existingSchoolClass.setYear(newSchoolClass.getYear());
 
-        if (newSchoolClass.getSchoolId() != null) {
-            existingSchoolClass.setSchool(schoolRepository.findById(newSchoolClass.getSchoolId())
-                    .orElseThrow(() -> new EntityNotFoundException("School with id " + newSchoolClass.getSchoolId() + " not found.")));
-        } else {
-            throw new IllegalArgumentException("School ID must be provided.");
-        }
+        existingSchoolClass.setSchool(schoolRepository.findById(newSchoolClass.getSchoolId())
+                .orElseThrow(() -> new EntityNotFoundException("School with id " + newSchoolClass.getSchoolId() + " not found.")));
         SchoolClass updatedSchoolClass = schoolClassRepository.save(existingSchoolClass);
 
         return schoolClassMapper.mapEntityToDto(updatedSchoolClass);
@@ -77,12 +74,16 @@ public class SchoolClassServiceImpl implements SchoolClassService {
 
     @Override
     public void validateSchoolClassDTO(SchoolClassDTO schoolClassDTO) {
-        if (schoolClassDTO.getSchoolId() == null ||  schoolClassDTO.getSchoolId() == 0) {
-            throw new IllegalArgumentException("The School cannot be null.");
+        if (schoolClassDTO.getSchoolId() == 0) {
+            throw new IllegalArgumentException("The School ID cannot be zero.");
         }
-//
-//        if (schoolClassDTO.getStudentCurriculumId() == null || schoolClassDTO.getStudentCurriculumId() == 0) {
-//            throw new IllegalArgumentException("The Student Curriculum cannot be null.");
-//        }
+
+        if (schoolClassDTO.getName() == null) {
+            throw new IllegalArgumentException("The School Class name cannot be null.");
+        }
+
+        if (schoolClassDTO.getYear() < 2000) {
+            throw new IllegalArgumentException("The School Year name cannot be < 2000.");
+        }
     }
 }

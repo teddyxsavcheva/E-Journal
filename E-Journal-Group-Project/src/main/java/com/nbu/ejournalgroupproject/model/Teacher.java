@@ -1,6 +1,5 @@
 package com.nbu.ejournalgroupproject.model;
 
-import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +35,7 @@ public class Teacher {
             joinColumns=@JoinColumn(name="teacher_id"),
             inverseJoinColumns=@JoinColumn(name="teacher_qualification_id")
     )
-    private List<TeacherQualification> teacherQualifications;
+    private Set<TeacherQualification> teacherQualifications;
 
     @OneToMany(mappedBy = "teacher")
     private List<StudentCurriculumHasTeacherAndDiscipline> curriculumHasTeacherAndDisciplineList;

@@ -8,8 +8,8 @@ import com.nbu.ejournalgroupproject.repository.HeadmasterRepository;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,13 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class HeadmasterServiceImpl implements HeadmasterService {
 
-    @Autowired
     private final HeadmasterRepository headmasterRepository;
 
-    @Autowired
     private final SchoolRepository schoolRepository;
 
-    @Autowired
     private final HeadmasterMapper headmasterMapper;
 
 
@@ -52,14 +49,14 @@ public class HeadmasterServiceImpl implements HeadmasterService {
     }
 
     @Override
-    public HeadmasterDTO createHeadmaster(HeadmasterDTO headmasterDTO) {
+    public HeadmasterDTO createHeadmaster(@Valid HeadmasterDTO headmasterDTO) {
         validateHeadmasterDTO(headmasterDTO);
         Headmaster headmaster = headmasterMapper.mapDtoToEntity(headmasterDTO);
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(headmaster));
     }
 
     @Override
-    public HeadmasterDTO updateHeadmaster(Long id, HeadmasterDTO newHeadmaster) {
+    public HeadmasterDTO updateHeadmaster(Long id, @Valid HeadmasterDTO newHeadmaster) {
         validateHeadmasterDTO(newHeadmaster);
 
         Headmaster existingHeadmaster = headmasterRepository.findById(id)
@@ -92,8 +89,8 @@ public class HeadmasterServiceImpl implements HeadmasterService {
 
     @Override
     public void validateHeadmasterDTO(HeadmasterDTO headmasterDTO) {
-        if (headmasterDTO.getSchoolId() == null) {
-            throw new IllegalArgumentException("The School cannot be null.");
+        if (headmasterDTO.getSchoolId() == 0) {
+            throw new IllegalArgumentException("The School ID cannot be zero.");
         }
 
         if (headmasterDTO.getName() == null) {

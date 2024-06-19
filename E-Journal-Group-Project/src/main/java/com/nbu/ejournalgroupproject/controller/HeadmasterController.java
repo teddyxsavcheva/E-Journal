@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class HeadmasterController {
 
     @PostMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<HeadmasterDTO> createHeadmaster(@RequestBody HeadmasterDTO headmasterDTO){
+    public ResponseEntity<HeadmasterDTO> createHeadmaster(@RequestBody @Valid HeadmasterDTO headmasterDTO){
         HeadmasterDTO newHeadmaster = headmasterService.createHeadmaster(headmasterDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newHeadmaster);
     }
@@ -50,7 +51,7 @@ public class HeadmasterController {
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<HeadmasterDTO> updateHeadmaster(@PathVariable Long id, @RequestBody HeadmasterDTO headmasterDTO){
+    public ResponseEntity<HeadmasterDTO> updateHeadmaster(@PathVariable Long id, @RequestBody @Valid HeadmasterDTO headmasterDTO){
         HeadmasterDTO newHeadmaster = headmasterService.updateHeadmaster(id, headmasterDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newHeadmaster);
     }

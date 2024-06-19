@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.StudentCurriculumDTO;
 import com.nbu.ejournalgroupproject.service.StudentCurriculumService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class StudentCurriculumController {
 
     @PostMapping(value={"/"})
     @ResponseBody
-    public ResponseEntity<StudentCurriculumDTO> createStudentCurriculum(@RequestBody StudentCurriculumDTO newStudentCurriculum){
+    public ResponseEntity<StudentCurriculumDTO> createStudentCurriculum(@RequestBody @Valid StudentCurriculumDTO newStudentCurriculum){
         StudentCurriculumDTO studentCurriculumDTO = studentCurriculumService.createStudentCurriculum(newStudentCurriculum);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentCurriculumDTO);
     }
@@ -44,7 +45,7 @@ public class StudentCurriculumController {
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<StudentCurriculumDTO> updateStudentCurriculum(@PathVariable Long id, @RequestBody StudentCurriculumDTO studentCurriculumDTO){
+    public ResponseEntity<StudentCurriculumDTO> updateStudentCurriculum(@PathVariable Long id, @RequestBody @Valid StudentCurriculumDTO studentCurriculumDTO){
         StudentCurriculumDTO newStudentCurriculum = studentCurriculumService.updateStudentCurriculum(id, studentCurriculumDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newStudentCurriculum);
     }

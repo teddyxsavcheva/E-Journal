@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.SchoolClassDTO;
 import com.nbu.ejournalgroupproject.service.SchoolClassService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +30,14 @@ public class SchoolClassController {
 
     @PostMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<SchoolClassDTO> createSchoolClass(@RequestBody SchoolClassDTO schoolClassDTO){
+    public ResponseEntity<SchoolClassDTO> createSchoolClass(@RequestBody @Valid SchoolClassDTO schoolClassDTO){
         SchoolClassDTO newSchoolClass = schoolClassService.createSchoolClass(schoolClassDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSchoolClass);
     }
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<SchoolClassDTO> updateSchoolClass(@PathVariable Long id, @RequestBody SchoolClassDTO schoolClassDTO){
+    public ResponseEntity<SchoolClassDTO> updateSchoolClass(@PathVariable Long id, @RequestBody @Valid SchoolClassDTO schoolClassDTO){
         SchoolClassDTO newSchoolClass = schoolClassService.updateSchoolClass(id, schoolClassDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newSchoolClass);
     }

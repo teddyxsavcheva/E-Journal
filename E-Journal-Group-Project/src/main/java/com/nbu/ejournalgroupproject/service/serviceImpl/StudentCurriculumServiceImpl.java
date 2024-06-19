@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.repository.SchoolClassRepository;
 import com.nbu.ejournalgroupproject.repository.StudentCurriculumRepository;
 import com.nbu.ejournalgroupproject.service.StudentCurriculumService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +40,14 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
     }
 
     @Override
-    public StudentCurriculumDTO createStudentCurriculum(StudentCurriculumDTO studentCurriculumDTO) {
+    public StudentCurriculumDTO createStudentCurriculum(@Valid StudentCurriculumDTO studentCurriculumDTO) {
         validateStudentCurriculumDTO(studentCurriculumDTO);
         StudentCurriculum studentCurriculum = studentCurriculumMapper.DtoToEntity(studentCurriculumDTO);
         return studentCurriculumMapper.entityToDto(studentCurriculumRepository.save(studentCurriculum));
     }
 
     @Override
-    public StudentCurriculumDTO updateStudentCurriculum(Long id, StudentCurriculumDTO newCurriculumDTO) {
+    public StudentCurriculumDTO updateStudentCurriculum(Long id, @Valid StudentCurriculumDTO newCurriculumDTO) {
         validateStudentCurriculumDTO(newCurriculumDTO);
         StudentCurriculum existingStudentCurriculum = studentCurriculumRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student Curriculum with id " + id + " not found"));
@@ -78,8 +79,8 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
 
     @Override
     public void validateStudentCurriculumDTO(StudentCurriculumDTO studentCurriculumDTO) {
-        if (studentCurriculumDTO.getSchoolClassId() == null ){
-            throw new IllegalArgumentException("The School class cannot be null.");
+        if (studentCurriculumDTO.getSchoolClassId() == 0 ){
+            throw new IllegalArgumentException("The School class cannot be zero.");
         }
 
     }
