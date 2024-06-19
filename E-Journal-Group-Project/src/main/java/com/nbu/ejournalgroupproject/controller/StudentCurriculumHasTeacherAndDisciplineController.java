@@ -3,6 +3,7 @@ package com.nbu.ejournalgroupproject.controller;
 import com.nbu.ejournalgroupproject.dto.StudentCurriculumHasTeacherAndDisciplineDto;
 import com.nbu.ejournalgroupproject.model.StudentCurriculumHasTeacherAndDiscipline;
 import com.nbu.ejournalgroupproject.service.StudentCurriculumHasTeacherAndDisciplineService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class StudentCurriculumHasTeacherAndDisciplineController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<StudentCurriculumHasTeacherAndDisciplineDto> createCurriculumTeacherDiscipline(@RequestBody StudentCurriculumHasTeacherAndDisciplineDto dto) {
+    public ResponseEntity<StudentCurriculumHasTeacherAndDisciplineDto> createCurriculumTeacherDiscipline(@Valid @RequestBody StudentCurriculumHasTeacherAndDisciplineDto dto) {
 
         StudentCurriculumHasTeacherAndDisciplineDto createdDto = service.createCurriculumHasTeacherAndDiscipline(dto);
 
@@ -41,7 +42,7 @@ public class StudentCurriculumHasTeacherAndDisciplineController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentCurriculumHasTeacherAndDisciplineDto> updateCurriculumTeacherDiscipline(@RequestBody StudentCurriculumHasTeacherAndDisciplineDto dto, @PathVariable Long id) {
+    public ResponseEntity<StudentCurriculumHasTeacherAndDisciplineDto> updateCurriculumTeacherDiscipline(@Valid @RequestBody StudentCurriculumHasTeacherAndDisciplineDto dto, @PathVariable Long id) {
 
         StudentCurriculumHasTeacherAndDisciplineDto updatedDto = service.updateCurriculumHasTeacherAndDiscipline(dto, id);
 

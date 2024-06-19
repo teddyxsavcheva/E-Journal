@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.service.TeacherQualificationService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class TeacherQualificationController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TeacherQualificationDto> createTeacherQualification(@RequestBody TeacherQualificationDto teacherQualificationDto) {
+    public ResponseEntity<TeacherQualificationDto> createTeacherQualification(@Valid @RequestBody TeacherQualificationDto teacherQualificationDto) {
 
         TeacherQualificationDto createdDto = teacherQualificationService.createTeacherQualification(teacherQualificationDto);
 
@@ -40,7 +41,7 @@ public class TeacherQualificationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TeacherQualificationDto> updateTeacherQualification(@RequestBody TeacherQualificationDto teacherQualificationDto, @PathVariable Long id) {
+    public ResponseEntity<TeacherQualificationDto> updateTeacherQualification(@Valid @RequestBody TeacherQualificationDto teacherQualificationDto, @PathVariable Long id) {
 
         TeacherQualificationDto updatedDto = teacherQualificationService.updateTeacherQualification(teacherQualificationDto, id);
 

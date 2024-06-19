@@ -9,6 +9,8 @@ import com.nbu.ejournalgroupproject.repository.StudentCurriculumRepository;
 import com.nbu.ejournalgroupproject.repository.TeacherRepository;
 import com.nbu.ejournalgroupproject.service.StudentCurriculumHasTeacherAndDisciplineService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO: Ask Kostadinova what happens with the curriculum if I remove needed qualification from a teacher?
 @AllArgsConstructor
 @Service
 public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements StudentCurriculumHasTeacherAndDisciplineService {
@@ -41,7 +42,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     }
 
     @Override
-    public StudentCurriculumHasTeacherAndDisciplineDto getCurriculumHasTeacherAndDisciplineById(Long id) {
+    public StudentCurriculumHasTeacherAndDisciplineDto getCurriculumHasTeacherAndDisciplineById(@NotNull Long id) {
 
         StudentCurriculumHasTeacherAndDiscipline entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + id));
@@ -50,7 +51,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     }
 
     @Override
-    public StudentCurriculumHasTeacherAndDisciplineDto createCurriculumHasTeacherAndDiscipline(StudentCurriculumHasTeacherAndDisciplineDto dto) {
+    public StudentCurriculumHasTeacherAndDisciplineDto createCurriculumHasTeacherAndDiscipline(@Valid StudentCurriculumHasTeacherAndDisciplineDto dto) {
 
         validateCurriculumHasTeacherAndDisciplineDto(dto);
 
@@ -75,7 +76,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     }
 
     @Override
-    public StudentCurriculumHasTeacherAndDisciplineDto updateCurriculumHasTeacherAndDiscipline(StudentCurriculumHasTeacherAndDisciplineDto dto, Long id) {
+    public StudentCurriculumHasTeacherAndDisciplineDto updateCurriculumHasTeacherAndDiscipline(@Valid StudentCurriculumHasTeacherAndDisciplineDto dto,@NotNull Long id) {
 
         validateCurriculumHasTeacherAndDisciplineDto(dto);
 
@@ -100,7 +101,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     }
 
     @Override
-    public void deleteCurriculumHasTeacherAndDiscipline(Long id) {
+    public void deleteCurriculumHasTeacherAndDiscipline(@NotNull Long id) {
 
         StudentCurriculumHasTeacherAndDiscipline entity = repository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + id));

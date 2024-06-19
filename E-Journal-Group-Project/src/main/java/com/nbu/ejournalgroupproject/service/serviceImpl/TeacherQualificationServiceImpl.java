@@ -10,9 +10,12 @@ import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
 import com.nbu.ejournalgroupproject.repository.TeacherRepository;
 import com.nbu.ejournalgroupproject.service.TeacherQualificationService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +41,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto getTeacherQualificationById(Long id) {
+    public TeacherQualificationDto getTeacherQualificationById(@NotNull Long id) {
 
         TeacherQualification teacherQualification = teacherQualificationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id + " + id));
@@ -48,7 +51,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto createTeacherQualification(TeacherQualificationDto dto) {
+    public TeacherQualificationDto createTeacherQualification(@Valid TeacherQualificationDto dto) {
 
         validateTeacherQualificationDto(dto);
 
@@ -58,7 +61,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto updateTeacherQualification(TeacherQualificationDto dto, Long id) {
+    public TeacherQualificationDto updateTeacherQualification(@Valid TeacherQualificationDto dto, @NotNull Long id) {
 
         validateTeacherQualificationDto(dto);
 
@@ -71,7 +74,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public void deleteTeacherQualification(Long id) {
+    public void deleteTeacherQualification(@NotNull Long id) {
 
         TeacherQualification teacherQualification = teacherQualificationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id + " + id));
@@ -90,7 +93,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto addTeacherToQualification(Long qualificationId, Long teacherId) {
+    public TeacherQualificationDto addTeacherToQualification(@NotNull Long qualificationId,@NotNull Long teacherId) {
 
         TeacherQualification qualification = teacherQualificationRepository.findById(qualificationId)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id " + qualificationId));
@@ -104,7 +107,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto removeTeacherFromQualification(Long qualificationId, Long teacherId) {
+    public TeacherQualificationDto removeTeacherFromQualification(@NotNull Long qualificationId,@NotNull Long teacherId) {
 
         TeacherQualification qualification = teacherQualificationRepository.findById(qualificationId)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id " + qualificationId));
@@ -119,7 +122,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto addDisciplineToQualification(Long qualificationId, Long disciplineId) {
+    public TeacherQualificationDto addDisciplineToQualification(@NotNull Long qualificationId,@NotNull Long disciplineId) {
 
         TeacherQualification qualification = teacherQualificationRepository.findById(qualificationId)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id " + qualificationId));
@@ -134,7 +137,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     }
 
     @Override
-    public TeacherQualificationDto removeDisciplineFromQualification(Long qualificationId, Long disciplineId) {
+    public TeacherQualificationDto removeDisciplineFromQualification(@NotNull Long qualificationId,@NotNull Long disciplineId) {
 
         TeacherQualification qualification = teacherQualificationRepository.findById(qualificationId)
                 .orElseThrow(() -> new EntityNotFoundException("No Teacher Qualification found with id " + qualificationId));

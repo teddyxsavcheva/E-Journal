@@ -1,12 +1,13 @@
 package com.nbu.ejournalgroupproject.dto;
 
 import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,10 +17,11 @@ public class TeacherQualificationDto {
 
     private Long id;
 
+    @NotNull(message = "Teacher Qualification Enum cannot be null")
     private TeacherQualificationEnum qualificationEnum;
 
-    private List<Long> disciplineIds;
+    private Set<Long> disciplineIds;
 
-    private List<Long> teacherIds;
+    private Set<Long> teacherIds;
 
 }

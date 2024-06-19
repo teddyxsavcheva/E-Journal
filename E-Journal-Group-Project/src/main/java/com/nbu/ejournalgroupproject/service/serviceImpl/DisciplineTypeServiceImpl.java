@@ -6,6 +6,8 @@ import com.nbu.ejournalgroupproject.model.DisciplineType;
 import com.nbu.ejournalgroupproject.repository.DisciplineTypeRepository;
 import com.nbu.ejournalgroupproject.service.DisciplineTypeService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
     }
 
     @Override
-    public DisciplineTypeDto getDisciplineTypeById(Long id) {
+    public DisciplineTypeDto getDisciplineTypeById(@NotNull Long id) {
 
         DisciplineType disciplineType = disciplineTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No DisciplineType found with id " + id));
@@ -41,7 +43,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
     }
 
     @Override
-    public DisciplineTypeDto createDisciplineType(DisciplineTypeDto disciplineTypeDto) {
+    public DisciplineTypeDto createDisciplineType(@Valid DisciplineTypeDto disciplineTypeDto) {
 
         validateDisciplineTypeDTO(disciplineTypeDto);
 
@@ -52,7 +54,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
     }
 
     @Override
-    public DisciplineTypeDto updateDisciplineType(DisciplineTypeDto disciplineTypeDto, Long id) {
+    public DisciplineTypeDto updateDisciplineType(@Valid DisciplineTypeDto disciplineTypeDto,@NotNull Long id) {
 
         validateDisciplineTypeDTO(disciplineTypeDto);
 
@@ -66,7 +68,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
     }
 
     @Override
-    public void deleteDisciplineType(Long id) {
+    public void deleteDisciplineType(@NotNull Long id) {
 
         DisciplineType disciplineType = disciplineTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No DisciplineType found with id " + id));

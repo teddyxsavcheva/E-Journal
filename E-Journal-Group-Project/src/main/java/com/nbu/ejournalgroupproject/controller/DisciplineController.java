@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.DisciplineDto;
 import com.nbu.ejournalgroupproject.service.DisciplineService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +30,14 @@ public class DisciplineController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<DisciplineDto> createDiscipline(@RequestBody DisciplineDto disciplineDto) {
+    public ResponseEntity<DisciplineDto> createDiscipline(@Valid @RequestBody DisciplineDto disciplineDto) {
 
         DisciplineDto createdDisciplineDto = disciplineService.createDiscipline(disciplineDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDisciplineDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DisciplineDto> updateDiscipline(@RequestBody DisciplineDto disciplineDto, @PathVariable Long id) {
+    public ResponseEntity<DisciplineDto> updateDiscipline(@Valid @RequestBody DisciplineDto disciplineDto, @PathVariable Long id) {
 
         DisciplineDto updatedDisciplineDto = disciplineService.updateDiscipline(disciplineDto, id);
         return ResponseEntity.status(HttpStatus.OK).body(updatedDisciplineDto);

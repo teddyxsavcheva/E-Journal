@@ -10,6 +10,8 @@ import com.nbu.ejournalgroupproject.repository.DisciplineTypeRepository;
 import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
 import com.nbu.ejournalgroupproject.service.DisciplineService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public DisciplineDto getDisciplineById(Long id) {
+    public DisciplineDto getDisciplineById(@NotNull Long id) {
 
         Discipline discipline = disciplineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + id));
@@ -47,7 +49,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public DisciplineDto createDiscipline(DisciplineDto disciplineDto) {
+    public DisciplineDto createDiscipline(@Valid DisciplineDto disciplineDto) {
 
         validateDisciplineDTO(disciplineDto);
 
@@ -59,7 +61,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public DisciplineDto updateDiscipline(DisciplineDto disciplineDto, Long id) {
+    public DisciplineDto updateDiscipline(@Valid DisciplineDto disciplineDto, @NotNull Long id) {
 
         validateDisciplineDTO(disciplineDto);
 
@@ -78,7 +80,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public void deleteDiscipline(Long id) {
+    public void deleteDiscipline(@NotNull Long id) {
 
         Discipline discipline = disciplineRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + id));
@@ -101,7 +103,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public DisciplineDto  addQualificationToDiscipline(Long disciplineId, Long qualificationId) {
+    public DisciplineDto  addQualificationToDiscipline(@NotNull Long disciplineId,@NotNull Long qualificationId) {
 
         Discipline discipline = disciplineRepository.findById(disciplineId)
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + disciplineId));
@@ -116,7 +118,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public DisciplineDto  removeQualificationFromDiscipline(Long disciplineId, Long qualificationId) {
+    public DisciplineDto  removeQualificationFromDiscipline(@NotNull Long disciplineId,@NotNull Long qualificationId) {
 
         Discipline discipline = disciplineRepository.findById(disciplineId)
                 .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id " + disciplineId));

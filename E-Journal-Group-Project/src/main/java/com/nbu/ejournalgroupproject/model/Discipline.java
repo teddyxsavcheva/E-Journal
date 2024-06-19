@@ -1,11 +1,15 @@
 package com.nbu.ejournalgroupproject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,21 +17,23 @@ import java.util.List;
 @Table(name = "discipline")
 @Entity
 public class Discipline {
-    //TODO: Think about validations.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "Name must not be blank")
+    @Size(min = 2, message = "Name must be at least 2 characters long")
     @Column(name = "name")
     private String name;
 
+    @NotNull(message = "Discipline type must not be null")
     @ManyToOne
     @JoinColumn(name = "discipline_type_id")
     private DisciplineType disciplineType;
 
     @OneToMany(mappedBy = "discipline")
-    private List<StudentCurriculumHasTeacherAndDiscipline> curriculumHasTeacherAndDisciplineList;
+    private Set<StudentCurriculumHasTeacherAndDiscipline> curriculumHasTeacherAndDisciplineList;
 
     @OneToMany(mappedBy = "discipline")
     private List<Grade> grades;
@@ -40,7 +46,6 @@ public class Discipline {
             joinColumns=@JoinColumn(name="discipline_id"),
             inverseJoinColumns=@JoinColumn(name="teacher_qualification_id")
     )
-    // TODO: Set?
-    private List<TeacherQualification> teacherQualifications;
+    private Set<TeacherQualification> teacherQualifications;
 
 }
