@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.model;
 
 import com.nbu.ejournalgroupproject.enums.DisciplineTypeEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ public class DisciplineType {
     @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "Discipline type enum must not be null")
     @Column(name = "discipline_type_enum")
     @Enumerated(EnumType.STRING)
     private DisciplineTypeEnum disciplineTypeEnum;

@@ -1,10 +1,10 @@
 package com.nbu.ejournalgroupproject.repository;
 
-import com.nbu.ejournalgroupproject.model.StudentCurriculum;
+import com.nbu.ejournalgroupproject.model.DisciplineType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StudentCurriculumRepository extends JpaRepository<StudentCurriculum, Long> {
-  
+public interface DisciplineTypeRepository extends JpaRepository<DisciplineType, Long> {
+
 }
