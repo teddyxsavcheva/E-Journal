@@ -2,9 +2,11 @@ package com.nbu.ejournalgroupproject.repository;
 
 import com.nbu.ejournalgroupproject.model.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
@@ -15,4 +17,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
             "JOIN tq.disciplines d " +
             "WHERE t.id = :teacherId AND d.id = :disciplineId")
     boolean isTeacherQualifiedForDiscipline(@Param("teacherId") Long teacherId, @Param("disciplineId") Long disciplineId);
+  
+    List<Teacher> findAllBySchoolId(Long schoolId);
 }
