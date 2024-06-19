@@ -31,7 +31,7 @@ public class StudentCurriculumController {
 
     @PostMapping(value={"/"})
     @ResponseBody
-    public ResponseEntity<StudentCurriculumDTO> createStudentCurriculum(@RequestBody @Valid StudentCurriculumDTO newStudentCurriculum){
+    public ResponseEntity<StudentCurriculumDTO> createStudentCurriculum(@Valid @RequestBody StudentCurriculumDTO newStudentCurriculum){
         StudentCurriculumDTO studentCurriculumDTO = studentCurriculumService.createStudentCurriculum(newStudentCurriculum);
         return ResponseEntity.status(HttpStatus.CREATED).body(studentCurriculumDTO);
     }
@@ -45,7 +45,7 @@ public class StudentCurriculumController {
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<StudentCurriculumDTO> updateStudentCurriculum(@PathVariable Long id, @RequestBody @Valid StudentCurriculumDTO studentCurriculumDTO){
+    public ResponseEntity<StudentCurriculumDTO> updateStudentCurriculum(@PathVariable Long id, @Valid @RequestBody StudentCurriculumDTO studentCurriculumDTO){
         StudentCurriculumDTO newStudentCurriculum = studentCurriculumService.updateStudentCurriculum(id, studentCurriculumDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newStudentCurriculum);
     }

@@ -36,7 +36,7 @@ public class HeadmasterController {
 
     @PostMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<HeadmasterDTO> createHeadmaster(@RequestBody @Valid HeadmasterDTO headmasterDTO){
+    public ResponseEntity<HeadmasterDTO> createHeadmaster(@Valid @RequestBody HeadmasterDTO headmasterDTO){
         HeadmasterDTO newHeadmaster = headmasterService.createHeadmaster(headmasterDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newHeadmaster);
     }
@@ -51,7 +51,7 @@ public class HeadmasterController {
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<HeadmasterDTO> updateHeadmaster(@PathVariable Long id, @RequestBody @Valid HeadmasterDTO headmasterDTO){
+    public ResponseEntity<HeadmasterDTO> updateHeadmaster(@PathVariable Long id,@Valid @RequestBody HeadmasterDTO headmasterDTO){
         HeadmasterDTO newHeadmaster = headmasterService.updateHeadmaster(id, headmasterDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newHeadmaster);
     }

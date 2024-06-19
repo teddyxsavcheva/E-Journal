@@ -31,14 +31,14 @@ public class SchoolTypeController {
 
     @PostMapping(value = {"/"})
     @ResponseBody
-    public ResponseEntity<SchoolTypeDTO> createSchoolType(@RequestBody @Valid SchoolTypeDTO schoolTypeDTO){
+    public ResponseEntity<SchoolTypeDTO> createSchoolType(@Valid @RequestBody SchoolTypeDTO schoolTypeDTO){
         SchoolTypeDTO newSchoolType = schoolTypeService.createSchoolType(schoolTypeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSchoolType);
     }
 
     @PutMapping(value={"/{id}"})
     @ResponseBody
-    public ResponseEntity<SchoolTypeDTO> updateSchoolType(@PathVariable Long id, @RequestBody @Valid SchoolTypeDTO schoolTypeDTO){
+    public ResponseEntity<SchoolTypeDTO> updateSchoolType(@PathVariable Long id, @Valid @RequestBody SchoolTypeDTO schoolTypeDTO){
         SchoolTypeDTO newSchoolType = schoolTypeService.updateSchoolType(id, schoolTypeDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newSchoolType);
     }

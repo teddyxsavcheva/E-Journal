@@ -9,6 +9,7 @@ import com.nbu.ejournalgroupproject.repository.TeacherRepository;
 import com.nbu.ejournalgroupproject.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDTO updateTeacher(Long teacherId, @Valid TeacherDTO teacherDTO) {
+    public TeacherDTO updateTeacher(@NotNull Long teacherId, @Valid TeacherDTO teacherDTO) {
         validateTeacherDTO(teacherDTO);
         Teacher existingTeacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new EntityNotFoundException("Teacher with id " + teacherId + " not found"));

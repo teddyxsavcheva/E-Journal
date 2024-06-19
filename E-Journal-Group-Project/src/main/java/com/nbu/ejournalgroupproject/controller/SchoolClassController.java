@@ -30,14 +30,14 @@ public class SchoolClassController {
 
     @PostMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<SchoolClassDTO> createSchoolClass(@RequestBody @Valid SchoolClassDTO schoolClassDTO){
+    public ResponseEntity<SchoolClassDTO> createSchoolClass(@Valid @RequestBody SchoolClassDTO schoolClassDTO){
         SchoolClassDTO newSchoolClass = schoolClassService.createSchoolClass(schoolClassDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSchoolClass);
     }
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<SchoolClassDTO> updateSchoolClass(@PathVariable Long id, @RequestBody @Valid SchoolClassDTO schoolClassDTO){
+    public ResponseEntity<SchoolClassDTO> updateSchoolClass(@PathVariable Long id, @Valid @RequestBody SchoolClassDTO schoolClassDTO){
         SchoolClassDTO newSchoolClass = schoolClassService.updateSchoolClass(id, schoolClassDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newSchoolClass);
     }

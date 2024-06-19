@@ -9,6 +9,7 @@ import com.nbu.ejournalgroupproject.repository.StudentCurriculumRepository;
 import com.nbu.ejournalgroupproject.service.StudentCurriculumService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
     }
 
     @Override
-    public StudentCurriculumDTO updateStudentCurriculum(Long id, @Valid StudentCurriculumDTO newCurriculumDTO) {
+    public StudentCurriculumDTO updateStudentCurriculum(@NotNull Long id, @Valid StudentCurriculumDTO newCurriculumDTO) {
         validateStudentCurriculumDTO(newCurriculumDTO);
         StudentCurriculum existingStudentCurriculum = studentCurriculumRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student Curriculum with id " + id + " not found"));

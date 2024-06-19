@@ -31,7 +31,7 @@ public class SchoolController {
 
     @PostMapping(value={"/"})
     @ResponseBody
-    public ResponseEntity<SchoolDTO> createSchool(@RequestBody @Valid SchoolDTO newSchool){
+    public ResponseEntity<SchoolDTO> createSchool(@Valid @RequestBody SchoolDTO newSchool){
         SchoolDTO schoolDTO = schoolService.createSchool(newSchool);
         return ResponseEntity.status(HttpStatus.CREATED).body(schoolDTO);
     }
@@ -45,7 +45,7 @@ public class SchoolController {
 
     @PutMapping(value = {"/{id}"})
     @ResponseBody
-    public ResponseEntity<SchoolDTO> updateSchool(@PathVariable Long id, @RequestBody @Valid SchoolDTO schoolDTO){
+    public ResponseEntity<SchoolDTO> updateSchool(@PathVariable Long id,@Valid @RequestBody SchoolDTO schoolDTO){
         SchoolDTO newSchool = schoolService.updateSchool(id, schoolDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newSchool);
     }

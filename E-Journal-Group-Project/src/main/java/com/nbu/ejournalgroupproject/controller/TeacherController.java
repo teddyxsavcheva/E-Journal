@@ -37,14 +37,14 @@ public class TeacherController {
 
     @PostMapping(value = {"/"})
     @ResponseBody
-    public ResponseEntity<TeacherDTO> createTeacher(@RequestBody @Valid TeacherDTO newTeacher){
+    public ResponseEntity<TeacherDTO> createTeacher(@Valid @RequestBody TeacherDTO newTeacher){
         TeacherDTO teacherDTO = teacherService.createTeacher(newTeacher);
         return ResponseEntity.status(HttpStatus.CREATED).body(teacherDTO);
     }
 
     @PutMapping(value = {"{id}"})
     @ResponseBody
-    public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable Long id, @RequestBody @Valid TeacherDTO teacherDTO) {
+    public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable Long id, @Valid @RequestBody TeacherDTO teacherDTO) {
         TeacherDTO updatedTeacherDTO = teacherService.updateTeacher(id, teacherDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updatedTeacherDTO);
     }

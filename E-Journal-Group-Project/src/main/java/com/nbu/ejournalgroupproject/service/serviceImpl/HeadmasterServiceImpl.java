@@ -9,6 +9,7 @@ import com.nbu.ejournalgroupproject.repository.SchoolRepository;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
     }
 
     @Override
-    public HeadmasterDTO updateHeadmaster(Long id, @Valid HeadmasterDTO newHeadmaster) {
+    public HeadmasterDTO updateHeadmaster(@NotNull Long id, @Valid HeadmasterDTO newHeadmaster) {
         validateHeadmasterDTO(newHeadmaster);
 
         Headmaster existingHeadmaster = headmasterRepository.findById(id)

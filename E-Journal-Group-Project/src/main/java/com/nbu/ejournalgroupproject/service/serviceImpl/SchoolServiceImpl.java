@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.repository.SchoolTypeRepository;
 import com.nbu.ejournalgroupproject.service.SchoolService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public SchoolDTO updateSchool(Long id, @Valid SchoolDTO newSchool) {
+    public SchoolDTO updateSchool(@NotNull Long id, @Valid SchoolDTO newSchool) {
         validateSchoolDTO(newSchool);
 
         School existingSchool = schoolRepository.findById(id)
