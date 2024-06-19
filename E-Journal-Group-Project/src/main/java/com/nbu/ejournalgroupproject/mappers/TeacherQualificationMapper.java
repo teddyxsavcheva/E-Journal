@@ -29,13 +29,13 @@ public class TeacherQualificationMapper {
         if (teacherQualification.getTeachers() != null) {
             teacherQualificationDto.setTeacherIds(teacherQualification.getTeachers().stream()
                     .map(Teacher::getId)
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toSet()));
         }
 
         if (teacherQualification.getDisciplines() != null) {
             teacherQualificationDto.setDisciplineIds(teacherQualification.getDisciplines().stream()
                     .map(Discipline::getId)
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toSet()));
         }
 
         return teacherQualificationDto;
@@ -51,14 +51,14 @@ public class TeacherQualificationMapper {
             teacherQualification.setTeachers(teacherQualificationDto.getTeacherIds().stream()
                     .map(id -> teacherRepository.findById(id)
                             .orElseThrow(() -> new EntityNotFoundException("No Teacher found with id: " + id)))
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toSet()));
         }
 
         if (teacherQualificationDto.getDisciplineIds() != null) {
             teacherQualification.setDisciplines(teacherQualificationDto.getDisciplineIds().stream()
                     .map(id -> disciplineRepository.findById(id)
                             .orElseThrow(() -> new EntityNotFoundException("No Discipline found with id: " + id)))
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toSet()));
         }
 
         return teacherQualification;
