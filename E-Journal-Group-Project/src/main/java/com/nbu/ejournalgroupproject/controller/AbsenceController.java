@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.AbsenceDTO;
 import com.nbu.ejournalgroupproject.service.AbsenceService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class AbsenceController {
     }
 
     @PostMapping("/")
-    public AbsenceDTO createAbsence(@RequestBody AbsenceDTO absenceDTO) {
+    public AbsenceDTO createAbsence(@Valid @RequestBody AbsenceDTO absenceDTO) {
         return absenceService.createAbsence(absenceDTO);
     }
 
@@ -37,7 +38,7 @@ public class AbsenceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AbsenceDTO> updateAbsence(@PathVariable Long id, @RequestBody AbsenceDTO absenceDTO) {
+    public ResponseEntity<AbsenceDTO> updateAbsence(@PathVariable Long id, @Valid @RequestBody AbsenceDTO absenceDTO) {
         AbsenceDTO updatedAbsence = absenceService.updateAbsence(id, absenceDTO);
         return ResponseEntity.ok(updatedAbsence);
     }

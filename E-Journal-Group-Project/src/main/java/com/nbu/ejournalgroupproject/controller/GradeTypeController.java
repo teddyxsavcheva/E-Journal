@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.GradeTypeDTO;
 import com.nbu.ejournalgroupproject.service.GradeTypeService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 public class GradeTypeController {
     private final GradeTypeService gradeTypeService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<GradeTypeDTO> getAllGradeTypes() {
         return gradeTypeService.getAllGradeTypes();
     }
@@ -26,18 +27,19 @@ public class GradeTypeController {
     }
 
     @PostMapping("/")
-    public GradeTypeDTO createGradeType(@RequestBody GradeTypeDTO gradeTypeDTO) {
+    public GradeTypeDTO createGradeType(@Valid @RequestBody GradeTypeDTO gradeTypeDTO) {
         return gradeTypeService.createGradeType(gradeTypeDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGrade(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteGradeType(@PathVariable Long id) {
         gradeTypeService.deleteGradeType(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GradeTypeDTO> updateGradeType(@PathVariable Long id, @RequestBody GradeTypeDTO gradeTypeDTO) {
-        GradeTypeDTO updateGradeType = gradeTypeService.updateGradeType(id, gradeTypeDTO);
-        return ResponseEntity.ok(updateGradeType);
+    public ResponseEntity<GradeTypeDTO> updateGradeType(@PathVariable Long id, @Valid @RequestBody GradeTypeDTO gradeTypeDTO) {
+        GradeTypeDTO updatedGradeType = gradeTypeService.updateGradeType(id, gradeTypeDTO);
+        return ResponseEntity.ok(updatedGradeType);
     }
 }

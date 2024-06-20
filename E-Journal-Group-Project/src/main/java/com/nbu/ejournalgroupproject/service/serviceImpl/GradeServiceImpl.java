@@ -1,12 +1,13 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.GradeDTO;
+import com.nbu.ejournalgroupproject.mappers.GradeMapper;
 import com.nbu.ejournalgroupproject.model.Grade;
 import com.nbu.ejournalgroupproject.repository.GradeRepository;
 import com.nbu.ejournalgroupproject.service.GradeService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,27 +18,28 @@ import java.util.stream.Collectors;
 public class GradeServiceImpl implements GradeService {
 
     private final GradeRepository gradeRepository;
-    private final ModelMapper modelMapper;
+    private final GradeMapper gradeMapper;
 
     @Override
     public GradeDTO getGradeById(Long id) {
-        Grade grade = gradeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Grade not found with id " + id));
-        return modelMapper.map(grade, GradeDTO.class);
+        Grade grade = gradeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Grade not found with id " + id));
+        return gradeMapper.toDTO(grade);
     }
 
     @Override
     public List<GradeDTO> getAllGrades() {
         List<Grade> grades = gradeRepository.findAll();
         return grades.stream()
-                .map(grade -> modelMapper.map(grade, GradeDTO.class))
+                .map(gradeMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public GradeDTO createGrade(GradeDTO gradeDTO) {
-        Grade grade = modelMapper.map(gradeDTO, Grade.class);
+    public GradeDTO createGrade(@Valid GradeDTO gradeDTO) {
+        Grade grade = gradeMapper.toEntity(gradeDTO);
         Grade createdGrade = gradeRepository.save(grade);
-        return modelMapper.map(createdGrade, GradeDTO.class);
+        return gradeMapper.toDTO(createdGrade);
     }
 
     @Override
@@ -46,10 +48,14 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public GradeDTO updateGrade(Long id, GradeDTO gradeDTO) {
-        Grade grade = gradeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Grade not found with id " + id));
-        modelMapper.map(gradeDTO, grade);
-        Grade updatedGrade = gradeRepository.save(grade);
-        return modelMapper.map(updatedGrade, GradeDTO.class);
+    public GradeDTO updateGrade(Long id, @Valid GradeDTO gradeDTO) {
+        Grade existingGrade = gradeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Grade not found with id " + id));
+
+        Grade updatedGrade = gradeMapper.toEntity(gradeDTO);
+        updatedGrade.setId(existingGrade.getId());
+
+        Grade savedGrade = gradeRepository.save(updatedGrade);
+        return gradeMapper.toDTO(savedGrade);
     }
 }

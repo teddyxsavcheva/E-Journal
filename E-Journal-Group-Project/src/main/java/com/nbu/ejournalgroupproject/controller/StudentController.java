@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.StudentDTO;
 import com.nbu.ejournalgroupproject.service.StudentService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class StudentController {
     }
 
     @PostMapping("/")
-    public StudentDTO createStudent(@RequestBody StudentDTO studentDTO) {
+    public StudentDTO createStudent(@Valid @RequestBody StudentDTO studentDTO) {
         return studentService.createStudent(studentDTO);
     }
 
@@ -38,7 +39,7 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentDTO studentDTO) {
         StudentDTO updatedStudent = studentService.updateStudent(id, studentDTO);
         return ResponseEntity.ok(updatedStudent);
     }

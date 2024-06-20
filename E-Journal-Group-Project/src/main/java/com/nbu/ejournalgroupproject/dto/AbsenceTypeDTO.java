@@ -1,7 +1,8 @@
 package com.nbu.ejournalgroupproject.dto;
 
 import com.nbu.ejournalgroupproject.enums.AbsenceTypeEnum;
-import com.nbu.ejournalgroupproject.model.Absence;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class AbsenceTypeDTO {
     private Long id;
+
+    @NotNull(message = "Absence type enum cannot be null")
     private AbsenceTypeEnum absenceTypeEnum;
-    private List<Absence> absences;
+
+    @NotEmpty(message = "Absence IDs cannot be empty")
+    private List<Long> absenceIds;
 }

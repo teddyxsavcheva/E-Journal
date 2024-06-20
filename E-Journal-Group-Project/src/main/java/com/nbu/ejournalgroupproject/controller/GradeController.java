@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.GradeDTO;
 import com.nbu.ejournalgroupproject.service.GradeService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class GradeController {
     }
 
     @PostMapping("/")
-    public GradeDTO createGrade(@RequestBody GradeDTO gradeDTO) {
+    public GradeDTO createGrade(@Valid @RequestBody GradeDTO gradeDTO) {
         return gradeService.createGrade(gradeDTO);
     }
 
@@ -37,8 +38,8 @@ public class GradeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GradeDTO> updateGrade(@PathVariable Long id, @RequestBody GradeDTO gradeDTO) {
-        GradeDTO updateGrade = gradeService.updateGrade(id, gradeDTO);
-        return ResponseEntity.ok(updateGrade);
+    public ResponseEntity<GradeDTO> updateGrade(@PathVariable Long id, @Valid @RequestBody GradeDTO gradeDTO) {
+        GradeDTO updatedGrade = gradeService.updateGrade(id, gradeDTO);
+        return ResponseEntity.ok(updatedGrade);
     }
 }

@@ -1,5 +1,8 @@
 package com.nbu.ejournalgroupproject.dto;
 
+import com.nbu.ejournalgroupproject.enums.GradeTypeEnum;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class GradeTypeDTO {
     private Long id;
-    private String gradeTypeEnum;
-    private List<Long> gradesIds;
 
+    @NotNull(message = "Grade type enum cannot be null")
+    private GradeTypeEnum gradeTypeEnum;
+
+    @NotEmpty(message = "Grades IDs cannot be empty")
+    private List<Long> gradesIds;
 }

@@ -1,14 +1,15 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.CaregiverDTO;
+import com.nbu.ejournalgroupproject.mappers.CaregiverMapper;
 import com.nbu.ejournalgroupproject.model.Caregiver;
 import com.nbu.ejournalgroupproject.model.Student;
 import com.nbu.ejournalgroupproject.repository.CaregiverRepository;
 import com.nbu.ejournalgroupproject.repository.StudentRepository;
 import com.nbu.ejournalgroupproject.service.CaregiverService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,29 +18,31 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CaregiverServiceImpl implements CaregiverService {
+
     private final CaregiverRepository caregiverRepository;
     private final StudentRepository studentRepository;
-    private final ModelMapper modelMapper;
+    private final CaregiverMapper caregiverMapper;
 
     @Override
     public CaregiverDTO getCaregiverById(Long id) {
-        Caregiver caregiver = caregiverRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Caregiver not found with id " + id));
-        return modelMapper.map(caregiver, CaregiverDTO.class);
+        Caregiver caregiver = caregiverRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Caregiver not found with id " + id));
+        return caregiverMapper.toDTO(caregiver);
     }
 
     @Override
     public List<CaregiverDTO> getAllCaregivers() {
         List<Caregiver> caregivers = caregiverRepository.findAll();
         return caregivers.stream()
-                .map(caregiver -> modelMapper.map(caregiver, CaregiverDTO.class))
+                .map(caregiverMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CaregiverDTO createCaregiver(CaregiverDTO caregiverDTO) {
-        Caregiver caregiver = modelMapper.map(caregiverDTO, Caregiver.class);
+    public CaregiverDTO createCaregiver(@Valid CaregiverDTO caregiverDTO) {
+        Caregiver caregiver = caregiverMapper.toEntity(caregiverDTO);
         Caregiver createdCaregiver = caregiverRepository.save(caregiver);
-        return modelMapper.map(createdCaregiver, CaregiverDTO.class);
+        return caregiverMapper.toDTO(createdCaregiver);
     }
 
     @Override
@@ -48,11 +51,15 @@ public class CaregiverServiceImpl implements CaregiverService {
     }
 
     @Override
-    public CaregiverDTO updateCaregiver(Long id, CaregiverDTO caregiverDTO) {
-        Caregiver caregiver = caregiverRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Caregiver not found with id " + id));
-        modelMapper.map(caregiverDTO, caregiver);
-        Caregiver updatedCaregiver = caregiverRepository.save(caregiver);
-        return modelMapper.map(updatedCaregiver, CaregiverDTO.class);
+    public CaregiverDTO updateCaregiver(Long id, @Valid CaregiverDTO caregiverDTO) {
+        Caregiver existingCaregiver = caregiverRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Caregiver not found with id " + id));
+
+        Caregiver updatedCaregiver = caregiverMapper.toEntity(caregiverDTO);
+        updatedCaregiver.setId(existingCaregiver.getId());
+
+        Caregiver savedCaregiver = caregiverRepository.save(updatedCaregiver);
+        return caregiverMapper.toDTO(savedCaregiver);
     }
 
     @Override
@@ -66,7 +73,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         caregiver.getStudents().add(student);
         Caregiver updatedCaregiver = caregiverRepository.save(caregiver);
 
-        return modelMapper.map(updatedCaregiver, CaregiverDTO.class);
+        return caregiverMapper.toDTO(updatedCaregiver);
     }
 
     @Override
@@ -80,6 +87,6 @@ public class CaregiverServiceImpl implements CaregiverService {
         caregiver.getStudents().remove(student);
         Caregiver updatedCaregiver = caregiverRepository.save(caregiver);
 
-        return modelMapper.map(updatedCaregiver, CaregiverDTO.class);
+        return caregiverMapper.toDTO(updatedCaregiver);
     }
 }

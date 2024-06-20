@@ -1,6 +1,9 @@
 package com.nbu.ejournalgroupproject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,31 +15,36 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "student")
 @Entity
+@Table(name = "student")
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
+    @NotEmpty(message = "Name cannot be empty")
     @Column(name = "name")
     private String name;
 
+    @Min(value = 1, message = "Number in class must be at least 1")
     @Column(name = "number_in_class")
     private int numberInClass;
 
+    @NotNull(message = "School class cannot be null")
     @ManyToOne
     @JoinColumn(name = "school_class_id")
     private SchoolClass schoolClass;
 
+    @NotEmpty(message = "Grades cannot be empty")
     @OneToMany(mappedBy = "student")
     private List<Grade> grades;
 
+    @NotEmpty(message = "Absences cannot be empty")
     @OneToMany(mappedBy = "student")
     private List<Absence> absences;
 
+    @NotEmpty(message = "Caregivers cannot be empty")
     @ManyToMany
     @JoinTable(name = "student_caregiver",
             joinColumns = @JoinColumn(name = "student_id"),

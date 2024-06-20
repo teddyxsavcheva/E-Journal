@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.CaregiverDTO;
 import com.nbu.ejournalgroupproject.service.CaregiverService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class CaregiverController {
     }
 
     @PostMapping("/")
-    public CaregiverDTO createCaregiver(@RequestBody CaregiverDTO caregiverDTO) {
+    public CaregiverDTO createCaregiver(@Valid @RequestBody CaregiverDTO caregiverDTO) {
         return caregiverService.createCaregiver(caregiverDTO);
     }
 
@@ -37,7 +38,7 @@ public class CaregiverController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CaregiverDTO> updateCaregiver(@PathVariable Long id, @RequestBody CaregiverDTO caregiverDTO) {
+    public ResponseEntity<CaregiverDTO> updateCaregiver(@PathVariable Long id, @Valid @RequestBody CaregiverDTO caregiverDTO) {
         CaregiverDTO updatedCaregiver = caregiverService.updateCaregiver(id, caregiverDTO);
         return ResponseEntity.ok(updatedCaregiver);
     }
