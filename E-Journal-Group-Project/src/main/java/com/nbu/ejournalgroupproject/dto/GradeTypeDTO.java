@@ -17,7 +17,4 @@ public class GradeTypeDTO {
 
     @NotNull(message = "Grade type enum cannot be null")
     private GradeTypeEnum gradeTypeEnum;
-
-    @NotEmpty(message = "Grades IDs cannot be empty")
-    private List<Long> gradesIds;
 }

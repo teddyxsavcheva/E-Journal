@@ -15,7 +15,7 @@ import java.util.List;
 public class CaregiverController {
     private CaregiverService caregiverService;
 
-    @GetMapping
+    @GetMapping("/")
     public List<CaregiverDTO> getAllCaregivers() {
         return caregiverService.getAllCaregivers();
     }

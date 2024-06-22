@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,15 +19,6 @@ public class StudentDTO {
     @Min(value = 1, message = "Number in class must be at least 1")
     private int numberInClass;
 
-    @NotNull(message = "School class ID cannot be null")
+    @NotNull(message = "School class cannot be null")
     private Long schoolClassId;
-
-    @NotEmpty(message = "Grade IDs cannot be empty")
-    private List<Long> gradeIds;
-
-    @NotEmpty(message = "Absence IDs cannot be empty")
-    private List<Long> absenceIds;
-
-    @NotEmpty(message = "Caregiver IDs cannot be empty")
-    private List<Long> caregiverIds;
 }

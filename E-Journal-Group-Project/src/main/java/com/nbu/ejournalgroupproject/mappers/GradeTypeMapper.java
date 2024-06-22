@@ -21,10 +21,6 @@ public class GradeTypeMapper {
         GradeTypeDTO gradeTypeDTO = new GradeTypeDTO();
         gradeTypeDTO.setId(gradeType.getId());
         gradeTypeDTO.setGradeTypeEnum(gradeType.getGradeTypeEnum());
-        List<Long> gradeIds = gradeType.getGrades().stream()
-                .map(Grade::getId)
-                .collect(Collectors.toList());
-        gradeTypeDTO.setGradesIds(gradeIds);
         return gradeTypeDTO;
     }
 
@@ -32,12 +28,6 @@ public class GradeTypeMapper {
         GradeType gradeType = new GradeType();
         gradeType.setId(gradeTypeDTO.getId());
         gradeType.setGradeTypeEnum(gradeTypeDTO.getGradeTypeEnum());
-
-        List<Grade> grades = gradeTypeDTO.getGradesIds().stream()
-                .map(id -> gradeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Grade not found with id " + id)))
-                .collect(Collectors.toList());
-        gradeType.setGrades(grades);
-
         return gradeType;
     }
 }

@@ -14,9 +14,7 @@ import java.time.LocalDate;
 public class GradeDTO {
     private Long id;
 
-    @NotNull(message = "Date of issue cannot be null")
-    @PastOrPresent(message = "Date of issue cannot be in the future")
-    private LocalDate dateOfIssue;
+    private LocalDate dateOfIssue = LocalDate.now();
 
     @NotNull(message = "Student ID cannot be null")
     private Long studentId;

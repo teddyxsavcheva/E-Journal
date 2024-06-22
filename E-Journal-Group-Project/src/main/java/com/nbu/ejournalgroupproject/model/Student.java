@@ -28,7 +28,7 @@ public class Student {
     private String name;
 
     @Min(value = 1, message = "Number in class must be at least 1")
-    @Column(name = "number_in_class")
+    @Column(name = "number_in_class", unique = true)
     private int numberInClass;
 
     @NotNull(message = "School class cannot be null")
@@ -36,15 +36,12 @@ public class Student {
     @JoinColumn(name = "school_class_id")
     private SchoolClass schoolClass;
 
-    @NotEmpty(message = "Grades cannot be empty")
     @OneToMany(mappedBy = "student")
     private List<Grade> grades;
 
-    @NotEmpty(message = "Absences cannot be empty")
     @OneToMany(mappedBy = "student")
     private List<Absence> absences;
 
-    @NotEmpty(message = "Caregivers cannot be empty")
     @ManyToMany
     @JoinTable(name = "student_caregiver",
             joinColumns = @JoinColumn(name = "student_id"),

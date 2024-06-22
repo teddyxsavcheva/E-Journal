@@ -21,10 +21,6 @@ public class AbsenceStatusMapper {
         AbsenceStatusDTO absenceStatusDTO = new AbsenceStatusDTO();
         absenceStatusDTO.setId(absenceStatus.getId());
         absenceStatusDTO.setAbsenceStatusEnum(absenceStatus.getAbsenceStatusEnum());
-        List<Long> absenceIds = absenceStatus.getAbsences().stream()
-                .map(Absence::getId)
-                .collect(Collectors.toList());
-        absenceStatusDTO.setAbsenceIds(absenceIds);
         return absenceStatusDTO;
     }
 
@@ -32,12 +28,6 @@ public class AbsenceStatusMapper {
         AbsenceStatus absenceStatus = new AbsenceStatus();
         absenceStatus.setId(absenceStatusDTO.getId());
         absenceStatus.setAbsenceStatusEnum(absenceStatusDTO.getAbsenceStatusEnum());
-
-        List<Absence> absences = absenceStatusDTO.getAbsenceIds().stream()
-                .map(id -> absenceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Absence not found with id " + id)))
-                .collect(Collectors.toList());
-        absenceStatus.setAbsences(absences);
-
         return absenceStatus;
     }
 }

@@ -9,7 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -23,9 +24,9 @@ public class CaregiverMapper {
         caregiverDTO.setId(caregiver.getId());
         caregiverDTO.setName(caregiver.getName());
         caregiverDTO.setEmail(caregiver.getEmail());
-        List<Long> studentIds = caregiver.getStudents().stream()
+        Set<Long> studentIds = caregiver.getStudents().stream()
                 .map(Student::getId)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         caregiverDTO.setStudentIds(studentIds);
         return caregiverDTO;
     }
@@ -36,10 +37,14 @@ public class CaregiverMapper {
         caregiver.setName(caregiverDTO.getName());
         caregiver.setEmail(caregiverDTO.getEmail());
 
-        List<Student> students = caregiverDTO.getStudentIds().stream()
-                .map(id -> studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student not found with id " + id)))
-                .collect(Collectors.toList());
-        caregiver.setStudents(new HashSet<>(students));
+        if (caregiverDTO.getStudentIds() == null) {
+            caregiver.setStudents(new HashSet<>());
+        } else {
+            Set<Student> students = caregiverDTO.getStudentIds().stream()
+                    .map(id -> studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student not found with id " + id)))
+                    .collect(Collectors.toSet());
+            caregiver.setStudents(new HashSet<>(students));
+        }
 
         return caregiver;
     }

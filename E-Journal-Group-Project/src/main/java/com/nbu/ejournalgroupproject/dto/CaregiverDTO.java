@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,6 +23,5 @@ public class CaregiverDTO {
     @Email(message = "Email should be valid")
     private String email;
 
-    @NotNull(message = "Student IDs cannot be null")
-    private List<Long> studentIds;
+    private Set<Long> studentIds;
 }

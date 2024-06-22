@@ -17,7 +17,4 @@ public class AbsenceTypeDTO {
 
     @NotNull(message = "Absence type enum cannot be null")
     private AbsenceTypeEnum absenceTypeEnum;
-
-    @NotEmpty(message = "Absence IDs cannot be empty")
-    private List<Long> absenceIds;
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,7 +18,4 @@ public class AbsenceStatusDTO {
 
     @NotNull(message = "Absence status enum cannot be null")
     private AbsenceStatusEnum absenceStatusEnum;
-
-    @NotEmpty(message = "Absence IDs cannot be empty")
-    private List<Long> absenceIds;
 }
