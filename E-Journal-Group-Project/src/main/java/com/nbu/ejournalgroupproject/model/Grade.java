@@ -1,36 +1,41 @@
 package com.nbu.ejournalgroupproject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "grade")
 @Entity
+@Table(name = "grade")
 public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "Date of issue cannot be null")
+    @PastOrPresent(message = "Date of issue cannot be in the future")
     @Column(name = "date_of_issue")
     private LocalDate dateOfIssue;
 
+    @NotNull(message = "Student cannot be null")
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @NotNull(message = "Discipline cannot be null")
     @ManyToOne
     @JoinColumn(name = "discipline_id")
     private Discipline discipline;
 
+    @NotNull(message = "Grade Type cannot be null")
     @ManyToOne
     @JoinColumn(name = "grade_type_id")
     private GradeType gradeType;
