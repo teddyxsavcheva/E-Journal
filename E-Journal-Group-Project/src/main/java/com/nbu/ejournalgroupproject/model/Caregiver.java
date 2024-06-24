@@ -1,35 +1,39 @@
 package com.nbu.ejournalgroupproject.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "caregiver")
 @Entity
+@Table(name = "caregiver")
 public class Caregiver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
+    @NotEmpty(message = "Name cannot be empty")
     @Column(name = "name")
     private String name;
 
+    @NotEmpty(message = "Email cannot be empty")
+    @Email(message = "Email should be valid")
     @Column(name = "email")
     private String email;
 
     @ManyToMany
-    @JoinTable(name="caregivers_have_students",
-            joinColumns=@JoinColumn(name="caregiver_id"),
-            inverseJoinColumns=@JoinColumn(name="student_id")
+    @JoinTable(name = "student_caregiver",
+            joinColumns = @JoinColumn(name = "caregiver_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<Student> students;
-
+    private Set<Student> students = new HashSet<>();
 }
