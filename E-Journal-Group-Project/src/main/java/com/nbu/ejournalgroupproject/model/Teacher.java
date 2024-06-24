@@ -1,7 +1,9 @@
 package com.nbu.ejournalgroupproject.model;
 
-import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,9 +23,13 @@ public class Teacher {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "Name cannot be null")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     @Column(name = "name")
     private String name;
 
+    @NotBlank(message = "Email cannot be null")
+    @Email(message = "Email should be valid")
     @Column(name = "email")
     private String email;
 
@@ -36,7 +42,7 @@ public class Teacher {
             joinColumns=@JoinColumn(name="teacher_id"),
             inverseJoinColumns=@JoinColumn(name="teacher_qualification_id")
     )
-    private List<TeacherQualification> teacherQualifications;
+    private Set<TeacherQualification> teacherQualifications;
 
     @OneToMany(mappedBy = "teacher")
     private List<StudentCurriculumHasTeacherAndDiscipline> curriculumHasTeacherAndDisciplineList;
