@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+// business logic for authentication and registration.
 public class AuthenticationService {
 
     private final UserRepository repository;

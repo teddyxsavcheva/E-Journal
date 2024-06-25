@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
+// handles HTTP requests related to authentication
 public class AuthenticationController {
 
     private final AuthenticationService service;
@@ -28,8 +29,5 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticateAdmin(request));
 
     }
-
-
-
 
 }

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "grade")
+// TODO: Ask if I should have teacher relation here and in absence
 public class Grade {
 
     @Id
@@ -39,4 +40,5 @@ public class Grade {
     @ManyToOne
     @JoinColumn(name = "grade_type_id")
     private GradeType gradeType;
+
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+// handles the creation and validation of JWT tokens
 public class JwtService {
 
     private static final String SECRET_KEY = "c8b34f63cca185f8d5d7c3b931ffaadd1f3b6aa4fc830bced04b91dd692d271d";
