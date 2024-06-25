@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+// the request body for registering a new user.
 public class RegisterRequest {
 
     private String firstName;

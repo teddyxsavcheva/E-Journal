@@ -17,6 +17,7 @@ import com.nbu.ejournalgroupproject.user.UserRepository;
 
 @Configuration
 @RequiredArgsConstructor
+// configures the application's authentication provider and password encoder.
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
