@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.config;
+package com.nbu.ejournalgroupproject.security.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,6 +19,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 // filters incoming HTTP requests to verify JWT tokens
+// checks the tokens
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -31,11 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
+        // we need to pass the authentication to the header
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
-        if (authHeader == null || authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 
             filterChain.doFilter(request, response);
             return;
@@ -43,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
+        // Checking if we have that user and extracting the email
         userEmail = jwtService.extractUserName(jwt);
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {

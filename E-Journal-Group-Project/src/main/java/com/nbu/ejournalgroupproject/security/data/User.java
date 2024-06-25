@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.user;
+package com.nbu.ejournalgroupproject.security.data;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

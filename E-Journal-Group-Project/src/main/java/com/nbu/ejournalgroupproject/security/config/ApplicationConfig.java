@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.config;
+package com.nbu.ejournalgroupproject.security.config;
 
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.nbu.ejournalgroupproject.user.UserRepository;
+import com.nbu.ejournalgroupproject.security.data.UserRepository;
 
 
 @Configuration
