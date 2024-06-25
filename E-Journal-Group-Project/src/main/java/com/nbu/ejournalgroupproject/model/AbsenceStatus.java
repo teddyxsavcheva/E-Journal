@@ -27,4 +27,5 @@ public class AbsenceStatus {
 
     @OneToMany(mappedBy = "absenceStatus")
     private List<Absence> absences;
+
 }
