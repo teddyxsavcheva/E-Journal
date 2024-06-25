@@ -57,6 +57,10 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
         StudentCurriculumHasTeacherAndDiscipline entity = new StudentCurriculumHasTeacherAndDiscipline();
 
+        // Validate if the teacher is from the same school as the school class that has the curriculum
+        validateTeacherAndCurriculumSchool(dto);
+
+        // Validate if the teacher has the qualification to teach the discipline
         validateTeacherDisciplineRelation(entity, dto);
 
         Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
@@ -83,6 +87,10 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         StudentCurriculumHasTeacherAndDiscipline entity = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + dto.getId()));
 
+        // Validate if the teacher is from the same school as the school class that has the curriculum
+        validateTeacherAndCurriculumSchool(dto);
+
+        // Validate if the teacher has the qualification to teach the discipline
         validateTeacherDisciplineRelation(entity, dto);
 
         Discipline discipline = disciplineRepository.findById(dto.getDisciplineId())
@@ -107,6 +115,26 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
                         .orElseThrow(() -> new EntityNotFoundException("No Curriculum with teacher and Discipline found with id " + id));
 
         repository.deleteById(id);
+    }
+
+    private void validateTeacherAndCurriculumSchool(StudentCurriculumHasTeacherAndDisciplineDto dto) {
+
+        Long teacherId = dto.getTeacherId();
+        Long curriculumId = dto.getCurriculumId();
+
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new EntityNotFoundException("No Teacher with id " + teacherId));
+
+        StudentCurriculum curriculum = studentCurriculumRepository.findById(curriculumId)
+                .orElseThrow(() -> new EntityNotFoundException("No Curriculum with id " + curriculumId));
+
+        School teacherSchool = teacher.getSchool();
+        School curriculumSchool = curriculum.getSchoolClass().getSchool();
+
+        if (!teacherSchool.equals(curriculumSchool)) {
+            throw new IllegalArgumentException("Teacher and Curriculum must belong to the same school.");
+        }
+
     }
 
     private void validateTeacherDisciplineRelation(StudentCurriculumHasTeacherAndDiscipline entity, StudentCurriculumHasTeacherAndDisciplineDto dto) {
