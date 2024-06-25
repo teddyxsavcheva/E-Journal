@@ -70,7 +70,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new EntityNotFoundException("Student not found with id " + studentId));
 
-        if (!studentRepository.hasSingleCaregiver(studentId))
+        if (!studentRepository.hasLessThenTwoCaregivers(studentId))
         {
             throw new IllegalArgumentException("Student have two caregivers");
         }
