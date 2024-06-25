@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.config;
+package com.nbu.ejournalgroupproject.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

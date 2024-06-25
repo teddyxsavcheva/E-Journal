@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.config;
+package com.nbu.ejournalgroupproject.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

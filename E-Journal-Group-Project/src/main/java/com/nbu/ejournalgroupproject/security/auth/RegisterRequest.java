@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.auth;
+package com.nbu.ejournalgroupproject.security.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

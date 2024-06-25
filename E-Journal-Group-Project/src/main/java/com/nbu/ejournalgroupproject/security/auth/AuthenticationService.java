@@ -1,9 +1,9 @@
-package com.nbu.ejournalgroupproject.auth;
+package com.nbu.ejournalgroupproject.security.auth;
 
-import com.nbu.ejournalgroupproject.config.JwtService;
-import com.nbu.ejournalgroupproject.user.Role;
-import com.nbu.ejournalgroupproject.user.User;
-import com.nbu.ejournalgroupproject.user.UserRepository;
+import com.nbu.ejournalgroupproject.security.config.JwtService;
+import com.nbu.ejournalgroupproject.security.data.Role;
+import com.nbu.ejournalgroupproject.security.data.User;
+import com.nbu.ejournalgroupproject.security.data.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

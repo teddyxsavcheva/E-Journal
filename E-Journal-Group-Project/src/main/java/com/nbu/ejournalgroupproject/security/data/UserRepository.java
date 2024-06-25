@@ -1,4 +1,4 @@
-package com.nbu.ejournalgroupproject.user;
+package com.nbu.ejournalgroupproject.security.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,4 +8,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Because email is unique, we will use it to find the user
     Optional<User> findByEmail(String email);
+
 }
