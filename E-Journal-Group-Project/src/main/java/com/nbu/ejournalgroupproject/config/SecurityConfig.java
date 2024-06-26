@@ -48,38 +48,38 @@ public class SecurityConfig {
         http.authorizeHttpRequests
                         (authz -> authz
 
-                                        // Administrator can change all information in the system
-                                        .requestMatchers("/**").hasAuthority("ADMINISTRATOR")
+                                // Administrator can change all information in the system
+                                .requestMatchers("/**").hasAuthority("ADMINISTRATOR")
 
-                                        // The teachers, parents, headmasters and students have access only to their school
-                                        //TODO: Maybe see how to implement this? Also, if I leave the two stars, will this be a problem as I would be able to get all schools?
-                                        .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                // The teachers, parents, headmasters and students have access only to their school
+                                //TODO: Maybe see how to implement this? Also, if I leave the two stars, will this be a problem as I would be able to get all schools?
+                                .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
 
-                                        .requestMatchers(HttpMethod.GET, "/school-class/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                        .requestMatchers(HttpMethod.GET, "/student-curriculum/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                        .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER", "STUDENT")
+                                .requestMatchers(HttpMethod.GET, "/school-class/**").hasAnyAuthority("HEADMASTER", "TEACHER")
+                                .requestMatchers(HttpMethod.GET, "/student-curriculum/**").hasAnyAuthority("HEADMASTER", "TEACHER")
+                                .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER", "STUDENT")
 
-                                        .requestMatchers(HttpMethod.GET,"/headmaster/**").hasAuthority("HEADMASTER")
-                                        .requestMatchers(HttpMethod.GET,"/teacher/**").hasAuthority("TEACHER")
-                                        .requestMatchers(HttpMethod.GET,"/caregivers/**").hasAuthority("CAREGIVER")
-                                        .requestMatchers(HttpMethod.GET, "/students/**").hasAuthority("STUDENT")
+                                .requestMatchers(HttpMethod.GET, "/headmaster/**").hasAuthority("HEADMASTER")
+                                .requestMatchers(HttpMethod.GET, "/teacher/**").hasAuthority("TEACHER")
+                                .requestMatchers(HttpMethod.GET, "/caregivers/**").hasAuthority("CAREGIVER")
+                                .requestMatchers(HttpMethod.GET, "/students/**").hasAuthority("STUDENT")
 
-                                        .requestMatchers(HttpMethod.GET,"/disciplines/**").hasAuthority("HEADMASTER")
+                                .requestMatchers(HttpMethod.GET, "/disciplines/**").hasAuthority("HEADMASTER")
 
-                                        .requestMatchers("/grades/**").hasAuthority("TEACHER")
-                                        .requestMatchers("/gradeTypes/**").hasAuthority("TEACHER")
+                                .requestMatchers("/grades/**").hasAuthority("TEACHER")
+                                .requestMatchers("/gradeTypes/**").hasAuthority("TEACHER")
 
-                                        .requestMatchers("/absences/**").hasAuthority("TEACHER")
-                                        .requestMatchers("/absenceStatuses/**").hasAuthority("TEACHER")
-                                        .requestMatchers("/absenceTypes/**").hasAuthority("TEACHER")
+                                .requestMatchers("/absences/**").hasAuthority("TEACHER")
+                                .requestMatchers("/absenceStatuses/**").hasAuthority("TEACHER")
+                                .requestMatchers("/absenceTypes/**").hasAuthority("TEACHER")
 
-                                        .requestMatchers(HttpMethod.GET,"/grades/**").hasAnyAuthority("CAREGIVER", "STUDENT", "HEADMASTER")
-                                        .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("HEADMASTER", "CAREGIVER", "STUDENT")
-                                        .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.GET, "/grades/**").hasAnyAuthority("CAREGIVER", "STUDENT", "HEADMASTER")
+                                .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("HEADMASTER", "CAREGIVER", "STUDENT")
+                                .anyRequest().authenticated()
 
                         )
                 .httpBasic(Customizer.withDefaults())
-        .formLogin(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults());
         return http.build();
     }
 }
