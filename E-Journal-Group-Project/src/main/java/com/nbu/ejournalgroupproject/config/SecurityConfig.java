@@ -57,18 +57,24 @@ public class SecurityConfig {
 
                                         .requestMatchers(HttpMethod.GET, "/school-class/**").hasAnyAuthority("HEADMASTER", "TEACHER")
                                         .requestMatchers(HttpMethod.GET, "/student-curriculum/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                        .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER")
+                                        .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER", "STUDENT")
 
-                                        .requestMatchers("/headmaster/**").hasAuthority("HEADMASTER")
-                                        .requestMatchers("/teacher/**").hasAuthority("TEACHER")
-                                        .requestMatchers("/caregivers/**").hasAuthority("CAREGIVER")
-                                        .requestMatchers("/students/**").hasAuthority("STUDENT")
+                                        .requestMatchers(HttpMethod.GET,"/headmaster/**").hasAuthority("HEADMASTER")
+                                        .requestMatchers(HttpMethod.GET,"/teacher/**").hasAuthority("TEACHER")
+                                        .requestMatchers(HttpMethod.GET,"/caregivers/**").hasAuthority("CAREGIVER")
+                                        .requestMatchers(HttpMethod.GET, "/students/**").hasAuthority("STUDENT")
 
-                                        .requestMatchers("/disciplines/**").hasAuthority("HEADMASTER")
-                                        .requestMatchers(HttpMethod.GET,"/grades/**").hasAnyAuthority("TEACHER", "CAREGIVER", "STUDENT", "HEADMASTER")
-                                        .requestMatchers("/absenceTypes/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                        .requestMatchers("/absenceStatuses/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                        .requestMatchers("/absences/**").hasAnyAuthority("TEACHER", "CAREGIVER", "STUDENT")
+                                        .requestMatchers(HttpMethod.GET,"/disciplines/**").hasAuthority("HEADMASTER")
+
+                                        .requestMatchers("/grades/**").hasAuthority("TEACHER")
+                                        .requestMatchers("/gradeTypes/**").hasAuthority("TEACHER")
+
+                                        .requestMatchers("/absences/**").hasAuthority("TEACHER")
+                                        .requestMatchers("/absenceStatuses/**").hasAuthority("TEACHER")
+                                        .requestMatchers("/absenceTypes/**").hasAuthority("TEACHER")
+
+                                        .requestMatchers(HttpMethod.GET,"/grades/**").hasAnyAuthority("CAREGIVER", "STUDENT", "HEADMASTER")
+                                        .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("HEADMASTER", "CAREGIVER", "STUDENT")
                                         .anyRequest().authenticated()
 
                         )
