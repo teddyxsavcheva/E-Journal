@@ -49,7 +49,7 @@ public class SecurityConfig {
                         (authz -> authz
 
                                 // Administrator can change all information in the system
-                                .requestMatchers("/**").hasAuthority("ADMINISTRATOR")
+                                //.requestMatchers("/**").hasAuthority("ADMINISTRATOR")
 
                                 // The teachers, parents, headmasters and students have access only to their school
                                 //TODO: Maybe see how to implement this? Also, if I leave the two stars, will this be a problem as I would be able to get all schools?
