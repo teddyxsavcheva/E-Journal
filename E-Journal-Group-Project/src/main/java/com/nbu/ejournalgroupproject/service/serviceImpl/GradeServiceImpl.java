@@ -58,4 +58,9 @@ public class GradeServiceImpl implements GradeService {
         Grade savedGrade = gradeRepository.save(updatedGrade);
         return gradeMapper.toDTO(savedGrade);
     }
+
+    @Override
+    public List<String> getGradesByStudentAndDiscipline(Long studentId,Long disciplineId) {
+        return gradeRepository.findGradeTypesByStudentAndDiscipline(studentId, disciplineId);
+    }
 }
