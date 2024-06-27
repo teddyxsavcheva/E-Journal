@@ -75,14 +75,11 @@ const TeacherList = () => {
         }
     };
 
-    if (error) {
-        return <div className="error-message">Error: {error.message}</div>;
-    }
-
     return (
         <div className="container mt-4">
             <div className="mb-4">
                 <h2>Teachers for School ID: {schoolId}</h2>
+                {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
 
             <div className="mb-4">
@@ -109,7 +106,7 @@ const TeacherList = () => {
                                 onChange={(e) => handleChange(e, setNewTeacher)}
                             />
                         </div>
-                        <button className="btn btn-success" onClick={handleAddTeacher}>
+                        <button className="btn btn-success me-1" onClick={handleAddTeacher}>
                             Add Teacher
                         </button>
                     </div>
@@ -117,55 +114,59 @@ const TeacherList = () => {
             </div>
 
             <ul className="list-group">
-                {teachers.map((teacher) => (
-                    <li key={teacher.id} className="list-group-item mb-3">
-                        <div className="d-flex align-items-center justify-content-between">
-                            <div className="teacher-info">
-                                {editTeacher && editTeacher.id === teacher.id ? (
-                                    <>
-                                        <div className="mb-2">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                name="name"
-                                                value={editTeacher.name}
-                                                onChange={(e) => handleChange(e, setEditTeacher)}
-                                            />
-                                        </div>
-                                        <div className="mb-2">
-                                            <input
-                                                type="email"
-                                                className="form-control"
-                                                name="email"
-                                                value={editTeacher.email}
-                                                onChange={(e) => handleChange(e, setEditTeacher)}
-                                            />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <span className="d-block mb-1">{teacher.name}</span>
-                                        <span>{teacher.email}</span>
-                                    </>
-                                )}
-                            </div>
-                            <div className="actions">
-                                {editTeacher && editTeacher.id === teacher.id ? (
-                                    <button className="btn btn-sm btn-success mr-2" onClick={handleSaveTeacher}>
-                                        Save
+                {teachers.length > 0 ? (
+                    teachers.map((teacher) => (
+                        <li key={teacher.id} className="list-group-item mb-3">
+                            <div className="d-flex align-items-center justify-content-between">
+                                <div className="teacher-info">
+                                    {editTeacher && editTeacher.id === teacher.id ? (
+                                        <>
+                                            <div className="mb-2">
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="name"
+                                                    value={editTeacher.name}
+                                                    onChange={(e) => handleChange(e, setEditTeacher)}
+                                                />
+                                            </div>
+                                            <div className="mb-2">
+                                                <input
+                                                    type="email"
+                                                    className="form-control"
+                                                    name="email"
+                                                    value={editTeacher.email}
+                                                    onChange={(e) => handleChange(e, setEditTeacher)}
+                                                />
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span className="d-block mb-1">{teacher.name}</span>
+                                            <span>{teacher.email}</span>
+                                        </>
+                                    )}
+                                </div>
+                                <div className="actions">
+                                    {editTeacher && editTeacher.id === teacher.id ? (
+                                        <button className="btn btn-sm btn-success me-1" onClick={handleSaveTeacher}>
+                                            Save
+                                        </button>
+                                    ) : (
+                                        <button className="btn btn-sm btn-primary me-1" onClick={() => handleEditTeacher(teacher)}>
+                                            Edit
+                                        </button>
+                                    )}
+                                    <button className="btn btn-sm btn-danger me-1" onClick={() => handleDeleteTeacher(teacher.id)}>
+                                        Delete
                                     </button>
-                                ) : (
-                                    <button className="btn btn-sm btn-primary mr-2" onClick={() => handleEditTeacher(teacher)}>
-                                        Edit
-                                    </button>
-                                )}
-                                <button className="btn btn-sm btn-danger" onClick={() => handleDeleteTeacher(teacher.id)}>
-                                    Delete
-                                </button>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                ))}
+                        </li>
+                    ))
+                ) : (
+                    <li className="list-group-item">No teachers available</li>
+                )}
             </ul>
         </div>
     );
