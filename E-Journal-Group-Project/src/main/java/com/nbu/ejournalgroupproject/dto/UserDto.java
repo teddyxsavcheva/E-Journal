@@ -21,6 +21,6 @@ public class UserDto {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-    private Set<Role> authorities;
+    private Set<Long> roleIds;
 
 }
