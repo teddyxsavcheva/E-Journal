@@ -5,15 +5,33 @@ import { useParams, useNavigate } from 'react-router-dom';
 const SchoolDetails = () => {
     const { schoolId } = useParams();
     const [school, setSchool] = useState(null);
+    const [schoolType, setSchoolType] = useState(null);
+    const [schoolTypes, setSchoolTypes] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        address: '',
+        schoolTypeId: '',
+    });
     const [error, setError] = useState(null);
-    const [editSchool, setEditSchool] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchSchoolDetails = async () => {
             try {
-                const response = await axios.get(`/school/${schoolId}`);
-                setSchool(response.data);
+                const schoolResponse = await axios.get(`/school/${schoolId}`);
+                setSchool(schoolResponse.data);
+                setFormData({
+                    name: schoolResponse.data.name,
+                    address: schoolResponse.data.address,
+                    schoolTypeId: schoolResponse.data.schoolTypeId,
+                });
+
+                const schoolTypeResponse = await axios.get(`/school-type/${schoolResponse.data.schoolTypeId}`);
+                setSchoolType(schoolTypeResponse.data.schoolType);
+
+                const allSchoolTypesResponse = await axios.get('/school-type/');
+                setSchoolTypes(allSchoolTypesResponse.data);
             } catch (error) {
                 setError(error);
                 console.error('There was an error fetching the school details!', error);
@@ -23,35 +41,30 @@ const SchoolDetails = () => {
         fetchSchoolDetails();
     }, [schoolId]);
 
-    const handleTeachersClick = () => {
-        navigate(`/school/${schoolId}/teachers`);
-    };
-
-    const handleSchoolClassesClick = () => {
-        navigate(`/school/${schoolId}/classes`);
-    };
-
-    const handleHeadmasterClick = () => {
-        navigate(`/school/${schoolId}/headmaster`);
-    };
-
-    const handleChange = (e, setter) => {
-        const { name, value } = e.target;
-        setter((prev) => ({ ...prev, [name]: value }));
-    };
-
     const handleEditClick = () => {
-        setEditSchool(school);
+        setIsEditing(true);
     };
 
-    const handleSaveClick = async () => {
+    const handleCancelClick = () => {
+        setIsEditing(false);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
-            await axios.put(`/school/${schoolId}`, editSchool);
-            setSchool(editSchool);
-            setEditSchool(null);
+            await axios.put(`/school/${schoolId}`, formData);
+            setIsEditing(false);
+            setSchool({ ...school, ...formData });
+            const updatedSchoolTypeResponse = await axios.get(`/school-type/${formData.schoolTypeId}`);
+            setSchoolType(updatedSchoolTypeResponse.data.schoolType);
         } catch (error) {
             setError(error);
-            console.error('There was an error updating the school!', error);
+            console.error('There was an error updating the school details!', error);
         }
     };
 
@@ -74,36 +87,57 @@ const SchoolDetails = () => {
             {school ? (
                 <div className="card">
                     <div className="card-body">
-                        {editSchool ? (
-                            <>
-                                <div className="mb-2">
+                        {isEditing ? (
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label htmlFor="name" className="form-label">Name</label>
                                     <input
                                         type="text"
                                         className="form-control"
+                                        id="name"
                                         name="name"
-                                        value={editSchool.name}
-                                        onChange={(e) => handleChange(e, setEditSchool)}
+                                        value={formData.name}
+                                        onChange={handleChange}
                                     />
                                 </div>
-                                <div className="mb-2">
+                                <div className="mb-3">
+                                    <label htmlFor="address" className="form-label">Address</label>
                                     <input
                                         type="text"
                                         className="form-control"
+                                        id="address"
                                         name="address"
-                                        value={editSchool.address}
-                                        onChange={(e) => handleChange(e, setEditSchool)}
+                                        value={formData.address}
+                                        onChange={handleChange}
                                     />
                                 </div>
-                                <button className="btn btn-success me-1" onClick={handleSaveClick}>Save</button>
-                                <button className="btn btn-secondary me-1" onClick={() => setEditSchool(null)}>Cancel</button>
-                            </>
+                                <div className="mb-3">
+                                    <label htmlFor="schoolTypeId" className="form-label">School Type</label>
+                                    <select
+                                        className="form-control"
+                                        id="schoolTypeId"
+                                        name="schoolTypeId"
+                                        value={formData.schoolTypeId}
+                                        onChange={handleChange}
+                                    >
+                                        {schoolTypes.map((type) => (
+                                            <option key={type.id} value={type.id}>
+                                                {type.schoolType.replace('_', ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button type="submit" className="btn btn-primary me-1">Save</button>
+                                <button type="button" className="btn btn-secondary" onClick={handleCancelClick}>Cancel</button>
+                            </form>
                         ) : (
                             <>
                                 <h5 className="card-title">{school.name}</h5>
                                 <p className="card-text">Address: {school.address}</p>
-                                <button className="btn btn-primary me-1" onClick={handleTeachersClick}>Teachers</button>
-                                <button className="btn btn-primary me-1" onClick={handleSchoolClassesClick}>School Classes</button>
-                                <button className="btn btn-primary me-1" onClick={handleHeadmasterClick}>Headmaster</button>
+                                <p className="card-text">School Type: {schoolType ? schoolType.replace('_', ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : 'N/A'}</p>
+                                <button className="btn btn-primary me-1" onClick={() => navigate(`/school/${schoolId}/teachers`)}>Teachers</button>
+                                <button className="btn btn-primary me-1" onClick={() => navigate(`/school/${schoolId}/classes`)}>School Classes</button>
+                                <button className="btn btn-primary me-1" onClick={() => navigate(`/school/${schoolId}/headmaster`)}>Headmaster</button>
                                 <button className="btn btn-secondary me-1" onClick={handleEditClick}>Edit</button>
                                 <button className="btn btn-danger me-1" onClick={handleDeleteClick}>Delete</button>
                             </>
@@ -112,7 +146,9 @@ const SchoolDetails = () => {
                 </div>
             ) : (
                 <div className="card">
-                    {/* Placeholder for loading or no data */}
+                    <div className="card-body">
+                        Loading...
+                    </div>
                 </div>
             )}
         </div>

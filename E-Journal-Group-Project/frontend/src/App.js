@@ -6,6 +6,7 @@ import SchoolDetails from './components/SchoolDetails';
 import TeacherList from './components/TeacherList';
 import SchoolClassesList from "./components/SchoolClassesList";
 import Headmaster from "./components/Headmaster";
+import AddSchool from "./components/AddSchool";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                         <Route path="/school/:schoolId/teachers" element={<TeacherList />} />
                         <Route path="/school/:schoolId/classes" element={<SchoolClassesList />} />
                         <Route path="/school/:schoolId/headmaster" element={<Headmaster />} />
+                        <Route path="/add-school" element={<AddSchool />} />
                     </Routes>
                 </main>
             </div>
