@@ -50,14 +50,16 @@ public class SecurityConfig {
                                 // TODO: Ask how they will know which headmaster is currently logged? So that he could access only his school?
                                 // The teachers, parents, headmasters and students have access only to their school
                                 //TODO: Maybe see how to implement this? Also, if I leave the two stars, will this be a problem as I would be able to get all schools?
-                                .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority
+                                        ("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
 
                                 // So that they can see the school classes
                                 .requestMatchers(HttpMethod.GET, "/school-class/**").hasAnyAuthority("HEADMASTER", "TEACHER")
                                 // So that they could see the curriculum? Idk if the teacher should be here or if I should add the student
                                 .requestMatchers(HttpMethod.GET, "/student-curriculum/**").hasAnyAuthority("HEADMASTER", "TEACHER")
                                 // So that headmaster, teacher and student could access the program?
-                                .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER", "STUDENT")
+                                .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority
+                                        ("HEADMASTER", "TEACHER", "STUDENT")
 
                                 // So that each role can access their endpoints as well
                                 .requestMatchers(HttpMethod.GET, "/headmaster/**").hasAuthority("HEADMASTER")
@@ -65,8 +67,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/caregivers/**").hasAuthority("CAREGIVER")
                                 .requestMatchers(HttpMethod.GET, "/students/**").hasAuthority("STUDENT")
 
-                                // The headmaster can see all disciplines
-                                .requestMatchers(HttpMethod.GET, "/disciplines/**").hasAuthority("HEADMASTER")
+                                // The headmaster can see all disciplines - should I add teacher as well
+                                .requestMatchers(HttpMethod.GET, "/disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER")
 
                                 // Honestly idk if I even need those
                                 .requestMatchers("/gradeTypes/**").hasAuthority("TEACHER")
@@ -74,16 +76,19 @@ public class SecurityConfig {
                                 .requestMatchers("/absenceTypes/**").hasAuthority("TEACHER")
 
                                 // So that the teacher can edit grades and the rest of them could access them
+                                // TODO: Which one is the correct implementation - grades or absences for those cases?
                                 .requestMatchers(HttpMethod.GET, "/grades/**").hasAnyAuthority("CAREGIVER", "STUDENT", "HEADMASTER")
                                 .requestMatchers("/grades/**").hasAuthority("TEACHER")
 
-                                // So that the teacher can edit grades and the rest of them could access them
-                                .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("HEADMASTER", "CAREGIVER", "STUDENT")
-                                .requestMatchers("/absences/**").hasAuthority("TEACHER")
+                                // So that the teacher can edit absences and the rest of them could access them
+                                .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/absences/**").hasAnyAuthority("TEACHER")
+                                .requestMatchers(HttpMethod.PUT, "/absences/**").hasAnyAuthority("TEACHER")
+                                .requestMatchers(HttpMethod.DELETE, "/absences/**").hasAnyAuthority("TEACHER")
 
                                 // Administrator can change all information in the system
                                 // TODO: But if I enable it, the rest doesn't work?
-                                //.requestMatchers("/**").hasAuthority("ADMINISTRATOR")
+                                .requestMatchers("/**").hasAuthority("ADMINISTRATOR")
 
                                 .anyRequest().authenticated()
 

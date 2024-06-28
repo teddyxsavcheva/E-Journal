@@ -1,5 +1,6 @@
 package com.nbu.ejournalgroupproject.model;
 
+import com.nbu.ejournalgroupproject.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,11 +15,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "headmaster")
 @Entity
+// TODO: Add user
 public class Headmaster {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    //foreign key or inheritance - joined
+    //private User user;
 
     @NotBlank(message = "Name cannot be null")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
