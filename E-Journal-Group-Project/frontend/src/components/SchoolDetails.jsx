@@ -68,17 +68,17 @@ const SchoolDetails = () => {
         }
     };
 
-    const handleDeleteClick = async () => {
-        if (window.confirm('Are you sure you want to delete this school?')) {
-            try {
-                await axios.delete(`/school/${schoolId}`);
-                navigate('/schools'); // Assuming you have a list of schools to navigate to after deletion
-            } catch (error) {
-                setError(error);
-                console.error('There was an error deleting the school!', error);
-            }
-        }
-    };
+    // const handleDeleteClick = async () => {
+    //     if (window.confirm('Are you sure you want to delete this school?')) {
+    //         try {
+    //             await axios.delete(`/school/${schoolId}`);
+    //             navigate('/schools'); // Assuming you have a list of schools to navigate to after deletion
+    //         } catch (error) {
+    //             setError(error);
+    //             console.error('There was an error deleting the school!', error);
+    //         }
+    //     }
+    // };
 
     return (
         <div className="container mt-4">
@@ -135,11 +135,11 @@ const SchoolDetails = () => {
                                 <h5 className="card-title">{school.name}</h5>
                                 <p className="card-text">Address: {school.address}</p>
                                 <p className="card-text">School Type: {schoolType ? schoolType.replace('_', ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : 'N/A'}</p>
-                                <button className="btn btn-primary me-1" onClick={() => navigate(`/school/${schoolId}/teachers`)}>Teachers</button>
-                                <button className="btn btn-primary me-1" onClick={() => navigate(`/school/${schoolId}/classes`)}>School Classes</button>
-                                <button className="btn btn-primary me-1" onClick={() => navigate(`/school/${schoolId}/headmaster`)}>Headmaster</button>
+                                <button className="btn btn-primary me-1" onClick={() => navigate(`/admin/school/${schoolId}/headmaster`)}>Headmaster</button>
+                                <button className="btn btn-primary me-1" onClick={() => navigate(`/admin/school/${schoolId}/teachers`)}>Teachers</button>
+                                <button className="btn btn-primary me-1" onClick={() => navigate(`/admin/school/${schoolId}/classes`)}>School Classes</button>
                                 <button className="btn btn-secondary me-1" onClick={handleEditClick}>Edit</button>
-                                <button className="btn btn-danger me-1" onClick={handleDeleteClick}>Delete</button>
+                                {/*<button className="btn btn-danger me-1" onClick={handleDeleteClick}>Delete</button>*/}
                             </>
                         )}
                     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from '../axiosInstance';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 
 const useTeachers = (schoolId) => {
     const [teachers, setTeachers] = useState([]);
@@ -153,10 +153,11 @@ const TeacherList = () => {
                                             Save
                                         </button>
                                     ) : (
-                                        <button className="btn btn-sm btn-primary me-1" onClick={() => handleEditTeacher(teacher)}>
+                                        <button className="btn btn-sm btn-success me-1" onClick={() => handleEditTeacher(teacher)}>
                                             Edit
                                         </button>
                                     )}
+                                    <Link to={`/admin/school/${schoolId}/teacher/${teacher.id}/qualifications`} className="btn btn-primary btn-sm me-1">Qualifications</Link>
                                     <button className="btn btn-sm btn-danger me-1" onClick={() => handleDeleteTeacher(teacher.id)}>
                                         Delete
                                     </button>

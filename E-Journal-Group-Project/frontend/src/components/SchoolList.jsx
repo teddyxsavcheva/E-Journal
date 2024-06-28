@@ -42,7 +42,7 @@ const SchoolList = () => {
             <h2 className="mb-4">Schools</h2>
             {error && <div className="alert alert-danger">Error: {error.message}</div>}
             <div className="mb-3">
-                <Link to="/add-school" className="btn btn-primary">Add School</Link>
+                <Link to="/admin/add-school" className="btn btn-primary">Add School</Link>
             </div>
             <ul className="list-group">
                 {schools.length > 0 ? (
@@ -50,7 +50,7 @@ const SchoolList = () => {
                         <li key={school.id} className="list-group-item d-flex justify-content-between align-items-center">
                             {school.name}
                             <div>
-                                <Link to={`/school/${school.id}`} className="btn btn-primary btn-sm mr-2">Details</Link>
+                                <Link to={`/admin/school/${school.id}`} className="btn btn-primary btn-sm mr-2">Details</Link>
                             </div>
                         </li>
                     ))
