@@ -47,48 +47,147 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests
                         (authz -> authz
-                                // TODO: Ask how they will know which headmaster is currently logged? So that he could access only his school?
-                                // The teachers, parents, headmasters and students have access only to their school
-                                //TODO: Maybe see how to implement this? Also, if I leave the two stars, will this be a problem as I would be able to get all schools?
+                                /* The Headmaster can see all endpoints, but only the Admin can edit them */
+
+                                // Everyone can see the school they are from, but only the admin can edit
                                 .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority
-                                        ("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                        ("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/schools/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/schools/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/schools/**").hasAuthority
+                                        ("ADMINISTRATOR")
 
-                                // So that they can see the school classes
-                                .requestMatchers(HttpMethod.GET, "/school-class/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                // So that they could see the curriculum? Idk if the teacher should be here or if I should add the student
-                                .requestMatchers(HttpMethod.GET, "/student-curriculum/**").hasAnyAuthority("HEADMASTER", "TEACHER")
-                                // So that headmaster, teacher and student could access the program?
+                                .requestMatchers(HttpMethod.GET, "/school-type/**").hasAnyAuthority
+                                        ("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/school-type/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/school-type/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/school-type/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                // Everyone can see the school class, but only the admin can edit
+                                .requestMatchers(HttpMethod.GET, "/school-class/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/school-class/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/school-class/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/school-class/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                // Everyone can see the curriculum, but only the admin can edit
+                                .requestMatchers(HttpMethod.GET, "/student-curriculum/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/student-curriculum/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/student-curriculum/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/student-curriculum/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                // Everyone can see the program for the semester, but only the admin can edit
                                 .requestMatchers(HttpMethod.GET, "/curriculums-teachers-disciplines/**").hasAnyAuthority
-                                        ("HEADMASTER", "TEACHER", "STUDENT")
+                                        ("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/curriculums-teachers-disciplines/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/curriculums-teachers-disciplines/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/curriculums-teachers-disciplines/**").hasAuthority
+                                        ("ADMINISTRATOR")
 
-                                // So that each role can access their endpoints as well
-                                .requestMatchers(HttpMethod.GET, "/headmaster/**").hasAuthority("HEADMASTER")
-                                .requestMatchers(HttpMethod.GET, "/teacher/**").hasAuthority("TEACHER")
-                                .requestMatchers(HttpMethod.GET, "/caregivers/**").hasAuthority("CAREGIVER")
-                                .requestMatchers(HttpMethod.GET, "/students/**").hasAuthority("STUDENT")
+                                //
+                                .requestMatchers(HttpMethod.GET, "/headmaster/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER")
+                                .requestMatchers(HttpMethod.POST, "/headmaster/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/headmaster/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/headmaster/**").hasAuthority
+                                        ("ADMINISTRATOR")
 
-                                // The headmaster can see all disciplines - should I add teacher as well
-                                .requestMatchers(HttpMethod.GET, "/disciplines/**").hasAnyAuthority("HEADMASTER", "TEACHER")
+                                .requestMatchers(HttpMethod.GET, "/teacher/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER","TEACHER")
+                                .requestMatchers(HttpMethod.POST, "/teacher/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/teacher/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/teacher/**").hasAuthority
+                                        ("ADMINISTRATOR")
 
-                                // Honestly idk if I even need those
-                                .requestMatchers("/gradeTypes/**").hasAuthority("TEACHER")
-                                .requestMatchers("/absenceStatuses/**").hasAuthority("TEACHER")
-                                .requestMatchers("/absenceTypes/**").hasAuthority("TEACHER")
+                                .requestMatchers(HttpMethod.GET, "/teacher-qualifications/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER","TEACHER")
+                                .requestMatchers(HttpMethod.POST, "/teacher-qualifications/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/teacher-qualifications/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/teacher-qualifications/**").hasAuthority
+                                        ("ADMINISTRATOR")
 
-                                // So that the teacher can edit grades and the rest of them could access them
-                                // TODO: Which one is the correct implementation - grades or absences for those cases?
-                                .requestMatchers(HttpMethod.GET, "/grades/**").hasAnyAuthority("CAREGIVER", "STUDENT", "HEADMASTER")
-                                .requestMatchers("/grades/**").hasAuthority("TEACHER")
+                                .requestMatchers(HttpMethod.GET, "/caregivers/**").hasAnyAuthority("ADMINISTRATOR","HEADMASTER","CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/caregivers/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/caregivers/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/caregivers/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                .requestMatchers(HttpMethod.GET, "/students/**").hasAnyAuthority("ADMINISTRATOR","HEADMASTER", "TEACHER","STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/students/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/students/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/students/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                .requestMatchers(HttpMethod.GET, "/disciplines/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/disciplines/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/disciplines/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/disciplines/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                // TODO: Discuss this
+                                .requestMatchers(HttpMethod.GET, "/discipline-types/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/discipline-types/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/discipline-types/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/discipline-types/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                .requestMatchers(HttpMethod.GET, "/gradeTypes/**").hasAnyAuthority("ADMINISTRATOR","HEADMASTER","TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/gradeTypes/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/gradeTypes/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/gradeTypes/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                .requestMatchers(HttpMethod.GET, "/absenceStatuses/**").hasAnyAuthority("ADMINISTRATOR","HEADMASTER","TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/absenceStatuses/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/absenceStatuses/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/absenceStatuses/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                .requestMatchers(HttpMethod.GET, "/absenceTypes/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST, "/absenceTypes/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.PUT, "/absenceTypes/**").hasAuthority
+                                        ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.DELETE, "/absenceTypes/**").hasAuthority
+                                        ("ADMINISTRATOR")
+
+                                .requestMatchers(HttpMethod.GET, "/grades/**").hasAnyAuthority("ADMINISTRATOR", "CAREGIVER", "STUDENT", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.POST,"/grades/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
+                                .requestMatchers(HttpMethod.PUT,"/grades/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
+                                .requestMatchers(HttpMethod.DELETE,"/grades/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
 
                                 // So that the teacher can edit absences and the rest of them could access them
-                                .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
-                                .requestMatchers(HttpMethod.POST, "/absences/**").hasAnyAuthority("TEACHER")
-                                .requestMatchers(HttpMethod.PUT, "/absences/**").hasAnyAuthority("TEACHER")
-                                .requestMatchers(HttpMethod.DELETE, "/absences/**").hasAnyAuthority("TEACHER")
-
-                                // Administrator can change all information in the system
-                                // TODO: But if I enable it, the rest doesn't work?
-                                .requestMatchers("/**").hasAuthority("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.GET, "/absences/**").hasAnyAuthority("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                .requestMatchers(HttpMethod.POST, "/absences/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
+                                .requestMatchers(HttpMethod.PUT, "/absences/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
+                                .requestMatchers(HttpMethod.DELETE, "/absences/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
 
                                 .anyRequest().authenticated()
 
