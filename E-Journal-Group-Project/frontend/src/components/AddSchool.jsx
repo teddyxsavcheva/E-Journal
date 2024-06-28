@@ -71,7 +71,7 @@ const AddSchool = () => {
                 </div>
                 <div>
                     <button type="submit" className="btn btn-primary me-2">Add School</button>
-                    <Link to="/" className="btn btn-secondary">Back to Schools</Link>
+                    <Link to="/admin" className="btn btn-secondary">Back to Schools</Link>
                 </div>
             </form>
         </div>

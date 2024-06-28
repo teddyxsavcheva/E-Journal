@@ -9,6 +9,10 @@ import Headmaster from "./components/Headmaster";
 import AddSchool from "./components/AddSchool";
 import TeacherQualifications from "./components/TeacherQualifications";
 import SchoolClassDetails from "./components/SchoolClassDetails";
+import Caregivers from "./components/Caregivers";
+import StudentView from "./components/StudentView";
+import CaregiverView from "./components/CaregiverView";
+import AddDiscipline from "./components/AddDiscipline";
 
 function App() {
     return (
@@ -19,8 +23,9 @@ function App() {
                 </header>
                 <main>
                     <Routes>
-                        <Route path="/" element={<SchoolList />} />
+                        <Route path="/admin" element={<SchoolList />} />
                         <Route path="/admin/add-school" element={<AddSchool />} />
+                        <Route path="/admin/add-discipline" element={<AddDiscipline />} />
                         <Route path="/admin/school/:schoolId" element={<SchoolDetails />} />
 
                         <Route path="/admin/school/:schoolId/teachers" element={<TeacherList />} />
@@ -28,10 +33,14 @@ function App() {
 
                         <Route path="/admin/school/:schoolId/classes" element={<SchoolClassesList />} />
                         <Route path="/admin/school/:schoolId/class/:classId" element={<SchoolClassDetails />} />
-                        <Route path="`/admin/school/:schoolId/class/:classId/student/:studentId/caregivers`" element={<SchoolClassDetails />} />
 
+                        <Route path="/admin/school/:schoolId/class/:classId/student/:studentId/caregivers" element={<Caregivers />} />
 
                         <Route path="/admin/school/:schoolId/headmaster" element={<Headmaster />} />
+
+                        <Route path="/students/:studentId" element={<StudentView />} />
+                        <Route path="/caregivers/:id" element={<CaregiverView />} />
+
                     </Routes>
                 </main>
             </div>

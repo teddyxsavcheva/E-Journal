@@ -23,42 +23,6 @@ const useStudents = (classId) => {
     return { students, error, fetchStudents };
 };
 
-const StudentForm = ({ student, onChange, onSave, onCancel, isEdit}) => (
-    <div className="card">
-        <h3 className="card-header">{isEdit ? 'Edit Student' : 'Add New Student'}</h3>
-        <div className="card-body">
-            <div className="form-group">
-                <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Student's Name"
-                    name="name"
-                    value={student.name}
-                    onChange={onChange}
-                />
-            </div>
-            <div className="form-group">
-                <input
-                    type="number"
-                    className="form-control mb-3"
-                    placeholder="Student's Number"
-                    name="number" //TODO
-                    value={student.numberInClass}
-                    onChange={onChange}
-                />
-            </div>
-            <button className="btn btn-success me-1" onClick={onSave}>
-                {isEdit ? 'Save' : 'Add Student'}
-            </button>
-            {isEdit && (
-                <button className="btn btn-secondary" onClick={onCancel}>
-                    Cancel
-                </button>
-            )}
-        </div>
-    </div>
-)
-
 const SchoolClassDetails = () => {
     const { schoolId, classId } = useParams();
     const { students, error , fetchStudents} = useStudents(classId);

@@ -42,7 +42,8 @@ const SchoolList = () => {
             <h2 className="mb-4">Schools</h2>
             {error && <div className="alert alert-danger">Error: {error.message}</div>}
             <div className="mb-3">
-                <Link to="/admin/add-school" className="btn btn-primary">Add School</Link>
+                <Link to="/admin/add-school" className="btn btn-primary me-2">Add School</Link>
+                <Link to="/admin/add-discipline" className="btn btn-primary me-2">Add Discipline</Link>
             </div>
             <ul className="list-group">
                 {schools.length > 0 ? (
