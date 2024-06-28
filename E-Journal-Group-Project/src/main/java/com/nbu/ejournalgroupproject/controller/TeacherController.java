@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.TeacherDTO;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.service.TeacherService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -68,5 +69,11 @@ public class TeacherController {
     public ResponseEntity<TeacherDTO> removeQualificationFromTeacher(@PathVariable Long teacherId, @PathVariable Long qualificationId) {
         TeacherDTO updatedDto = teacherService.deleteQualificationFromTeacher(teacherId, qualificationId);
         return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+    }
+
+    @GetMapping("/{id}/qualifications")
+    public ResponseEntity<List<TeacherQualificationDto>> getTeacherQualifications(@PathVariable Long id) {
+        List<TeacherQualificationDto> qualifications = teacherService.getQualificationsByTeacherId(id);
+        return ResponseEntity.ok(qualifications);
     }
 }

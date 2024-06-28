@@ -73,4 +73,10 @@ public class StudentController {
     public List<Long> getStudentAbsences(@PathVariable Long studentId, @PathVariable Long disciplineId) {
         return absenceService.getAbsencesByStudentAndDiscipline(studentId, disciplineId);
     }
+
+    @GetMapping("/school-class/{id}")
+    public ResponseEntity<List<StudentDTO>> getStudentByClassId(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getStudentsFromClass(id));
+    }
+
 }

@@ -89,4 +89,13 @@ public class StudentServiceImpl implements StudentService {
 
         return studentMapper.toDTO(updatedStudent);
     }
+
+    @Override
+    public List<StudentDTO> getStudentsFromClass(Long id) {
+        List<Student> students = studentRepository.getStudentsBySchoolClassId(id);
+        return students
+                .stream()
+                .map(studentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }
