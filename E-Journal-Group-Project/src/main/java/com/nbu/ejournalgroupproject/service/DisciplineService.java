@@ -21,4 +21,6 @@ public interface DisciplineService {
     DisciplineDto addQualificationToDiscipline(Long disciplineId, Long qualificationId);
 
     DisciplineDto removeQualificationFromDiscipline(Long disciplineId, Long qualificationId);
+
+    List<DisciplineDto> getDisciplinesByStudentId(Long studentId);
 }
