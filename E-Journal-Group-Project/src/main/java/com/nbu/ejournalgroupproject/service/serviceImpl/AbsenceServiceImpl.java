@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.service.AbsenceService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class AbsenceServiceImpl implements AbsenceService {
     private final AbsenceRepository absenceRepository;
     private final AbsenceMapper absenceMapper;
 
+    // TODO: Should this look like this?
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public AbsenceDTO getAbsenceById(Long id) {
         Absence absence = absenceRepository.findById(id)
@@ -27,6 +30,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(absence);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public List<AbsenceDTO> getAllAbsences() {
         List<Absence> absences = absenceRepository.findAll();
@@ -35,6 +39,8 @@ public class AbsenceServiceImpl implements AbsenceService {
                 .collect(Collectors.toList());
     }
 
+    // TODO: Should I add admin  here?
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
     @Override
     public AbsenceDTO createAbsence(@Valid AbsenceDTO absenceDTO) {
         Absence absence = absenceMapper.toEntity(absenceDTO);
@@ -42,11 +48,13 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(createdAbsence);
     }
 
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
     @Override
     public void deleteAbsence(Long id) {
         absenceRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAnyAuthority('TEACHER')")
     @Override
     public AbsenceDTO updateAbsence(Long id, @Valid AbsenceDTO absenceDTO) {
         Absence existingAbsence = absenceRepository.findById(id)

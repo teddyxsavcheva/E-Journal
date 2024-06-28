@@ -17,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "student")
+// TODO: Add user
 public class Student {
 
     @Id
