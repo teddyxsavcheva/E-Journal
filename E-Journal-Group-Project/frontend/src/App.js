@@ -1,21 +1,21 @@
 // App.jsx
 import React from 'react';
 import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
-import SchoolList from './components/SchoolList';
-import SchoolDetails from './components/SchoolDetails';
-import TeacherList from './components/TeacherList';
-import SchoolClassesList from "./components/SchoolClassList";
-import Headmaster from "./components/Headmaster";
-import AddSchool from "./components/AddSchool";
-import TeacherQualifications from "./components/TeacherQualifications";
-import SchoolClassDetails from "./components/SchoolClassDetails";
-import Caregivers from "./components/Caregivers";
-import StudentView from "./components/StudentView";
-import CaregiverView from "./components/CaregiverView";
-import AddDiscipline from "./components/AddDiscipline";
-import CurriculumDetails from "./components/CurriculumDetails";
-import HomePage from "./components/HomePage";
-import StudentsGrades from "./components/StudentsGrades";
+import SchoolList from './adminView/SchoolList';
+import SchoolDetails from './adminView/SchoolDetails';
+import TeacherList from './teacherView/TeacherList';
+import SchoolClassesList from "./adminView/SchoolClassList";
+import Headmaster from "./adminView/Headmaster";
+import AddSchool from "./adminView/AddSchool";
+import TeacherQualifications from "./adminView/TeacherQualifications";
+import SchoolClassDetails from "./adminView/SchoolClassDetails";
+import Caregivers from "./adminView/Caregivers";
+import StudentView from "./studentView/StudentView";
+import CaregiverView from "./adminView/CaregiverView";
+import AddDiscipline from "./adminView/AddDiscipline";
+import CurriculumDetails from "./adminView/CurriculumDetails";
+import HomePage from "./adminView/HomePage";
+import StudentsGrades from "./adminView/StudentsGrades";
 
 function App() {
     return (
@@ -40,6 +40,7 @@ function App() {
                         <Route path="/admin/school/:schoolId/class/:classId/curriculum" element={<CurriculumDetails />} />
 
                         <Route path="/admin/school-class/:classId/students-grades/teacher/:teacherId/discipline/:disciplineId/grades" element={<StudentsGrades />} />
+                        <Route path="/admin/school-class/:classId/students-grades/teacher/:teacherId/discipline/:disciplineId/absences" element={<StudentsGrades />} />
 
 
                         <Route path="/admin/school/:schoolId/class/:classId/student/:studentId/caregivers" element={<Caregivers />} />

@@ -24,6 +24,8 @@ const HomePage = () => {
         <div className="container mt-5">
             <h1 className="text-center mb-4">Navigation Form</h1>
             <div className="card p-4">
+            <Link to="/admin" className="btn btn-info text-white">Go to Admin Page</Link>
+                <span className="text-center mt-3">OR</span>
                 <div className="mb-3">
                     <label htmlFor="idInput" className="form-label">Enter ID:</label>
                     <input
@@ -47,7 +49,6 @@ const HomePage = () => {
                 </div>
                 <div className="d-grid gap-2">
                     <Link to={generateUrl()} className="btn btn-primary">Go to {role} Page</Link>
-                    <Link to="/admin" className="btn btn-secondary">Go to Admin Page</Link>
                 </div>
             </div>
         </div>
