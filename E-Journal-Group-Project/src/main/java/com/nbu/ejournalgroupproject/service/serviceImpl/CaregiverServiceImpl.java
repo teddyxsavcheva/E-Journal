@@ -61,6 +61,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         Caregiver existingCaregiver = caregiverRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Caregiver not found with id " + id));
 
+        // here happens the checking for User?
         Caregiver updatedCaregiver = caregiverMapper.toEntity(caregiverDTO);
         updatedCaregiver.setId(existingCaregiver.getId());
 

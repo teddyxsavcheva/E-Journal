@@ -4,8 +4,10 @@ import com.nbu.ejournalgroupproject.dto.TeacherDTO;
 import com.nbu.ejournalgroupproject.mappers.TeacherMapper;
 import com.nbu.ejournalgroupproject.model.Teacher;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
+import com.nbu.ejournalgroupproject.model.user.User;
 import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
 import com.nbu.ejournalgroupproject.repository.TeacherRepository;
+import com.nbu.ejournalgroupproject.repository.UserRepository;
 import com.nbu.ejournalgroupproject.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -25,6 +27,7 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherMapper teacherMapper;
 
     private final TeacherQualificationRepository teacherQualificationRepository;
+    private final UserRepository userRepository;
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER','TEACHER')")
     @Override
@@ -71,6 +74,12 @@ public class TeacherServiceImpl implements TeacherService {
 
         existingTeacher.setName(teacherDTO.getName());
         existingTeacher.setEmail(teacherDTO.getEmail());
+
+        // Checking for user
+        User user = userRepository.findById(teacherDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + teacherDTO.getUserId() + " not found"));
+        existingTeacher.setUser(user);
+
         teacherMapper.mapSchoolIdToEntity(teacherDTO, existingTeacher);
         Teacher updatedTeacher = teacherRepository.save(existingTeacher);
         return teacherMapper.EntityToDto(updatedTeacher);

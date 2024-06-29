@@ -13,6 +13,8 @@ import lombok.Setter;
 public class StudentDTO {
     private Long id;
 
+    private Long userId;
+
     @NotEmpty(message = "Name cannot be empty")
     private String name;
 
