@@ -196,7 +196,6 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 
                         )
-                // This is disabled temporary for testing purposes as otherwise the methods require token
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 
