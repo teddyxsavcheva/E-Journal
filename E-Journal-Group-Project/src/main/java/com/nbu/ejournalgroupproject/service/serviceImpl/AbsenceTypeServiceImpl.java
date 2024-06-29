@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.service.AbsenceTypeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
     private final AbsenceTypeRepository absenceTypeRepository;
     private final AbsenceTypeMapper absenceTypeMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public AbsenceTypeDTO getAbsenceTypeById(Long id) {
         AbsenceType absenceType = absenceTypeRepository.findById(id)
@@ -27,6 +29,7 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         return absenceTypeMapper.toDTO(absenceType);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<AbsenceTypeDTO> getAllAbsenceTypes() {
         List<AbsenceType> absenceTypes = absenceTypeRepository.findAll();
@@ -35,6 +38,7 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public AbsenceTypeDTO createAbsenceType(@Valid AbsenceTypeDTO absenceTypeDTO) {
         AbsenceType absenceType = absenceTypeMapper.toEntity(absenceTypeDTO);
@@ -42,11 +46,13 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         return absenceTypeMapper.toDTO(createdAbsenceType);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteAbsenceType(Long id) {
         absenceTypeRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public AbsenceTypeDTO updateAbsenceType(Long id, @Valid AbsenceTypeDTO absenceTypeDTO) {
         AbsenceType existingAbsenceType = absenceTypeRepository.findById(id)

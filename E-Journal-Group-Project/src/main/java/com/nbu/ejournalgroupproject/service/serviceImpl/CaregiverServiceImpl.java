@@ -10,6 +10,7 @@ import com.nbu.ejournalgroupproject.service.CaregiverService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CaregiverServiceImpl implements CaregiverService {
     private final StudentRepository studentRepository;
     private final CaregiverMapper caregiverMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'CAREGIVER')")
     @Override
     public CaregiverDTO getCaregiverById(Long id) {
         Caregiver caregiver = caregiverRepository.findById(id)
@@ -30,6 +32,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         return caregiverMapper.toDTO(caregiver);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<CaregiverDTO> getAllCaregivers() {
         List<Caregiver> caregivers = caregiverRepository.findAll();
@@ -38,6 +41,7 @@ public class CaregiverServiceImpl implements CaregiverService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public CaregiverDTO createCaregiver(@Valid CaregiverDTO caregiverDTO) {
         Caregiver caregiver = caregiverMapper.toEntity(caregiverDTO);
@@ -45,11 +49,13 @@ public class CaregiverServiceImpl implements CaregiverService {
         return caregiverMapper.toDTO(createdCaregiver);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteCaregiver(Long id) {
         caregiverRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public CaregiverDTO updateCaregiver(Long id, @Valid CaregiverDTO caregiverDTO) {
         Caregiver existingCaregiver = caregiverRepository.findById(id)
@@ -62,6 +68,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         return caregiverMapper.toDTO(savedCaregiver);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public CaregiverDTO addStudentToCaregiver(Long caregiverId, Long studentId) {
         Caregiver caregiver = caregiverRepository.findById(caregiverId)
@@ -81,6 +88,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         return caregiverMapper.toDTO(updatedCaregiver);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public CaregiverDTO removeStudentFromCaregiver(Long caregiverId, Long studentId) {
         Caregiver caregiver = caregiverRepository.findById(caregiverId)

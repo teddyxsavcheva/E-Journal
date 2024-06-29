@@ -47,20 +47,23 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests
                         (authz -> authz
+
+                                //TODO: The POST, PUT and DELETE won't work as they require tokens!!!
+
                                 /* The Headmaster can see all endpoints, but only the Admin can edit them */
 
                                 // Everyone can see the school they are from, but only the admin can edit
-                                .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority
-                                        ("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
                                 .requestMatchers(HttpMethod.POST, "/schools/**").hasAuthority
                                         ("ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.GET, "/schools/**").hasAnyAuthority
+                                        ("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
                                 .requestMatchers(HttpMethod.PUT, "/schools/**").hasAuthority
                                         ("ADMINISTRATOR")
                                 .requestMatchers(HttpMethod.DELETE, "/schools/**").hasAuthority
                                         ("ADMINISTRATOR")
 
                                 .requestMatchers(HttpMethod.GET, "/school-type/**").hasAnyAuthority
-                                        ("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", "STUDENT")
+                                        ("ADMINISTRATOR","HEADMASTER", "TEACHER", "CAREGIVER", " STUDENT")
                                 .requestMatchers(HttpMethod.POST, "/school-type/**").hasAuthority
                                         ("ADMINISTRATOR")
                                 .requestMatchers(HttpMethod.PUT, "/school-type/**").hasAuthority
@@ -178,7 +181,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/absenceTypes/**").hasAuthority
                                         ("ADMINISTRATOR")
 
-                                .requestMatchers(HttpMethod.GET, "/grades/**").hasAnyAuthority("ADMINISTRATOR", "CAREGIVER", "STUDENT", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
+                                .requestMatchers(HttpMethod.GET, "/grades/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
                                 .requestMatchers(HttpMethod.POST,"/grades/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
                                 .requestMatchers(HttpMethod.PUT,"/grades/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
                                 .requestMatchers(HttpMethod.DELETE,"/grades/**").hasAnyAuthority("ADMINISTRATOR","TEACHER")
@@ -192,7 +195,8 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 
                         )
-
+                // This is disabled temporary for testing purposes as otherwise the methods require token
+                .csrf(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 

@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.service.GradeTypeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class GradeTypeServiceImpl implements GradeTypeService {
     private final GradeTypeRepository gradeTypeRepository;
     private final GradeTypeMapper gradeTypeMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public GradeTypeDTO getGradeTypeById(Long id) {
         GradeType gradeType = gradeTypeRepository.findById(id)
@@ -27,6 +29,7 @@ public class GradeTypeServiceImpl implements GradeTypeService {
         return gradeTypeMapper.toDTO(gradeType);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<GradeTypeDTO> getAllGradeTypes() {
         List<GradeType> gradeTypes = gradeTypeRepository.findAll();
@@ -35,6 +38,7 @@ public class GradeTypeServiceImpl implements GradeTypeService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public GradeTypeDTO createGradeType(@Valid GradeTypeDTO gradeTypeDTO) {
         GradeType gradeType = gradeTypeMapper.toEntity(gradeTypeDTO);
@@ -42,11 +46,13 @@ public class GradeTypeServiceImpl implements GradeTypeService {
         return gradeTypeMapper.toDTO(createdGradeType);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteGradeType(Long id) {
         gradeTypeRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public GradeTypeDTO updateGradeType(Long id, @Valid GradeTypeDTO gradeTypeDTO) {
         GradeType existingGradeType = gradeTypeRepository.findById(id)

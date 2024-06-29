@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
     private final CurriculumHasTeacherAndDisciplineMapper mapper;
     private static final Logger logger = LoggerFactory.getLogger(StudentCurriculumHasTeacherAndDisciplineServiceImpl.class);
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<StudentCurriculumHasTeacherAndDisciplineDto> getAllCurriculumHasTeacherAndDiscipline() {
 
@@ -41,6 +43,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public StudentCurriculumHasTeacherAndDisciplineDto getCurriculumHasTeacherAndDisciplineById(@NotNull Long id) {
 
@@ -50,6 +53,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         return mapper.convertToDto(entity);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentCurriculumHasTeacherAndDisciplineDto createCurriculumHasTeacherAndDiscipline(@Valid StudentCurriculumHasTeacherAndDisciplineDto dto) {
 
@@ -79,6 +83,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentCurriculumHasTeacherAndDisciplineDto updateCurriculumHasTeacherAndDiscipline(@Valid StudentCurriculumHasTeacherAndDisciplineDto dto,@NotNull Long id) {
 
@@ -108,6 +113,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
         return mapper.convertToDto(repository.save(entity));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteCurriculumHasTeacherAndDiscipline(@NotNull Long id) {
 

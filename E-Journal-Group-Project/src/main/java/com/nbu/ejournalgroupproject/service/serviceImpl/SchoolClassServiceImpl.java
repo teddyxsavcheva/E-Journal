@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
     private final SchoolClassMapper schoolClassMapper;
     private final SchoolRepository schoolRepository;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<SchoolClassDTO> getSchoolClasses() {
         List<SchoolClass> schoolClasses = schoolClassRepository.findAll();
@@ -32,6 +34,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public SchoolClassDTO getSchoolClas(Long id) {
         SchoolClass schoolClass = schoolClassRepository.findById(id)
@@ -39,6 +42,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
         return schoolClassMapper.mapEntityToDto(schoolClass);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolClassDTO createSchoolClass(@Valid SchoolClassDTO schoolClassDTO) {
         validateSchoolClassDTO(schoolClassDTO);
@@ -48,6 +52,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
         return schoolClassMapper.mapEntityToDto(schoolClassRepository.save(schoolClass));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolClassDTO updateSchoolClass(@NotNull Long id, @Valid SchoolClassDTO newSchoolClass) {
         validateSchoolClassDTO(newSchoolClass);
@@ -65,6 +70,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
         return schoolClassMapper.mapEntityToDto(updatedSchoolClass);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteSchoolClass(Long id) {
         SchoolClass schoolClass = schoolClassRepository.findById(id)
