@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
     private final StudentCurriculumMapper studentCurriculumMapper;
     private final SchoolClassRepository schoolClassRepository;
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<StudentCurriculumDTO> getStudentCurriculums() {
         List<StudentCurriculum> studentCurriculums = studentCurriculumRepository.findAll();
@@ -33,6 +35,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public StudentCurriculumDTO getStudentCurriculum(Long id) {
         StudentCurriculum studentCurriculum = studentCurriculumRepository.findById(id)
@@ -40,6 +43,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
         return studentCurriculumMapper.entityToDto(studentCurriculum);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentCurriculumDTO createStudentCurriculum(@Valid StudentCurriculumDTO studentCurriculumDTO) {
         validateStudentCurriculumDTO(studentCurriculumDTO);
@@ -47,6 +51,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
         return studentCurriculumMapper.entityToDto(studentCurriculumRepository.save(studentCurriculum));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentCurriculumDTO updateStudentCurriculum(@NotNull Long id, @Valid StudentCurriculumDTO newCurriculumDTO) {
         validateStudentCurriculumDTO(newCurriculumDTO);
@@ -61,6 +66,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     private void updateStudentCurriculumSchoolClass(StudentCurriculum existingStudentCurriculum, StudentCurriculumDTO newCurriculumDTO) {
         Long schoolClassId = newCurriculumDTO.getSchoolClassId();
         if(schoolClassId != null){
@@ -70,6 +76,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteStudentCurriculum(Long id) {
         StudentCurriculum studentCurriculum = studentCurriculumRepository.findById(id)

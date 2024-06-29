@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
     private final DisciplineTypeRepository disciplineTypeRepository;
     private final DisciplineTypeMapper disciplineTypeMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<DisciplineTypeDto> getAllDisciplineTypes() {
 
@@ -32,6 +34,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public DisciplineTypeDto getDisciplineTypeById(@NotNull Long id) {
 
@@ -42,6 +45,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public DisciplineTypeDto createDisciplineType(@Valid DisciplineTypeDto disciplineTypeDto) {
 
@@ -53,6 +57,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public DisciplineTypeDto updateDisciplineType(@Valid DisciplineTypeDto disciplineTypeDto,@NotNull Long id) {
 
@@ -67,6 +72,7 @@ public class DisciplineTypeServiceImpl implements DisciplineTypeService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteDisciplineType(@NotNull Long id) {
 

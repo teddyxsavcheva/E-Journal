@@ -10,6 +10,7 @@ import com.nbu.ejournalgroupproject.service.StudentService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class StudentServiceImpl implements StudentService {
     private final CaregiverRepository caregiverRepository;
     private final StudentMapper studentMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public StudentDTO getStudentById(Long id) {
         Student student = studentRepository.findById(id)
@@ -30,6 +32,7 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.toDTO(student);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<StudentDTO> getAllStudents() {
         List<Student> students = studentRepository.findAll();
@@ -38,6 +41,7 @@ public class StudentServiceImpl implements StudentService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentDTO createStudent(@Valid StudentDTO studentDTO) {
         Student student = studentMapper.toEntity(studentDTO);
@@ -45,11 +49,13 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.toDTO(createdStudent);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentDTO updateStudent(Long id, @Valid StudentDTO studentDTO) {
         Student existingStudent = studentRepository.findById(id)
@@ -62,6 +68,7 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.toDTO(savedStudent);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentDTO addCaregiverToStudent(Long studentId, Long caregiverId) {
         Student student = studentRepository.findById(studentId)
@@ -76,6 +83,7 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.toDTO(updatedStudent);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public StudentDTO removeCaregiverFromStudent(Long studentId, Long caregiverId) {
         Student student = studentRepository.findById(studentId)

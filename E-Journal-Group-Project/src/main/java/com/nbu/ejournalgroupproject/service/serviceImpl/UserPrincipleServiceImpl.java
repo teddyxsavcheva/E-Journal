@@ -18,6 +18,7 @@ public class UserPrincipleServiceImpl implements UserPrincipleService {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    // Loads the user from the DB
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDto userDto = this.userService.getUserByUsername(username);

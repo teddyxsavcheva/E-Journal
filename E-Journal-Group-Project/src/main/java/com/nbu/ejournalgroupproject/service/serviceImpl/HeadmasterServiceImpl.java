@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
 
     private final HeadmasterMapper headmasterMapper;
 
-
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<HeadmasterDTO> getHeadmasters() {
         List<Headmaster> headmasters = headmasterRepository.findAll();
@@ -36,6 +37,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public HeadmasterDTO getHeadmaster(Long id) {
         Headmaster headmaster = headmasterRepository.findById(id)
@@ -43,12 +45,14 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         return headmasterMapper.mapEntityToDto(headmaster);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public HeadmasterDTO getHeadmasterBySchoolID(Long id) {
        Headmaster headmaster = headmasterRepository.findBySchoolId(id);
        return headmasterMapper.mapEntityToDto(headmaster);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public HeadmasterDTO createHeadmaster(@Valid HeadmasterDTO headmasterDTO) {
         validateHeadmasterDTO(headmasterDTO);
@@ -56,6 +60,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(headmaster));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public HeadmasterDTO updateHeadmaster(@NotNull Long id, @Valid HeadmasterDTO newHeadmaster) {
         validateHeadmasterDTO(newHeadmaster);
@@ -71,6 +76,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(existingHeadmaster));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     private void updateHeadmasterSchool(Headmaster existingHeadmaster, HeadmasterDTO newHeadmaster) {
         Long schoolId = newHeadmaster.getSchoolId();
         if (schoolId != null) {
@@ -80,6 +86,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteHeadmaster(Long id) {
         Headmaster headmaster = headmasterRepository.findById(id)

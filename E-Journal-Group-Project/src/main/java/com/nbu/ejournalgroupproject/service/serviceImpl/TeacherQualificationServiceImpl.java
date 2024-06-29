@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,6 +30,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
     private TeacherQualificationMapper teacherQualificationMapper;
     private DisciplineRepository disciplineRepository;
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<TeacherQualificationDto> getAllTeacherQualifications() {
 
@@ -40,6 +42,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR', 'HEADMASTER', 'TEACHER')")
     @Override
     public TeacherQualificationDto getTeacherQualificationById(@NotNull Long id) {
 
@@ -50,6 +53,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherQualificationDto createTeacherQualification(@Valid TeacherQualificationDto dto) {
 
@@ -60,6 +64,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
         return teacherQualificationMapper.convertToDto(teacherQualificationRepository.save(teacherQualification));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherQualificationDto updateTeacherQualification(@Valid TeacherQualificationDto dto, @NotNull Long id) {
 
@@ -73,6 +78,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
         return teacherQualificationMapper.convertToDto(teacherQualificationRepository.save(teacherQualification));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteTeacherQualification(@NotNull Long id) {
 
@@ -92,6 +98,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherQualificationDto addTeacherToQualification(@NotNull Long qualificationId,@NotNull Long teacherId) {
 
@@ -106,6 +113,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
         return teacherQualificationMapper.convertToDto(teacherQualificationRepository.save(qualification));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherQualificationDto removeTeacherFromQualification(@NotNull Long qualificationId,@NotNull Long teacherId) {
 
@@ -121,6 +129,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherQualificationDto addDisciplineToQualification(@NotNull Long qualificationId,@NotNull Long disciplineId) {
 
@@ -136,6 +145,7 @@ public class TeacherQualificationServiceImpl implements TeacherQualificationServ
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherQualificationDto removeDisciplineFromQualification(@NotNull Long qualificationId,@NotNull Long disciplineId) {
 

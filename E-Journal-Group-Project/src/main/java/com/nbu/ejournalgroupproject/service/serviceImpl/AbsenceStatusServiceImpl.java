@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.service.AbsenceStatusService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AbsenceStatusServiceImpl implements AbsenceStatusService {
     private final AbsenceStatusRepository absenceStatusRepository;
     private final AbsenceStatusMapper absenceStatusMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public AbsenceStatusDTO getAbsenceStatusById(Long id) {
         AbsenceStatus absenceStatus = absenceStatusRepository.findById(id)
@@ -27,6 +29,7 @@ public class AbsenceStatusServiceImpl implements AbsenceStatusService {
         return absenceStatusMapper.toDTO(absenceStatus);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<AbsenceStatusDTO> getAllAbsenceStatuses() {
         List<AbsenceStatus> absenceStatuses = absenceStatusRepository.findAll();
@@ -35,6 +38,7 @@ public class AbsenceStatusServiceImpl implements AbsenceStatusService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public AbsenceStatusDTO createAbsenceStatus(@Valid AbsenceStatusDTO absenceStatusDTO) {
         AbsenceStatus absenceStatus = absenceStatusMapper.toEntity(absenceStatusDTO);
@@ -42,11 +46,13 @@ public class AbsenceStatusServiceImpl implements AbsenceStatusService {
         return absenceStatusMapper.toDTO(createdAbsenceStatus);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteAbsenceStatus(Long id) {
         absenceStatusRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public AbsenceStatusDTO updateAbsenceStatus(Long id, @Valid AbsenceStatusDTO absenceStatusDTO) {
         AbsenceStatus existingAbsenceStatus = absenceStatusRepository.findById(id)

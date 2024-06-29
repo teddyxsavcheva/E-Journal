@@ -21,7 +21,6 @@ public class AbsenceServiceImpl implements AbsenceService {
     private final AbsenceRepository absenceRepository;
     private final AbsenceMapper absenceMapper;
 
-    // TODO: Should this look like this?
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public AbsenceDTO getAbsenceById(Long id) {
@@ -30,7 +29,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(absence);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<AbsenceDTO> getAllAbsences() {
         List<Absence> absences = absenceRepository.findAll();
@@ -39,8 +38,7 @@ public class AbsenceServiceImpl implements AbsenceService {
                 .collect(Collectors.toList());
     }
 
-    // TODO: Should I add admin  here?
-    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public AbsenceDTO createAbsence(@Valid AbsenceDTO absenceDTO) {
         Absence absence = absenceMapper.toEntity(absenceDTO);
@@ -48,13 +46,13 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(createdAbsence);
     }
 
-    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public void deleteAbsence(Long id) {
         absenceRepository.deleteById(id);
     }
 
-    @PreAuthorize("hasAnyAuthority('TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public AbsenceDTO updateAbsence(Long id, @Valid AbsenceDTO absenceDTO) {
         Absence existingAbsence = absenceRepository.findById(id)
