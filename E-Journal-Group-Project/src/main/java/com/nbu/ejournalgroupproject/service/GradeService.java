@@ -10,4 +10,6 @@ public interface GradeService {
     void deleteGrade(Long id);
     GradeDTO updateGrade(Long id, GradeDTO gradeDTO);
     List<String> getGradesByStudentAndDiscipline(Long studentId, Long disciplineId);
+
+    List<GradeDTO> getGradeObjectsByStudentAndDiscipline(Long studentId, Long disciplineId);
 }

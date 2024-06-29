@@ -14,4 +14,6 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
     @Query("SELECT gt.gradeTypeEnum FROM Grade g JOIN g.gradeType gt WHERE g.student.id = :studentId AND g.discipline.id = :disciplineId")
     List<String> findGradeTypesByStudentAndDiscipline(@Param("studentId") Long studentId, @Param("disciplineId") Long disciplineId);
 
+    List<Grade> getAllByStudentIdAndDisciplineId(Long studentId, Long disciplineId);
+
 }

@@ -63,4 +63,12 @@ public class GradeServiceImpl implements GradeService {
     public List<String> getGradesByStudentAndDiscipline(Long studentId,Long disciplineId) {
         return gradeRepository.findGradeTypesByStudentAndDiscipline(studentId, disciplineId);
     }
+
+    @Override
+    public List<GradeDTO> getGradeObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
+        return gradeRepository.getAllByStudentIdAndDisciplineId(studentId, disciplineId)
+                .stream()
+                .map(gradeMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

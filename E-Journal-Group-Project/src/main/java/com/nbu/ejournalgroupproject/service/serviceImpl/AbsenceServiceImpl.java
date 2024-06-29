@@ -71,4 +71,10 @@ public class AbsenceServiceImpl implements AbsenceService {
 
         return counts;
     }
+
+    @Override
+    public List<AbsenceDTO> getAbsenceObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
+        return absenceRepository.getAllByDisciplineIdAndStudentId(studentId, disciplineId)
+                .stream().map(absenceMapper::toDTO).collect(Collectors.toList());
+    }
 }
