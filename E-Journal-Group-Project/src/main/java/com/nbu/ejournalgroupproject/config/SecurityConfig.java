@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -45,10 +46,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests
+        http
+                .csrf(AbstractHttpConfigurer::disable) // so that we don't need to work with tokens
+                .authorizeHttpRequests
                         (authz -> authz
-
-                                //TODO: The POST, PUT and DELETE won't work as they require tokens!!!
 
                                 /* The Headmaster can see all endpoints, but only the Admin can edit them */
 
@@ -196,7 +197,6 @@ public class SecurityConfig {
 
                         )
                 // This is disabled temporary for testing purposes as otherwise the methods require token
-                .csrf(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 

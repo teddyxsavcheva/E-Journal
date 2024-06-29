@@ -61,6 +61,7 @@ public class StudentServiceImpl implements StudentService {
         Student existingStudent = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student not found with id " + id));
 
+        // here happens the checking for User?
         Student updatedStudent = studentMapper.toEntity(studentDTO);
         updatedStudent.setId(existingStudent.getId());
 

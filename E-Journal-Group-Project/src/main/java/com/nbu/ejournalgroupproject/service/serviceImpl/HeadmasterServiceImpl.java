@@ -4,8 +4,10 @@ import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
 import com.nbu.ejournalgroupproject.mappers.HeadmasterMapper;
 import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
+import com.nbu.ejournalgroupproject.model.user.User;
 import com.nbu.ejournalgroupproject.repository.HeadmasterRepository;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
+import com.nbu.ejournalgroupproject.repository.UserRepository;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
     private final SchoolRepository schoolRepository;
 
     private final HeadmasterMapper headmasterMapper;
+    private final UserRepository userRepository;
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
@@ -73,10 +76,14 @@ public class HeadmasterServiceImpl implements HeadmasterService {
 
         updateHeadmasterSchool(existingHeadmaster, newHeadmaster);
 
+        // Checking for user
+        User user = userRepository.findById(newHeadmaster.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + newHeadmaster.getUserId() + " not found"));
+        existingHeadmaster.setUser(user);
+
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(existingHeadmaster));
     }
 
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     private void updateHeadmasterSchool(Headmaster existingHeadmaster, HeadmasterDTO newHeadmaster) {
         Long schoolId = newHeadmaster.getSchoolId();
         if (schoolId != null) {

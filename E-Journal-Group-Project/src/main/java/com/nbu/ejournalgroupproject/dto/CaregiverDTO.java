@@ -16,6 +16,8 @@ import java.util.Set;
 public class CaregiverDTO {
     private Long id;
 
+    private Long userId;
+
     @NotEmpty(message = "Name cannot be empty")
     private String name;
 
