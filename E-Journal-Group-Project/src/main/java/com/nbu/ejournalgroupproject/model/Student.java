@@ -1,5 +1,6 @@
 package com.nbu.ejournalgroupproject.model;
 
+import com.nbu.ejournalgroupproject.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -17,12 +18,15 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "student")
-// TODO: Add user
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @NotEmpty(message = "Name cannot be empty")
     @Column(name = "name")

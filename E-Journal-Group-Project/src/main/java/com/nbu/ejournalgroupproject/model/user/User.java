@@ -1,10 +1,15 @@
 package com.nbu.ejournalgroupproject.model.user;
 
+import com.nbu.ejournalgroupproject.model.Caregiver;
+import com.nbu.ejournalgroupproject.model.Headmaster;
+import com.nbu.ejournalgroupproject.model.Student;
+import com.nbu.ejournalgroupproject.model.Teacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -34,6 +39,18 @@ public class User {
 
     @NotNull
     private boolean enabled = true;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Teacher> teachers = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Student> students = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Caregiver> caregivers = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Headmaster> headmasters = new HashSet<>();
 
     @Override
     public String toString() {
