@@ -31,12 +31,6 @@ const SchoolList = () => {
         fetchSchoolTypes();
     }, []);
 
-    const handleSchoolTypeChange = (event) => {
-        setSelectedSchoolTypeId(event.target.value);
-        // You can implement filtering of schools based on selected school type here
-        // Example: fetchFilteredSchools(event.target.value);
-    };
-
     return (
         <div className="container mt-4">
             <h2 className="mb-4">Schools</h2>
@@ -59,15 +53,6 @@ const SchoolList = () => {
                     <li className="list-group-item">No schools available</li>
                 )}
             </ul>
-            <div className="mt-4">
-                <label htmlFor="schoolTypeSelect" className="form-label">Filter by School Type:</label>
-                <select id="schoolTypeSelect" className="form-select" onChange={handleSchoolTypeChange}>
-                    <option value="">All</option>
-                    {schoolTypes.map(type => (
-                        <option key={type.id} value={type.id}>{type.schoolType}</option>
-                    ))}
-                </select>
-            </div>
         </div>
     );
 };

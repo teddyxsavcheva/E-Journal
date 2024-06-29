@@ -75,10 +75,20 @@ const SchoolClassDetails = () => {
 
     return (
         <div className="container mt-4">
-            <div className="mb-4">
-                <h2>Students for School ID: {schoolId}</h2>
-                {error && <div className="alert alert-danger">Error: {error.message}</div>}
+            <div className="mb-4 d-flex justify-content-between align-items-center">
+                <h2 className="mb-0">School Class Details for School ID: {schoolId}</h2>
+                <Link to={`/admin/school/${schoolId}/class/${classId}/curriculum`}
+                      className="btn btn-primary">
+                    Curriculum
+                </Link>
             </div>
+            {error &&
+                <div className="alert alert-danger text-center">
+                    Error: {error.message}
+                </div>
+            }
+
+
 
             <div className="mb-4">
                 <div className="card">

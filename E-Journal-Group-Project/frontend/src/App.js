@@ -1,6 +1,6 @@
 // App.jsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Link, Route, Routes} from 'react-router-dom';
 import SchoolList from './components/SchoolList';
 import SchoolDetails from './components/SchoolDetails';
 import TeacherList from './components/TeacherList';
@@ -13,6 +13,9 @@ import Caregivers from "./components/Caregivers";
 import StudentView from "./components/StudentView";
 import CaregiverView from "./components/CaregiverView";
 import AddDiscipline from "./components/AddDiscipline";
+import CurriculumDetails from "./components/CurriculumDetails";
+import HomePage from "./components/HomePage";
+import StudentsGrades from "./components/StudentsGrades";
 
 function App() {
     return (
@@ -23,6 +26,7 @@ function App() {
                 </header>
                 <main>
                     <Routes>
+                        <Route path="/" element={<HomePage/>} />
                         <Route path="/admin" element={<SchoolList />} />
                         <Route path="/admin/add-school" element={<AddSchool />} />
                         <Route path="/admin/add-discipline" element={<AddDiscipline />} />
@@ -33,13 +37,19 @@ function App() {
 
                         <Route path="/admin/school/:schoolId/classes" element={<SchoolClassesList />} />
                         <Route path="/admin/school/:schoolId/class/:classId" element={<SchoolClassDetails />} />
+                        <Route path="/admin/school/:schoolId/class/:classId/curriculum" element={<CurriculumDetails />} />
+
+                        <Route path="/admin/school-class/:classId/students-grades/teacher/:teacherId/discipline/:disciplineId/grades" element={<StudentsGrades />} />
+
 
                         <Route path="/admin/school/:schoolId/class/:classId/student/:studentId/caregivers" element={<Caregivers />} />
 
                         <Route path="/admin/school/:schoolId/headmaster" element={<Headmaster />} />
 
-                        <Route path="/students/:studentId" element={<StudentView />} />
-                        <Route path="/caregivers/:id" element={<CaregiverView />} />
+                        <Route path="/student/:studentId" element={<StudentView />} />
+                        <Route path="/caregiver/:id" element={<CaregiverView />} />
+
+
 
                     </Routes>
                 </main>

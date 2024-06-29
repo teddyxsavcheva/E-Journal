@@ -53,7 +53,7 @@ const CaregiverView = () => {
                                 <li key={student.id} className="list-group-item d-flex justify-content-between align-items-center">
                                     {student.name}
                                     <div>
-                                        <Link to={`/students/${student.id}`} className="btn btn-primary btn-sm">Details</Link>
+                                        <Link to={`/student/${student.id}`} className="btn btn-primary btn-sm">Details</Link>
                                     </div>
                                 </li>
                             ))
