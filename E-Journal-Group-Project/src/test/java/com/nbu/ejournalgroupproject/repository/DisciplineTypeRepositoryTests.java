@@ -2,6 +2,8 @@ package com.nbu.ejournalgroupproject.repository;
 
 import com.nbu.ejournalgroupproject.enums.DisciplineTypeEnum;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +45,12 @@ public class DisciplineTypeRepositoryTests {
         disciplineTypeRepository.save(math);
     }
 
+    // We need to delete them after each test so that they don't stay in the db
+    @AfterEach
+    public void tearDown() {
+        disciplineTypeRepository.deleteAll();
+    }
+
     @Test
     public void disciplineTypeRepo_findAll_returnsManyDisciplineTypes() {
         List<DisciplineType> disciplineTypes = disciplineTypeRepository.findAll();
@@ -58,6 +67,15 @@ public class DisciplineTypeRepositoryTests {
 
         assertThat(foundDisciplineType).isPresent();
         assertThat(foundDisciplineType.get().getDisciplineTypeEnum()).isEqualTo(DisciplineTypeEnum.BIOLOGY);
+    }
+
+    @Test
+    public void disciplineTypeRepo_findById_throwsEntityNotFoundException() {
+        Long notFoundId = 10L;
+        assertThrows(EntityNotFoundException.class, () ->
+                disciplineTypeRepository.findById(notFoundId)
+                        .orElseThrow(EntityNotFoundException::new)
+        );
     }
 
     @Test
