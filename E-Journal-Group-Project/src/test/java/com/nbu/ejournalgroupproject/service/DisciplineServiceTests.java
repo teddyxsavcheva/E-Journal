@@ -81,7 +81,6 @@ public class DisciplineServiceTests {
         teacherQualification.setDisciplines(disciplineSet);
         teacherQualificationRepository.save(teacherQualification);
 
-
         disciplineType = new DisciplineType();
         disciplineType.setDisciplineTypeEnum(DisciplineTypeEnum.BIOLOGY);
         disciplineTypeRepository.save(disciplineType);
