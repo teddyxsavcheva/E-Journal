@@ -49,5 +49,12 @@ public class StudentCurriculumController {
         StudentCurriculumDTO newStudentCurriculum = studentCurriculumService.updateStudentCurriculum(id, studentCurriculumDTO);
         return ResponseEntity.status(HttpStatus.OK).body(newStudentCurriculum);
     }
+
+    @RequestMapping(value = {"/school-class/{id}"})
+    @ResponseBody
+    public ResponseEntity<StudentCurriculumDTO> getStudentCurriculumByClassId(@PathVariable long id){
+        return ResponseEntity.ok(studentCurriculumService.getStudentCurriculumByClassId(id));
+    }
+
 }
 

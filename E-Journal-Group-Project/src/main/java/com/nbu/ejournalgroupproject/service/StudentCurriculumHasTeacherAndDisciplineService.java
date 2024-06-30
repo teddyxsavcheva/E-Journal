@@ -18,4 +18,5 @@ public interface StudentCurriculumHasTeacherAndDisciplineService {
 
     void validateCurriculumHasTeacherAndDisciplineDto(StudentCurriculumHasTeacherAndDisciplineDto dto);
 
+    List<StudentCurriculumHasTeacherAndDisciplineDto> getAllCurriculumTeacherDisciplineByStudCurr(Long id);
 }

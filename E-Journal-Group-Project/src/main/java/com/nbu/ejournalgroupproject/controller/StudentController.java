@@ -1,7 +1,7 @@
 package com.nbu.ejournalgroupproject.controller;
 
-import com.nbu.ejournalgroupproject.dto.StudentDTO;
-import com.nbu.ejournalgroupproject.service.StudentService;
+import com.nbu.ejournalgroupproject.dto.*;
+import com.nbu.ejournalgroupproject.service.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,9 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final DisciplineService disciplineService;
+    private final GradeService gradeService;
+    private final AbsenceService absenceService;
 
     @GetMapping("/")
     public List<StudentDTO> getAllStudents() {
@@ -55,4 +58,36 @@ public class StudentController {
         StudentDTO updatedStudent = studentService.removeCaregiverFromStudent(studentId, caregiverId);
         return ResponseEntity.ok(updatedStudent);
     }
+
+    @GetMapping("/{studentId}/disciplines")
+    public List<DisciplineDto> getStudentDisciplines(@PathVariable Long studentId) {
+        return disciplineService.getDisciplinesByStudentId(studentId);
+    }
+
+    @GetMapping("/{studentId}/disciplines/{disciplineId}/grades")
+    public List<String> getStudentGrades(@PathVariable Long studentId, @PathVariable Long disciplineId) {
+        return gradeService.getGradesByStudentAndDiscipline(studentId, disciplineId);
+    }
+
+    @GetMapping("/{studentId}/disciplines/{disciplineId}/absences")
+    public List<Long> getStudentAbsences(@PathVariable Long studentId, @PathVariable Long disciplineId) {
+        return absenceService.getAbsencesByStudentAndDiscipline(studentId, disciplineId);
+    }
+
+    @GetMapping("/school-class/{id}")
+    public ResponseEntity<List<StudentDTO>> getStudentByClassId(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getStudentsFromClass(id));
+    }
+
+    @GetMapping("/{studentId}/discipline/{disciplineId}/grades")
+    public ResponseEntity<List<GradeDTO>> getStudentGradesByDisciplineId(@PathVariable Long studentId, @PathVariable Long disciplineId) {
+        return ResponseEntity.ok(gradeService.getGradeObjectsByStudentAndDiscipline(studentId, disciplineId));
+    }
+
+    @GetMapping("/{studentId}/discipline/{disciplineId}/absences")
+    public ResponseEntity<List<AbsenceDTO>> getStudentAbsencesByDisciplineId(@PathVariable Long studentId, @PathVariable Long disciplineId) {
+        return ResponseEntity.ok(absenceService.getAbsenceObjectsByStudentAndDiscipline(studentId, disciplineId));
+    }
+
+
 }

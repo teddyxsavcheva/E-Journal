@@ -103,4 +103,13 @@ public class CaregiverServiceImpl implements CaregiverService {
 
         return caregiverMapper.toDTO(updatedCaregiver);
     }
+
+    @Override
+    public List<CaregiverDTO> getCaregiversFromStudentId(Long id) {
+        List<Caregiver> caregivers = caregiverRepository.findCaregiversByStudentId(id);
+        return caregivers
+                .stream()
+                .map(caregiverMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

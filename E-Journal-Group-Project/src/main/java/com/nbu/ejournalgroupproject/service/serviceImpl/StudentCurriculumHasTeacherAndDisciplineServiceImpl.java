@@ -169,4 +169,13 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
     }
 
+    @Override
+    public List<StudentCurriculumHasTeacherAndDisciplineDto> getAllCurriculumTeacherDisciplineByStudCurr(Long id) {
+        List<StudentCurriculumHasTeacherAndDiscipline> sctd = repository.findAllByStudentCurriculumId(id);
+        return sctd
+                .stream()
+                .map(mapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
 }

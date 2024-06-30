@@ -17,4 +17,5 @@ public interface StudentCurriculumService {
 
     void validateStudentCurriculumDTO(StudentCurriculumDTO studentCurriculumDTO);
 
+    StudentCurriculumDTO getStudentCurriculumByClassId(long id);
 }

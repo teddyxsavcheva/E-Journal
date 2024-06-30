@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.service;
 
 import com.nbu.ejournalgroupproject.dto.TeacherDTO;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface TeacherService {
 
     TeacherDTO deleteQualificationFromTeacher(Long teacherID, Long qualificationId);
 
+    List<TeacherQualificationDto> getQualificationsByTeacherId(Long teacherId);
 
 
 }

@@ -44,6 +44,15 @@ public class SchoolClassServiceImpl implements SchoolClassService {
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
+    public List<SchoolClassDTO> getSchoolClasBySchoolId(Long id) {
+        List<SchoolClass> schoolClasses = schoolClassRepository.findAllBySchoolId(id);
+        return schoolClasses
+                .stream()
+                .map(schoolClassMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public SchoolClassDTO createSchoolClass(@Valid SchoolClassDTO schoolClassDTO) {
         validateSchoolClassDTO(schoolClassDTO);
 
@@ -93,4 +102,14 @@ public class SchoolClassServiceImpl implements SchoolClassService {
             throw new IllegalArgumentException("The School Year name cannot be < 2000.");
         }
     }
+
+    @Override
+    public List<SchoolClassDTO> getClassesFromTeacherId(Long teacherId){
+        List<SchoolClass> classes = schoolClassRepository.findDistinctClassesByTeacherId(teacherId);
+        return classes
+                .stream()
+                .map(schoolClassMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
 }

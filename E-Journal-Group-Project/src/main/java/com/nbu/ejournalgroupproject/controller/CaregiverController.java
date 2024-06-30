@@ -54,4 +54,10 @@ public class CaregiverController {
         CaregiverDTO updatedCaregiver = caregiverService.removeStudentFromCaregiver(caregiverId, studentId);
         return ResponseEntity.ok(updatedCaregiver);
     }
+
+    @GetMapping("/student/{id}")
+    public ResponseEntity<List<CaregiverDTO>> getCaregiverByStudentId(@PathVariable Long id) {
+        return ResponseEntity.ok(caregiverService.getCaregiversFromStudentId(id));
+    }
+
 }

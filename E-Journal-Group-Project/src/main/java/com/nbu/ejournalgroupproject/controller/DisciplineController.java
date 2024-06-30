@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.controller;
 
 import com.nbu.ejournalgroupproject.dto.DisciplineDto;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.service.DisciplineService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,11 @@ public class DisciplineController {
 
         disciplineService.deleteDiscipline(id);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/qualifications")
+    public ResponseEntity<List<TeacherQualificationDto>> getQualificationsByDisciplineId(@PathVariable Long id) {
+        return ResponseEntity.ok(disciplineService.getQualificationsByDisciplineId(id));
     }
 
     // Add and Remove methods for the m:n table

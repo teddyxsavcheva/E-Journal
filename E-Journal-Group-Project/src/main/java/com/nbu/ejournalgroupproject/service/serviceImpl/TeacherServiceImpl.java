@@ -1,7 +1,10 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.TeacherDTO;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.mappers.TeacherMapper;
+import com.nbu.ejournalgroupproject.mappers.TeacherQualificationMapper;
+import com.nbu.ejournalgroupproject.model.SchoolClass;
 import com.nbu.ejournalgroupproject.model.Teacher;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
 import com.nbu.ejournalgroupproject.model.user.User;
@@ -134,5 +137,15 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherMapper.EntityToDto(teacherRepository.save(teacher));
     }
 
+    @Override
+    public List<TeacherQualificationDto> getQualificationsByTeacherId(Long teacherId) {
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new EntityNotFoundException("Teacher with id " + teacherId + " not found"));
+
+        return teacher.getTeacherQualifications()
+                .stream()
+                .map(teacherQualificationMapper::convertToDto)
+                .collect(Collectors.toList());
+    }
 
 }
