@@ -1,0 +1,110 @@
+/* StudentsGrades.css */
+
+/* Styling for the container */
+.container {
+    margin: auto;
+    padding: 20px;
+}
+
+/* Styling for alerts */
+.alert {
+    margin-bottom: 10px;
+}
+
+/* Styling for the back link */
+.btn-back {
+    margin-bottom: 20px;
+}
+
+/* Styling for the table */
+.table {
+    width: 100%;
+}
+
+/* Styling for table headers */
+.table th {
+    text-align: left;
+}
+
+/* Styling for table rows */
+.table td {
+    vertical-align: middle;
+}
+
+/* Styling for badges */
+.badge {
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 4px 8px; /* Adjust padding for smaller badges */
+}
+
+/* Specific color classes for badges */
+.badge-success {
+    background-color: #71ce00;
+    color: white;
+}
+
+.badge-primary {
+    background-color: #2993cc;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #f4d536;
+    color: white;
+}
+
+.badge-orange {
+    background-color: #f47036;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.badge-secondary {
+    background-color: gray;
+    color: white;
+}
+
+/* Styling for action buttons within badges */
+.badge .btn {
+    margin-left: 3px; /* Adjust margin for smaller buttons */
+    padding: 2px 6px; /* Adjust padding for smaller buttons */
+    font-size: 12px; /* Adjust font size for smaller buttons */
+}
+
+/* Styling for the form group */
+.form-group {
+    display: flex;
+    align-items: center;
+}
+
+/* Styling for the add grade button */
+.add-grade-btn {
+    margin-left: 10px;
+}
+
+.name {
+    width: 20%;
+}
+
+.grades {
+    width: 30%;
+}
+
+.edit {
+    width: 30%;
+}
+
+.add {
+    width: 20%;
+}
+
+/* Optional: Adjust form select size */
+.form-select {
+    font-size: 14px; /* Adjust font size for select dropdowns */
+    padding: 5px; /* Adjust padding for select dropdowns */
+}

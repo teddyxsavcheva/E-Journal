@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,5 +58,23 @@ public class AbsenceServiceImpl implements AbsenceService {
 
         Absence savedAbsence = absenceRepository.save(updatedAbsence);
         return absenceMapper.toDTO(savedAbsence);
+    }
+
+    @Override
+    public List<Long> getAbsencesByStudentAndDiscipline(Long studentId, Long disciplineId) {
+        List<Long> counts = new ArrayList<>();
+        Long excusedCount = absenceRepository.excusedAbsencesCountByStudentAndDiscipline(studentId, disciplineId);
+        Long notExcusedCount = absenceRepository.notExcusedAbsencesCountByStudentAndDiscipline(studentId, disciplineId);
+
+        counts.add(excusedCount);
+        counts.add(notExcusedCount);
+
+        return counts;
+    }
+
+    @Override
+    public List<AbsenceDTO> getAbsenceObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
+        return absenceRepository.getAllByDisciplineIdAndStudentId(studentId, disciplineId)
+                .stream().map(absenceMapper::toDTO).collect(Collectors.toList());
     }
 }
