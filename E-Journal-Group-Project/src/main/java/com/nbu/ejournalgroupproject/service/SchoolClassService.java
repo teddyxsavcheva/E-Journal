@@ -17,4 +17,6 @@ public interface SchoolClassService {
 
     void validateSchoolClassDTO(SchoolClassDTO schoolClassDTO);
 
+    List<SchoolClassDTO> getSchoolClasBySchoolId(Long id);
+
 }

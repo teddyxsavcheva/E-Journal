@@ -131,4 +131,12 @@ public class DisciplineServiceImpl implements DisciplineService {
         return disciplineMapper.convertToDto(disciplineRepository.save(discipline));
 
     }
+
+    @Override
+    public List<DisciplineDto> getDisciplinesByStudentId(Long studentId) {
+        List<Discipline> disciplines = disciplineRepository.findDisciplinesByStudentId(studentId);
+        return disciplines.stream()
+                .map(disciplineMapper::convertToDto)
+                .collect(Collectors.toList());
+    }
 }

@@ -87,4 +87,13 @@ public class SchoolClassServiceImpl implements SchoolClassService {
             throw new IllegalArgumentException("The School Year name cannot be < 2000.");
         }
     }
+
+    @Override
+    public List<SchoolClassDTO> getSchoolClasBySchoolId(Long id) {
+        List<SchoolClass> schoolClasses = schoolClassRepository.findAllBySchoolId(id);
+        return schoolClasses
+                .stream()
+                .map(schoolClassMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
 }
