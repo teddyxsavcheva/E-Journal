@@ -10,9 +10,10 @@ const StudentsGrades = () => {
     const [gradeTypes, setGradeTypes] = useState([]);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
-    const [selectedGrades, setSelectedGrades] = useState({});
     const [editingGrade, setEditingGrade] = useState(null);
-    const [visibleGradeId, setVisibleGradeId] = useState(null);
+    const [visibleGradeIds, setVisibleGradeIds] = useState({}); // Use an object to track visibility by gradeId
+    const [editingGrades, setEditingGrades] = useState({}); // State for editing grades
+    const [addingGrades, setAddingGrades] = useState({}); // State for adding grades
 
     // Fetch students in the class
     const fetchStudents = async () => {
@@ -26,15 +27,13 @@ const StudentsGrades = () => {
     };
 
     // Fetch grades for each student
-    const fetchGrades = async () => {
+    const fetchGrades = async (studentId) => {
         try {
-            const response = await axios.get(`/students/${teacherId}/discipline/${disciplineId}/grades`);
-            const gradesData = response.data.reduce((acc, grade) => {
-                acc[grade.studentId] = acc[grade.studentId] || [];
-                acc[grade.studentId].push(grade);
-                return acc;
-            }, {});
-            setGrades(gradesData);
+            const response = await axios.get(`/students/${studentId}/discipline/${disciplineId}/grades`);
+            setGrades(prevGrades => ({
+                ...prevGrades,
+                [studentId]: response.data
+            }));
         } catch (error) {
             setError('Error fetching grades');
             console.error('Error fetching grades:', error);
@@ -55,9 +54,15 @@ const StudentsGrades = () => {
     // Fetch initial data on component mount
     useEffect(() => {
         fetchStudents();
-        fetchGrades();
         fetchGradeTypes();
     }, [classId, teacherId, disciplineId]);
+
+    // Effect to fetch grades whenever students or disciplineId change
+    useEffect(() => {
+        students.forEach(student => {
+            fetchGrades(student.id);
+        });
+    }, [students, disciplineId]);
 
     // Find grade type by ID
     const findGradeTypeById = (id) => {
@@ -69,12 +74,12 @@ const StudentsGrades = () => {
     const handleAddGrade = async (event, studentId, disciplineId) => {
         event.preventDefault();
         try {
-            const selectedGrade = selectedGrades[studentId];
-            await axios.post(`/grades/`, { gradeTypeId: selectedGrade.gradeTypeId, studentId, disciplineId });
+            const gradeTypeId = addingGrades[studentId];
+            await axios.post(`/grades/`, { gradeTypeId, studentId, disciplineId });
             setSuccessMessage('Grade added successfully!');
             setTimeout(() => setSuccessMessage(''), 3000);
-            setSelectedGrades(prevState => ({ ...prevState, [studentId]: '' }));
-            fetchGrades(); // Refresh the grades list
+            setAddingGrades(prevState => ({ ...prevState, [studentId]: '' }));
+            fetchGrades(studentId); // Refresh the grades list for the specific student
         } catch (error) {
             setError('Error adding grade');
             console.error('Error adding grade:', error);
@@ -87,7 +92,20 @@ const StudentsGrades = () => {
             await axios.delete(`/grades/${gradeId}`);
             setSuccessMessage('Grade removed successfully!');
             setTimeout(() => setSuccessMessage(''), 3000);
-            fetchGrades(); // Refresh the grades list
+
+            // Update local state to remove the deleted grade
+            const updatedGrades = { ...grades };
+            Object.keys(updatedGrades).forEach(studentId => {
+                updatedGrades[studentId] = updatedGrades[studentId].filter(grade => grade.id !== gradeId);
+            });
+            setGrades(updatedGrades);
+
+            // Optionally, you can also update visibleGradeIds if needed
+            setVisibleGradeIds(prevState => {
+                const updatedVisibleGradeIds = { ...prevState };
+                delete updatedVisibleGradeIds[gradeId];
+                return updatedVisibleGradeIds;
+            });
         } catch (error) {
             setError('Error removing grade');
             console.error('Error removing grade:', error);
@@ -97,34 +115,66 @@ const StudentsGrades = () => {
     // Start editing a grade
     const handleEditGrade = (grade) => {
         setEditingGrade(grade);
-        setSelectedGrades(prevState => ({ ...prevState, [grade.studentId]: grade.gradeTypeId }));
-        setVisibleGradeId(grade.id);
+        setEditingGrades(prevState => ({ ...prevState, [grade.studentId]: grade.gradeTypeId }));
+        setVisibleGradeIds(prevState => ({ ...prevState, [grade.id]: true }));
     };
 
     // Save edited grade
     const handleSaveGrade = async (event) => {
         event.preventDefault();
         try {
-            const selectedGrade = selectedGrades[editingGrade.studentId];
-            await axios.put(`/grades/${editingGrade.id}`, { gradeTypeId: selectedGrade });
+            const response = await axios.get(`/grades/${editingGrade.id}`);
+            const existingGrade = response.data;
+
+            const updatedGrade = {
+                ...existingGrade,
+                gradeTypeId: parseInt(editingGrades[editingGrade.studentId], 10)
+            };
+
+            await axios.put(`/grades/${editingGrade.id}`, updatedGrade);
+
             setSuccessMessage('Grade updated successfully!');
             setTimeout(() => setSuccessMessage(''), 3000);
-            setSelectedGrades(prevState => ({ ...prevState, [editingGrade.studentId]: '' }));
+
+            // Clear state and update visibility
+            setEditingGrades(prevState => ({ ...prevState, [editingGrade.studentId]: '' }));
             setEditingGrade(null);
-            setVisibleGradeId(null);
-            fetchGrades(); // Refresh the grades list
+            setVisibleGradeIds(prevState => ({ ...prevState, [editingGrade.id]: false }));
+
+            fetchGrades(editingGrade.studentId);
         } catch (error) {
             setError('Error updating grade');
             console.error('Error updating grade:', error);
         }
     };
 
-    // Handle grade selection change
-    const handleGradeChange = (studentId, value) => {
-        setSelectedGrades(prevState => ({ ...prevState, [studentId]: value }));
+
+    // Handle grade selection change for editing
+    const handleEditGradeChange = (studentId, value) => {
+        setEditingGrades(prevState => ({ ...prevState, [studentId]: value }));
     };
 
-    // Render component
+    // Handle grade selection change for adding
+    const handleAddGradeChange = (studentId, value) => {
+        setAddingGrades(prevState => ({ ...prevState, [studentId]: value }));
+    };
+
+    // Toggle visibility of grade details
+    const toggleGradeVisibility = (gradeId) => {
+        setVisibleGradeIds(prevState => ({ ...prevState, [gradeId]: !prevState[gradeId] }));
+    };
+
+    const getBadgeClass = (gradeType) => {
+        switch (gradeType) {
+            case 'A': return 'badge-success'; // Green
+            case 'B': return 'badge-primary'; // Blue
+            case 'C': return 'badge-warning'; // Yellow
+            case 'D': return 'badge-orange'; // Orange
+            case 'F': return 'badge-danger'; // Red
+            default: return 'badge-secondary'; // Default color
+        }
+    };
+
     return (
         <div className="container mt-4">
             <h2>Grades for Class ID: {classId}, Teacher ID: {teacherId}, Discipline ID: {disciplineId}</h2>
@@ -138,6 +188,7 @@ const StudentsGrades = () => {
                 <tr>
                     <th>Student</th>
                     <th>Grades</th>
+                    <th>Edit</th>
                     <th>Current Grade</th>
                 </tr>
                 </thead>
@@ -151,29 +202,48 @@ const StudentsGrades = () => {
                                     grades[student.id].map((grade) => (
                                         <span
                                             key={grade.id}
-                                            className={`badge badge-${findGradeTypeById(grade.gradeTypeId).toLowerCase()}`}
-                                            onClick={() => setVisibleGradeId(grade.id === visibleGradeId ? null : grade.id)}
+                                            className={`badge p-2 ${getBadgeClass(findGradeTypeById(grade.gradeTypeId))}`}
+                                            onClick={() => toggleGradeVisibility(grade.id)}
                                         >
-                                            {findGradeTypeById(grade.gradeTypeId)}
-                                            {visibleGradeId === grade.id && (
+                                                {findGradeTypeById(grade.gradeTypeId)}
+                                            {visibleGradeIds[grade.id] && (
                                                 <>
-                                                    <button className="btn btn-sm btn-info ml-2" onClick={() => handleEditGrade(grade)}>Edit</button>
-                                                    <button className="btn btn-sm btn-danger ml-2" onClick={() => handleRemoveGrade(grade.id)}>Delete</button>
+                                                    <button className="btn btn-sm btn-light ml-2" onClick={() => handleEditGrade(grade)}>Edit</button>
+                                                    <button className="btn btn-sm btn-light ml-2" onClick={() => handleRemoveGrade(grade.id)}>Delete</button>
                                                 </>
                                             )}
-                                        </span>
+                                            </span>
                                     ))
                                 ) : (
                                     <span>No grades</span>
                                 )}
                             </td>
-                            <td>
+                            <td className="edit">
+                                {editingGrade && editingGrade.studentId === student.id && (
+                                    <form onSubmit={handleSaveGrade} className="form-group">
+                                        <select
+                                            className="form-select"
+                                            value={editingGrades[editingGrade.studentId] || ''}
+                                            onChange={(e) => handleEditGradeChange(editingGrade.studentId, e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Select Grade</option>
+                                            {gradeTypes.map((grade) => (
+                                                <option key={grade.id} value={grade.id}>{grade.gradeTypeEnum}</option>
+                                            ))}
+                                        </select>
+                                        <button type="submit" className="btn btn-primary mx-2">Save</button>
+                                        <button type="button" className="btn btn-secondary" onClick={() => setEditingGrade(null)}>Cancel</button>
+                                    </form>
+                                )}
+                            </td>
+                            <td className="add">
                                 <form onSubmit={(event) => handleAddGrade(event, student.id, disciplineId)} className="add-grade-form">
                                     <div className="form-group">
                                         <select
                                             className="form-select"
-                                            value={selectedGrades[student.id] || ''}
-                                            onChange={(e) => handleGradeChange(student.id, e.target.value)}
+                                            value={addingGrades[student.id] || ''}
+                                            onChange={(e) => handleAddGradeChange(student.id, e.target.value)}
                                             required
                                         >
                                             <option value="">Select Grade</option>
@@ -189,34 +259,11 @@ const StudentsGrades = () => {
                     ))
                 ) : (
                     <tr>
-                        <td colSpan="5">No students available</td>
+                        <td colSpan="4">No students available</td>
                     </tr>
                 )}
                 </tbody>
             </table>
-
-            {editingGrade && (
-                <form onSubmit={handleSaveGrade} className="edit-grade-form mt-4">
-                    <h3>Edit Grade</h3>
-                    <div className="mb-3">
-                        <label htmlFor="gradeSelectEdit" className="form-label">Edit Grade:</label>
-                        <select
-                            id="gradeSelectEdit"
-                            className="form-select"
-                            value={selectedGrades[editingGrade.studentId] || ''}
-                            onChange={(e) => handleGradeChange(editingGrade.studentId, e.target.value)}
-                            required
-                        >
-                            <option value="">Select Grade</option>
-                            {gradeTypes.map((grade) => (
-                                <option key={grade.id} value={grade.id}>{grade.gradeTypeEnum}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <button type="submit" className="btn btn-primary me-2">Save Grade</button>
-                    <button type="button" className="btn btn-secondary" onClick={() => setEditingGrade(null)}>Cancel</button>
-                </form>
-            )}
         </div>
     );
 };

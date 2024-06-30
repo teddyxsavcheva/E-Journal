@@ -2,7 +2,6 @@
 
 /* Styling for the container */
 .container {
-    width: 80%;
     margin: auto;
     padding: 20px;
 }
@@ -34,10 +33,40 @@
 
 /* Styling for badges */
 .badge {
-    color: black;
     cursor: pointer;
     margin-right: 5px;
     padding: 4px 8px; /* Adjust padding for smaller badges */
+}
+
+/* Specific color classes for badges */
+.badge-success {
+    background-color: #71ce00;
+    color: white;
+}
+
+.badge-primary {
+    background-color: #2993cc;
+    color: white;
+}
+
+.badge-warning {
+    background-color: #f4d536;
+    color: white;
+}
+
+.badge-orange {
+    background-color: #f47036;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.badge-secondary {
+    background-color: gray;
+    color: white;
 }
 
 /* Styling for action buttons within badges */
@@ -53,17 +82,25 @@
     align-items: center;
 }
 
-
 /* Styling for the add grade button */
 .add-grade-btn {
     margin-left: 10px;
 }
 
-.name{
+.name {
     width: 20%;
 }
+
 .grades {
-    width: 60%;
+    width: 30%;
+}
+
+.edit {
+    width: 30%;
+}
+
+.add {
+    width: 20%;
 }
 
 /* Optional: Adjust form select size */
