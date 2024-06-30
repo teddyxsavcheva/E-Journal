@@ -28,7 +28,7 @@ public class Student {
     private String name;
 
     @Min(value = 1, message = "Number in class must be at least 1")
-    @Column(name = "number_in_class", unique = true)
+    @Column(name = "number_in_class")
     private int numberInClass;
 
     @NotNull(message = "School class cannot be null")

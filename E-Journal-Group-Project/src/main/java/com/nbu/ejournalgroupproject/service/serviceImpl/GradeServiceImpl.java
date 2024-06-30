@@ -63,4 +63,20 @@ public class GradeServiceImpl implements GradeService {
     public List<String> getGradesByStudentAndDiscipline(Long studentId,Long disciplineId) {
         return gradeRepository.findGradeTypesByStudentAndDiscipline(studentId, disciplineId);
     }
+
+    @Override
+    public List<String> findAvgGradeForSchool(Long headmasterId){
+        return gradeRepository.findAvgGradeForSchool(headmasterId);
+    }
+
+    @Override
+    public List<String> findAvgGradeForDiscipline(Long headmasterId){
+        return gradeRepository.findAvgGradeForDiscipline(headmasterId);
+    }
+
+    @Override
+    public List<String> findAvgGradeForTeacherByDiscipline(Long headmasterId){
+        return gradeRepository.findAvgGradeForTeacherByDiscipline(headmasterId);
+    }
+
 }
