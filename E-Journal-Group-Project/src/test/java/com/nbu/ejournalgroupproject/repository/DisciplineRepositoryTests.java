@@ -1,8 +1,9 @@
 package com.nbu.ejournalgroupproject.repository;
 
 import com.nbu.ejournalgroupproject.enums.DisciplineTypeEnum;
-import com.nbu.ejournalgroupproject.model.Discipline;
-import com.nbu.ejournalgroupproject.model.DisciplineType;
+import com.nbu.ejournalgroupproject.enums.SchoolTypeEnum;
+import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
+import com.nbu.ejournalgroupproject.model.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +16,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -28,6 +31,24 @@ public class DisciplineRepositoryTests {
     @Autowired
     private DisciplineTypeRepository disciplineTypeRepository;
 
+    @Autowired
+    private SchoolClassRepository schoolClassRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private StudentCurriculumRepository studentCurriculumRepository;
+
+    @Autowired
+    private SchoolTypeRepository schoolTypeRepository;
+
+    @Autowired
+    private SchoolRepository schoolRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
     private Discipline biology;
     private Discipline chemistry;
     private Discipline math;
@@ -35,6 +56,10 @@ public class DisciplineRepositoryTests {
     private DisciplineType biologyType;
     private DisciplineType chemistryType;
     private DisciplineType mathType;
+    @Autowired
+    private TeacherQualificationRepository teacherQualificationRepository;
+    @Autowired
+    private StudentCurriculumHasTeacherAndDisciplineRepository studentCurriculumHasTeacherAndDisciplineRepository;
 
     @BeforeEach
     public void setUp() {
@@ -136,5 +161,65 @@ public class DisciplineRepositoryTests {
         Optional<Discipline> deletedDiscipline = disciplineRepository.findById(biology.getId());
 
         assertThat(deletedDiscipline).isNotPresent();
+    }
+
+    @Test
+    public void disciplineRepo_findDisciplinesByStudentId_returnsDisciplines() {
+
+        SchoolType schoolType = new SchoolType();
+        schoolType.setSchoolTypeEnum(SchoolTypeEnum.HIGH_SCHOOL);
+        schoolTypeRepository.save(schoolType);
+
+        School school = new School();
+        school.setName("PMG");
+        school.setAddress("Gabrovo");
+        school.setSchoolType(schoolType);
+        schoolRepository.save(school);
+
+        SchoolClass schoolClass = new SchoolClass();
+        schoolClass.setYear(2021);
+        schoolClass.setSchool(school);
+        schoolClass.setName("Gclass");
+        schoolClassRepository.save(schoolClass);
+
+        Student student = new Student();
+        student.setName("Teddy");
+        student.setNumberInClass(21);
+        student.setSchoolClass(schoolClass);
+        studentRepository.save(student);
+
+        StudentCurriculum curriculum = new StudentCurriculum();
+        curriculum.setYear(12);
+        curriculum.setSemester(2);
+        curriculum.setSchoolClass(schoolClass);
+        studentCurriculumRepository.save(curriculum);
+
+        TeacherQualification teacherQualification = new TeacherQualification();
+        teacherQualification.setQualificationEnum(TeacherQualificationEnum.PERMIT_BIOLOGY_TEACHING);
+        // Setting the m:n relationship
+        Set<Discipline> disciplinesSet = new HashSet<>();
+        disciplinesSet.add(biology);
+        teacherQualification.setDisciplines(disciplinesSet);
+        teacherQualificationRepository.save(teacherQualification);
+
+        Teacher teacher = new Teacher();
+        teacher.setName("Teddy");
+        teacher.setEmail("teddyeqka@example.com");
+        teacher.setTeacherQualifications(Set.of(teacherQualification));
+        teacherRepository.save(teacher);
+
+        StudentCurriculumHasTeacherAndDiscipline program1 = new StudentCurriculumHasTeacherAndDiscipline();
+        program1.setTeacher(teacher);
+        program1.setDiscipline(biology);
+        program1.setStudentCurriculum(curriculum);
+        studentCurriculumHasTeacherAndDisciplineRepository.save(program1);
+
+        // Call the repository method
+        List<Discipline> disciplines = disciplineRepository.findDisciplinesByStudentId(student.getId());
+
+        assertThat(disciplines).isNotNull();
+        assertThat(disciplines.size()).isGreaterThan(0);
+        assertThat(disciplines).extracting(Discipline::getName)
+                .contains("Biology");
     }
 }
