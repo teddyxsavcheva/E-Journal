@@ -28,14 +28,11 @@ public class SchoolClassController {
         return ResponseEntity.ok(schoolClassService.getSchoolClas(id));
     }
 
-
     @GetMapping(value = {"/school-id/{id}"})
     @ResponseBody
     public ResponseEntity<List<SchoolClassDTO>> getSchoolClassBySchoolId(@PathVariable Long id){
         return ResponseEntity.ok(schoolClassService.getSchoolClasBySchoolId(id));
     }
-
-
 
     @PostMapping(value = "/")
     @ResponseBody
