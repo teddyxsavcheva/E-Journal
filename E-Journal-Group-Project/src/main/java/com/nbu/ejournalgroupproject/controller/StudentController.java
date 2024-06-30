@@ -73,4 +73,21 @@ public class StudentController {
     public List<Long> getStudentAbsences(@PathVariable Long studentId, @PathVariable Long disciplineId) {
         return absenceService.getAbsencesByStudentAndDiscipline(studentId, disciplineId);
     }
+
+    @GetMapping("/school-class/{id}")
+    public ResponseEntity<List<StudentDTO>> getStudentByClassId(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getStudentsFromClass(id));
+    }
+
+    @GetMapping("/{studentId}/discipline/{disciplineId}/grades")
+    public ResponseEntity<List<GradeDTO>> getStudentGradesByDisciplineId(@PathVariable Long studentId, @PathVariable Long disciplineId) {
+        return ResponseEntity.ok(gradeService.getGradeObjectsByStudentAndDiscipline(studentId, disciplineId));
+    }
+
+    @GetMapping("/{studentId}/discipline/{disciplineId}/absences")
+    public ResponseEntity<List<AbsenceDTO>> getStudentAbsencesByDisciplineId(@PathVariable Long studentId, @PathVariable Long disciplineId) {
+        return ResponseEntity.ok(absenceService.getAbsenceObjectsByStudentAndDiscipline(studentId, disciplineId));
+    }
+
+
 }

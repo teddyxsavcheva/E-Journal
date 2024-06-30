@@ -85,4 +85,9 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
         }
 
     }
+
+    @Override
+    public StudentCurriculumDTO getStudentCurriculumByClassId(long id) {
+        return studentCurriculumMapper.entityToDto(studentCurriculumRepository.getStudentCurriculumBySchoolClassId(id));
+    }
 }

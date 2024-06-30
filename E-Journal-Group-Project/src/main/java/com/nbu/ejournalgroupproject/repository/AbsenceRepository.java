@@ -14,4 +14,6 @@ public interface AbsenceRepository extends JpaRepository<Absence, Long> {
     @Query("SELECT COUNT(a) FROM Absence a JOIN a.absenceStatus ast  WHERE a.student.id = :studentId AND a.discipline.id = :disciplineId AND ast.id = 2")
     Long notExcusedAbsencesCountByStudentAndDiscipline(Long studentId, Long disciplineId);
 
+    List<Absence> getAllByDisciplineIdAndStudentId(Long disciplineId, Long studentId);
+
 }

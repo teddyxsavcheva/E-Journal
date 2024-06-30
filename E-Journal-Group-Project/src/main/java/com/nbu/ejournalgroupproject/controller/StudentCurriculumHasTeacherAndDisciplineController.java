@@ -58,4 +58,11 @@ public class StudentCurriculumHasTeacherAndDisciplineController {
         return ResponseEntity.ok(HttpStatus.OK);
 
     }
+
+    @GetMapping("/student-curriculum/{id}")
+    public ResponseEntity<List<StudentCurriculumHasTeacherAndDisciplineDto>> getAllCurriculumTeachersDisciplinesByStudCurr(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getAllCurriculumTeacherDisciplineByStudCurr(id));
+
+    }
+
 }

@@ -15,4 +15,5 @@ public interface GradeService {
     List<String> findAvgGradeForSchool(Long headmasterId);
     List<String> findAvgGradeForDiscipline(Long headmasterId);
     List<String> findAvgGradeForTeacherByDiscipline(Long headmasterId);
+    List<GradeDTO> getGradeObjectsByStudentAndDiscipline(Long studentId, Long disciplineId);
 }

@@ -11,4 +11,6 @@ public interface StudentService {
     StudentDTO updateStudent(Long id, StudentDTO studentDTO);
     StudentDTO addCaregiverToStudent(Long studentId, Long caregiverId);
     StudentDTO removeCaregiverFromStudent(Long studentId, Long caregiverId);
+
+    List<StudentDTO> getStudentsFromClass(Long id);
 }

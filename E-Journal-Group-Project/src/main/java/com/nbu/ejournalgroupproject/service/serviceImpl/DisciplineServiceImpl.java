@@ -1,7 +1,9 @@
 package com.nbu.ejournalgroupproject.service.serviceImpl;
 
 import com.nbu.ejournalgroupproject.dto.DisciplineDto;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.mappers.DisciplineMapper;
+import com.nbu.ejournalgroupproject.mappers.TeacherQualificationMapper;
 import com.nbu.ejournalgroupproject.model.Discipline;
 import com.nbu.ejournalgroupproject.model.DisciplineType;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
@@ -26,6 +28,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     private final TeacherQualificationRepository teacherQualificationRepository;
     private final DisciplineTypeRepository disciplineTypeRepository;
     private final DisciplineMapper disciplineMapper;
+    private final TeacherQualificationMapper teacherQualificationMapper;
 
     @Override
     public List<DisciplineDto> getAllDisciplines() {
@@ -137,6 +140,17 @@ public class DisciplineServiceImpl implements DisciplineService {
         List<Discipline> disciplines = disciplineRepository.findDisciplinesByStudentId(studentId);
         return disciplines.stream()
                 .map(disciplineMapper::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherQualificationDto> getQualificationsByDisciplineId(Long disciplineId) {
+        Discipline discipline = disciplineRepository.findById(disciplineId)
+                .orElseThrow(() -> new EntityNotFoundException("Discipline with id " + disciplineId + " not found"));
+
+        return discipline.getTeacherQualifications()
+                .stream()
+                .map(teacherQualificationMapper::convertToDto)
                 .collect(Collectors.toList());
     }
 }

@@ -40,6 +40,15 @@ public class SchoolClassServiceImpl implements SchoolClassService {
     }
 
     @Override
+    public List<SchoolClassDTO> getSchoolClasBySchoolId(Long id) {
+        List<SchoolClass> schoolClasses = schoolClassRepository.findAllBySchoolId(id);
+        return schoolClasses
+                .stream()
+                .map(schoolClassMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public SchoolClassDTO createSchoolClass(@Valid SchoolClassDTO schoolClassDTO) {
         validateSchoolClassDTO(schoolClassDTO);
 
@@ -89,11 +98,12 @@ public class SchoolClassServiceImpl implements SchoolClassService {
     }
 
     @Override
-    public List<SchoolClassDTO> getSchoolClasBySchoolId(Long id) {
-        List<SchoolClass> schoolClasses = schoolClassRepository.findAllBySchoolId(id);
-        return schoolClasses
+    public List<SchoolClassDTO> getClassesFromTeacherId(Long teacherId){
+        List<SchoolClass> classes = schoolClassRepository.findDistinctClassesByTeacherId(teacherId);
+        return classes
                 .stream()
                 .map(schoolClassMapper::mapEntityToDto)
                 .collect(Collectors.toList());
     }
+
 }

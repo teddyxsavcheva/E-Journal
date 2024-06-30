@@ -79,4 +79,11 @@ public class GradeServiceImpl implements GradeService {
         return gradeRepository.findAvgGradeForTeacherByDiscipline(headmasterId);
     }
 
+    @Override
+    public List<GradeDTO> getGradeObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
+        return gradeRepository.getAllByStudentIdAndDisciplineId(studentId, disciplineId)
+                .stream()
+                .map(gradeMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }
