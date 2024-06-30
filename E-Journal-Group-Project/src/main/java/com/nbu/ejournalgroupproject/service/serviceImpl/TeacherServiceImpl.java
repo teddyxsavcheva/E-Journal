@@ -30,6 +30,8 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherMapper teacherMapper;
 
     private final TeacherQualificationRepository teacherQualificationRepository;
+    private final TeacherQualificationMapper teacherQualificationMapper;
+
     private final UserRepository userRepository;
 
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER','TEACHER')")
