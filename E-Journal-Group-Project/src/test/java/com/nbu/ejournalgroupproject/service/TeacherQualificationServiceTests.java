@@ -68,7 +68,7 @@ public class TeacherQualificationServiceTests {
         teacherQualification.setTeachers(teachers);
 
         teacherQualificationDto = new TeacherQualificationDto();
-        teacherQualificationDto.setQualificationEnum(TeacherQualificationEnum.PERMIT_BIOLOGY_TEACHING);;
+        teacherQualificationDto.setQualificationEnum(TeacherQualificationEnum.PERMIT_BIOLOGY_TEACHING);
 
         disciplineType = new DisciplineType();
         disciplineType.setDisciplineTypeEnum(DisciplineTypeEnum.BIOLOGY);

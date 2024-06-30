@@ -314,7 +314,7 @@ public class DisciplineServiceTests {
     }
 
     @Test
-    public void getDisciplinesByStudentId_shouldReturnDisciplineDtos() {
+    public void disciplineService_getDisciplinesByStudentId_returnsDisciplineDtos() {
         when(disciplineRepository.findDisciplinesByStudentId(student.getId())).thenReturn(List.of(discipline));
         when(disciplineMapper.convertToDto(discipline)).thenReturn(disciplineDto);
 
@@ -328,7 +328,7 @@ public class DisciplineServiceTests {
     }
 
     @Test
-    public void getQualificationsByDisciplineId_shouldReturnQualificationDtos() {
+    public void disciplineService_getQualificationsByDisciplineId_returnsQualificationDtos() {
         when(disciplineRepository.findById(discipline.getId())).thenReturn(Optional.of(discipline));
         when(teacherQualificationMapper.convertToDto(teacherQualification)).thenReturn(teacherQualificationDto);
 
@@ -342,7 +342,7 @@ public class DisciplineServiceTests {
     }
 
     @Test
-    public void getQualificationsByDisciplineId_shouldThrowExceptionWhenDisciplineNotFound() {
+    public void disciplineService_getQualificationsByDisciplineId_throwsExceptionWhenDisciplineNotFound() {
         Long nonExistentDisciplineId = 999L;
         when(disciplineRepository.findById(nonExistentDisciplineId)).thenReturn(Optional.empty());
 
