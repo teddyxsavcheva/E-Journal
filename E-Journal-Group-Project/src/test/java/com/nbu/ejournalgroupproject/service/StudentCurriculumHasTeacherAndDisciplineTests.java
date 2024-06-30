@@ -259,6 +259,7 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
         // When
         service.deleteCurriculumHasTeacherAndDiscipline(id);
 
+
         // Then
         verify(repository, times(1)).deleteById(id);
     }
