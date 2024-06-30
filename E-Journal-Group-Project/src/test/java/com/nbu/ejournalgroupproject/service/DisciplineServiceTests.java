@@ -1,15 +1,14 @@
 package com.nbu.ejournalgroupproject.service;
 
 import com.nbu.ejournalgroupproject.dto.DisciplineDto;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.enums.DisciplineTypeEnum;
+import com.nbu.ejournalgroupproject.enums.SchoolTypeEnum;
 import com.nbu.ejournalgroupproject.enums.TeacherQualificationEnum;
 import com.nbu.ejournalgroupproject.mappers.DisciplineMapper;
-import com.nbu.ejournalgroupproject.model.Discipline;
-import com.nbu.ejournalgroupproject.model.DisciplineType;
-import com.nbu.ejournalgroupproject.model.TeacherQualification;
-import com.nbu.ejournalgroupproject.repository.DisciplineRepository;
-import com.nbu.ejournalgroupproject.repository.DisciplineTypeRepository;
-import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
+import com.nbu.ejournalgroupproject.mappers.TeacherQualificationMapper;
+import com.nbu.ejournalgroupproject.model.*;
+import com.nbu.ejournalgroupproject.repository.*;
 import com.nbu.ejournalgroupproject.service.serviceImpl.DisciplineServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -42,7 +42,22 @@ public class DisciplineServiceTests {
     TeacherQualificationRepository teacherQualificationRepository;
 
     @Mock
+    SchoolRepository schoolRepository;
+
+    @Mock
+    SchoolTypeRepository schoolTypeRepository;
+
+    @Mock
+    StudentRepository studentRepository;
+
+    @Mock
+    SchoolClassRepository schoolClassRepository;
+
+    @Mock
     DisciplineMapper disciplineMapper;
+
+    @Mock
+    private TeacherQualificationMapper teacherQualificationMapper;
 
     @InjectMocks
     DisciplineServiceImpl disciplineService;
@@ -50,10 +65,22 @@ public class DisciplineServiceTests {
     Discipline discipline;
     DisciplineDto disciplineDto;
     DisciplineType disciplineType;
+    School school;
+    SchoolType schoolType;
+    SchoolClass schoolClass;
+    Student student;
     TeacherQualification teacherQualification;
+    TeacherQualificationDto teacherQualificationDto;
 
     @BeforeEach
     void setUp() {
+
+        teacherQualification = new TeacherQualification();
+        teacherQualification.setQualificationEnum(TeacherQualificationEnum.PERMIT_BIOLOGY_TEACHING);
+        Set<Discipline> disciplineSet = new HashSet<>();
+        teacherQualification.setDisciplines(disciplineSet);
+        teacherQualificationRepository.save(teacherQualification);
+
 
         disciplineType = new DisciplineType();
         disciplineType.setDisciplineTypeEnum(DisciplineTypeEnum.BIOLOGY);
@@ -63,16 +90,41 @@ public class DisciplineServiceTests {
         discipline.setName("Biology");
         discipline.setDisciplineType(disciplineType);
         Set<TeacherQualification> qualificationSet = new HashSet<>();
+        qualificationSet.add(teacherQualification);
         discipline.setTeacherQualifications(qualificationSet);
+
+        teacherQualificationDto = new TeacherQualificationDto();
+        teacherQualificationDto.setQualificationEnum(teacherQualification.getQualificationEnum());
+        Set<Long> disciplineIdSet = new HashSet<>();
+        disciplineIdSet.add(discipline.getId());
+        teacherQualificationDto.setDisciplineIds(disciplineIdSet);
 
         disciplineDto = new DisciplineDto();
         disciplineDto.setName("Biology");
         disciplineDto.setDisciplineTypeId(1L);
 
-        teacherQualification = new TeacherQualification();
-        teacherQualification.setQualificationEnum(TeacherQualificationEnum.PERMIT_BIOLOGY_TEACHING);
-        Set<Discipline> disciplineSet = new HashSet<>();
-        teacherQualification.setDisciplines(disciplineSet);
+        schoolType = new SchoolType();
+        schoolType.setSchoolTypeEnum(SchoolTypeEnum.HIGH_SCHOOL);
+        schoolTypeRepository.save(schoolType);
+
+        school = new School();
+        school.setName("PMG");
+        school.setAddress("Gabrovo");
+        school.setSchoolType(schoolType);
+        schoolRepository.save(school);
+
+        schoolClass = new SchoolClass();
+        schoolClass.setYear(2021);
+        schoolClass.setSchool(school);
+        schoolClass.setName("Gclass");
+        schoolClassRepository.save(schoolClass);
+
+        student = new Student();
+        student.setName("Teddy");
+        student.setNumberInClass(21);
+        student.setSchoolClass(schoolClass);
+        studentRepository.save(student);
+
     }
 
     @AfterEach
@@ -259,6 +311,48 @@ public class DisciplineServiceTests {
         invalidDto.setDisciplineTypeId(0L);
 
         assertThrows(IllegalArgumentException.class, () -> disciplineService.validateDisciplineDTO(invalidDto));
+    }
+
+    @Test
+    public void getDisciplinesByStudentId_shouldReturnDisciplineDtos() {
+        when(disciplineRepository.findDisciplinesByStudentId(student.getId())).thenReturn(List.of(discipline));
+        when(disciplineMapper.convertToDto(discipline)).thenReturn(disciplineDto);
+
+        List<DisciplineDto> result = disciplineService.getDisciplinesByStudentId(student.getId());
+
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getName()).isEqualTo("Biology");
+        verify(disciplineRepository, times(1)).findDisciplinesByStudentId(student.getId());
+        verify(disciplineMapper, times(1)).convertToDto(discipline);
+    }
+
+    @Test
+    public void getQualificationsByDisciplineId_shouldReturnQualificationDtos() {
+        when(disciplineRepository.findById(discipline.getId())).thenReturn(Optional.of(discipline));
+        when(teacherQualificationMapper.convertToDto(teacherQualification)).thenReturn(teacherQualificationDto);
+
+        List<TeacherQualificationDto> result = disciplineService.getQualificationsByDisciplineId(discipline.getId());
+
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getQualificationEnum()).isEqualTo(TeacherQualificationEnum.PERMIT_BIOLOGY_TEACHING);
+        verify(disciplineRepository, times(1)).findById(discipline.getId());
+        verify(teacherQualificationMapper, times(1)).convertToDto(teacherQualification);
+    }
+
+    @Test
+    public void getQualificationsByDisciplineId_shouldThrowExceptionWhenDisciplineNotFound() {
+        Long nonExistentDisciplineId = 999L;
+        when(disciplineRepository.findById(nonExistentDisciplineId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                disciplineService.getQualificationsByDisciplineId(nonExistentDisciplineId)
+        );
+
+        assertThat(exception.getMessage()).isEqualTo("Discipline with id " + nonExistentDisciplineId + " not found");
+        verify(disciplineRepository, times(1)).findById(nonExistentDisciplineId);
+        verifyNoInteractions(teacherQualificationMapper);
     }
 
 }
