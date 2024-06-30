@@ -122,6 +122,7 @@ public class StudentCurriculumHasTeacherAndDisciplineRepositoryTests {
     public void tearDown() {
         repository.deleteAll();
         schoolClassRepository.deleteAll();
+        schoolTypeRepository.deleteAll();
         schoolRepository.deleteAll();
         teacherRepository.deleteAll();
         disciplineRepository.deleteAll();

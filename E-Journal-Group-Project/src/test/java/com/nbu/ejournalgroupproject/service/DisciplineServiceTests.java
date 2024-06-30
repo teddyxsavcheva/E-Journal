@@ -131,6 +131,11 @@ public class DisciplineServiceTests {
     void tearDown() {
         disciplineRepository.deleteAll();
         disciplineTypeRepository.deleteAll();
+        teacherQualificationRepository.deleteAll();
+        schoolClassRepository.deleteAll();
+        schoolRepository.deleteAll();
+        schoolTypeRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test

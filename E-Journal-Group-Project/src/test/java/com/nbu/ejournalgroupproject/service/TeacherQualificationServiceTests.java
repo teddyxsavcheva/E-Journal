@@ -91,6 +91,9 @@ public class TeacherQualificationServiceTests {
     @AfterEach
     void tearDown() {
         teacherQualificationRepository.deleteAll();
+        teacherRepository.deleteAll();
+        disciplineTypeRepository.deleteAll();
+        disciplineRepository.deleteAll();
     }
 
     @Test
@@ -189,6 +192,7 @@ public class TeacherQualificationServiceTests {
     public void teacherQualificationService_addTeacherToQualification_returnsTeacherQualification() {
         when(teacherQualificationRepository.findById(1L)).thenReturn(Optional.of(teacherQualification));
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
+        when(teacherQualificationRepository.save(any(TeacherQualification.class))).thenReturn(teacherQualification);
         when(teacherQualificationMapper.convertToDto(any(TeacherQualification.class))).thenReturn(teacherQualificationDto);
 
         TeacherQualificationDto result = teacherQualificationService.addTeacherToQualification(1L, 1L);
@@ -214,6 +218,7 @@ public class TeacherQualificationServiceTests {
         teacherQualification.getTeachers().add(teacher);
         when(teacherQualificationRepository.findById(1L)).thenReturn(Optional.of(teacherQualification));
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
+        when(teacherQualificationRepository.save(any(TeacherQualification.class))).thenReturn(teacherQualification);
         when(teacherQualificationMapper.convertToDto(any(TeacherQualification.class))).thenReturn(teacherQualificationDto);
 
         TeacherQualificationDto result = teacherQualificationService.removeTeacherFromQualification(1L, 1L);
@@ -238,6 +243,7 @@ public class TeacherQualificationServiceTests {
     public void teacherQualificationService_addDisciplineToQualification_returnsTeacherQualification() {
         when(teacherQualificationRepository.findById(1L)).thenReturn(Optional.of(teacherQualification));
         when(disciplineRepository.findById(1L)).thenReturn(Optional.of(discipline));
+        when(teacherQualificationRepository.save(any(TeacherQualification.class))).thenReturn(teacherQualification);
         when(teacherQualificationMapper.convertToDto(any(TeacherQualification.class))).thenReturn(teacherQualificationDto);
 
         TeacherQualificationDto result = teacherQualificationService.addDisciplineToQualification(1L, 1L);
@@ -263,6 +269,7 @@ public class TeacherQualificationServiceTests {
         teacherQualification.getDisciplines().add(discipline);
         when(teacherQualificationRepository.findById(1L)).thenReturn(Optional.of(teacherQualification));
         when(disciplineRepository.findById(1L)).thenReturn(Optional.of(discipline));
+        when(teacherQualificationRepository.save(any(TeacherQualification.class))).thenReturn(teacherQualification);
         when(teacherQualificationMapper.convertToDto(any(TeacherQualification.class))).thenReturn(teacherQualificationDto);
 
         TeacherQualificationDto result = teacherQualificationService.removeDisciplineFromQualification(1L, 1L);
@@ -274,6 +281,7 @@ public class TeacherQualificationServiceTests {
         verify(teacherQualificationRepository, times(1)).save(any(TeacherQualification.class));
         verify(teacherQualificationMapper, times(1)).convertToDto(any(TeacherQualification.class));
     }
+
 
     @Test
     public void teacherQualificationService_removeDisciplineFromQualification_throwsException() {

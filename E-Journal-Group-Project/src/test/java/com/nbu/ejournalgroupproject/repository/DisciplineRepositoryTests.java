@@ -96,6 +96,13 @@ public class DisciplineRepositoryTests {
     @AfterEach
     public void tearDown() {
         disciplineRepository.deleteAll();
+        disciplineTypeRepository.deleteAll();
+        schoolClassRepository.deleteAll();
+        studentRepository.deleteAll();
+        studentCurriculumRepository.deleteAll();
+        teacherQualificationRepository.deleteAll();
+        schoolRepository.deleteAll();
+        schoolTypeRepository.deleteAll();
     }
 
     @Test
