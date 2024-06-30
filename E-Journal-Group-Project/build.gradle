@@ -38,6 +38,8 @@ dependencies {
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.11.0'
 	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.2'
+	testImplementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+
 }
 
 tasks.named('test') {
