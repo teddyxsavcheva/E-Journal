@@ -16,6 +16,7 @@ import AddDiscipline from "./adminView/AddDiscipline";
 import CurriculumDetails from "./adminView/CurriculumDetails";
 import HomePage from "./adminView/HomePage";
 import StudentsGrades from "./adminView/StudentsGrades";
+import StudentsAbsences from "./adminView/StudentsAbsences";
 
 function App() {
     return (
@@ -40,7 +41,7 @@ function App() {
                         <Route path="/admin/school/:schoolId/class/:classId/curriculum" element={<CurriculumDetails />} />
 
                         <Route path="/admin/school-class/:classId/students-grades/teacher/:teacherId/discipline/:disciplineId/grades" element={<StudentsGrades />} />
-                        <Route path="/admin/school-class/:classId/students-grades/teacher/:teacherId/discipline/:disciplineId/absences" element={<StudentsGrades />} />
+                        <Route path="/admin/school-class/:classId/students-grades/teacher/:teacherId/discipline/:disciplineId/absences" element={<StudentsAbsences />} />
 
 
                         <Route path="/admin/school/:schoolId/class/:classId/student/:studentId/caregivers" element={<Caregivers />} />

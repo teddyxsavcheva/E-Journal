@@ -181,7 +181,7 @@ const StudentsGrades = () => {
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
-            <Link to={`/admin/school/${classId}`} className="btn btn-secondary mb-4">Back to Class List</Link>
+            <Link to={`/admin/school/${classId}/classes`} className="btn btn-secondary mb-4">Back to Class List</Link>
 
             <table className="table table-striped">
                 <thead>
