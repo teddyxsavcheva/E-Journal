@@ -1,6 +1,7 @@
 package com.nbu.ejournalgroupproject.service;
 
 import com.nbu.ejournalgroupproject.dto.DisciplineDto;
+import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface DisciplineService {
     DisciplineDto removeQualificationFromDiscipline(Long disciplineId, Long qualificationId);
 
     List<DisciplineDto> getDisciplinesByStudentId(Long studentId);
+
+    List<TeacherQualificationDto> getQualificationsByDisciplineId(Long disciplineId);
 }

@@ -19,4 +19,5 @@ public interface SchoolClassService {
 
     List<SchoolClassDTO> getSchoolClasBySchoolId(Long id);
 
+    List<SchoolClassDTO> getClassesFromTeacherId(Long teacherId);
 }

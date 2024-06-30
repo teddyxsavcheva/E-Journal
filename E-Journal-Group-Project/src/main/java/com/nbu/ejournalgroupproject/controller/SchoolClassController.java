@@ -57,4 +57,10 @@ public class SchoolClassController {
         schoolClassService.deleteSchoolClass(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @GetMapping(value = {"/teacher/{teacherId}"})
+    @ResponseBody
+    public ResponseEntity<List<SchoolClassDTO>> getSchoolClassByTeacherId(@PathVariable Long teacherId){
+        return ResponseEntity.ok(schoolClassService.getClassesFromTeacherId(teacherId));
+    }
 }

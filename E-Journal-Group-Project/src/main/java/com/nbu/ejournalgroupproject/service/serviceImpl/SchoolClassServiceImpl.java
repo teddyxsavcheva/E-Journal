@@ -97,5 +97,13 @@ public class SchoolClassServiceImpl implements SchoolClassService {
         }
     }
 
+    @Override
+    public List<SchoolClassDTO> getClassesFromTeacherId(Long teacherId){
+        List<SchoolClass> classes = schoolClassRepository.findDistinctClassesByTeacherId(teacherId);
+        return classes
+                .stream()
+                .map(schoolClassMapper::mapEntityToDto)
+                .collect(Collectors.toList());
+    }
 
 }

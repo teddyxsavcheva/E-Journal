@@ -4,6 +4,7 @@ import com.nbu.ejournalgroupproject.dto.TeacherDTO;
 import com.nbu.ejournalgroupproject.dto.TeacherQualificationDto;
 import com.nbu.ejournalgroupproject.mappers.TeacherMapper;
 import com.nbu.ejournalgroupproject.mappers.TeacherQualificationMapper;
+import com.nbu.ejournalgroupproject.model.SchoolClass;
 import com.nbu.ejournalgroupproject.model.Teacher;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
 import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
@@ -129,6 +130,5 @@ public class TeacherServiceImpl implements TeacherService {
                 .map(teacherQualificationMapper::convertToDto)
                 .collect(Collectors.toList());
     }
-
 
 }
