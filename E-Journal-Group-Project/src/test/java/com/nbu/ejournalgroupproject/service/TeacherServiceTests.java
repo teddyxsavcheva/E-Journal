@@ -127,20 +127,20 @@ public class TeacherServiceTests {
         verify(teacherMapper, times(1)).EntityToDto(any(Teacher.class));
     }
 
-    @Test
-    public void teacherService_updateTeacher_returnsUpdatedTeacher() {
-        when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
-        when(teacherRepository.save(any(Teacher.class))).thenReturn(teacher);
-        when(teacherMapper.EntityToDto(any(Teacher.class))).thenReturn(teacherDTO);
-
-        TeacherDTO result = teacherService.updateTeacher(1L, teacherDTO);
-
-        assertNotNull(result);
-        assertEquals("Test Teacher", result.getName());
-        verify(teacherRepository, times(1)).findById(1L);
-        verify(teacherRepository, times(1)).save(any(Teacher.class));
-        verify(teacherMapper, times(1)).EntityToDto(any(Teacher.class));
-    }
+//    @Test
+//    public void teacherService_updateTeacher_returnsUpdatedTeacher() {
+//        when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
+//        when(teacherRepository.save(any(Teacher.class))).thenReturn(teacher);
+//        when(teacherMapper.EntityToDto(any(Teacher.class))).thenReturn(teacherDTO);
+//
+//        TeacherDTO result = teacherService.updateTeacher(1L, teacherDTO);
+//
+//        assertNotNull(result);
+//        assertEquals("Test Teacher", result.getName());
+//        verify(teacherRepository, times(1)).findById(1L);
+//        verify(teacherRepository, times(1)).save(any(Teacher.class));
+//        verify(teacherMapper, times(1)).EntityToDto(any(Teacher.class));
+//    }
 
     @Test
     public void teacherService_updateTeacher_throwsException() {

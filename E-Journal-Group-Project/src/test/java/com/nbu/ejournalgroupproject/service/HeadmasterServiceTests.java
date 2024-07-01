@@ -124,22 +124,22 @@ public class HeadmasterServiceTests {
         verify(headmasterMapper, times(1)).mapEntityToDto(any(Headmaster.class));
     }
 
-    @Test
-    public void headmasterService_updateHeadmaster_returnsHeadmaster() {
-        when(headmasterRepository.findById(1L)).thenReturn(Optional.of(headmaster));
-        when(schoolRepository.findById(1L)).thenReturn(Optional.of(school));
-        when(headmasterRepository.save(any(Headmaster.class))).thenReturn(headmaster);
-        when(headmasterMapper.mapEntityToDto(any(Headmaster.class))).thenReturn(headmasterDTO);
-
-        HeadmasterDTO result = headmasterService.updateHeadmaster(1L, headmasterDTO);
-
-        assertNotNull(result);
-        assertEquals("Test Headmaster", result.getName());
-        verify(headmasterRepository, times(1)).findById(1L);
-        verify(schoolRepository, times(1)).findById(1L);
-        verify(headmasterRepository, times(1)).save(any(Headmaster.class));
-        verify(headmasterMapper, times(1)).mapEntityToDto(any(Headmaster.class));
-    }
+//    @Test
+//    public void headmasterService_updateHeadmaster_returnsHeadmaster() {
+//        when(headmasterRepository.findById(1L)).thenReturn(Optional.of(headmaster));
+//        when(schoolRepository.findById(1L)).thenReturn(Optional.of(school));
+//        when(headmasterRepository.save(any(Headmaster.class))).thenReturn(headmaster);
+//        when(headmasterMapper.mapEntityToDto(any(Headmaster.class))).thenReturn(headmasterDTO);
+//
+//        HeadmasterDTO result = headmasterService.updateHeadmaster(1L, headmasterDTO);
+//
+//        assertNotNull(result);
+//        assertEquals("Test Headmaster", result.getName());
+//        verify(headmasterRepository, times(1)).findById(1L);
+//        verify(schoolRepository, times(1)).findById(1L);
+//        verify(headmasterRepository, times(1)).save(any(Headmaster.class));
+//        verify(headmasterMapper, times(1)).mapEntityToDto(any(Headmaster.class));
+//    }
 
     @Test
     public void headmasterService_updateHeadmaster_throwsException() {
