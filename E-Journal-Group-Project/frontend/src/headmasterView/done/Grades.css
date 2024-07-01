@@ -33,7 +33,7 @@
 
 /* Styling for badges */
 .badge {
-    cursor: pointer;
+    cursor: default;
     margin-right: 5px;
     padding: 4px 8px; /* Adjust padding for smaller badges */
 }
