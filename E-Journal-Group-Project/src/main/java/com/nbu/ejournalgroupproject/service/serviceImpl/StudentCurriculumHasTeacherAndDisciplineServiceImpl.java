@@ -169,6 +169,7 @@ public class StudentCurriculumHasTeacherAndDisciplineServiceImpl implements Stud
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<StudentCurriculumHasTeacherAndDisciplineDto> getAllCurriculumTeacherDisciplineByStudCurr(Long id) {
         List<StudentCurriculumHasTeacherAndDiscipline> sctd = repository.findAllByStudentCurriculumId(id);

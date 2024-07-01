@@ -139,6 +139,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherMapper.EntityToDto(teacherRepository.save(teacher));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER')")
     @Override
     public List<TeacherQualificationDto> getQualificationsByTeacherId(Long teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId)

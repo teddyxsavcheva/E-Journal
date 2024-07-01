@@ -149,7 +149,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/disciplines/**").hasAuthority
                                         ("ADMINISTRATOR")
 
-                                // TODO: Discuss this
                                 .requestMatchers(HttpMethod.GET, "/discipline-types/**").hasAnyAuthority("ADMINISTRATOR", "HEADMASTER", "TEACHER", "STUDENT", "CAREGIVER")
                                 .requestMatchers(HttpMethod.POST, "/discipline-types/**").hasAuthority
                                         ("ADMINISTRATOR")

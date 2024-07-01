@@ -66,6 +66,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(savedAbsence);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<Long> getAbsencesByStudentAndDiscipline(Long studentId, Long disciplineId) {
         List<Long> counts = new ArrayList<>();
@@ -78,6 +79,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return counts;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<AbsenceDTO> getAbsenceObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
         return absenceRepository.getAllByDisciplineIdAndStudentId(studentId, disciplineId)

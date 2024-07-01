@@ -93,6 +93,7 @@ public class StudentCurriculumServiceImpl implements StudentCurriculumService {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public StudentCurriculumDTO getStudentCurriculumByClassId(long id) {
         return studentCurriculumMapper.entityToDto(studentCurriculumRepository.getStudentCurriculumBySchoolClassId(id));

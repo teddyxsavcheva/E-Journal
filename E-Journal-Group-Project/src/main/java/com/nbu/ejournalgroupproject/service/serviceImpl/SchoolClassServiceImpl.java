@@ -52,6 +52,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolClassDTO createSchoolClass(@Valid SchoolClassDTO schoolClassDTO) {
         validateSchoolClassDTO(schoolClassDTO);
@@ -103,6 +104,7 @@ public class SchoolClassServiceImpl implements SchoolClassService {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER')")
     @Override
     public List<SchoolClassDTO> getClassesFromTeacherId(Long teacherId){
         List<SchoolClass> classes = schoolClassRepository.findDistinctClassesByTeacherId(teacherId);

@@ -104,6 +104,7 @@ public class CaregiverServiceImpl implements CaregiverService {
         return caregiverMapper.toDTO(updatedCaregiver);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER','CAREGIVER')")
     @Override
     public List<CaregiverDTO> getCaregiversFromStudentId(Long id) {
         List<Caregiver> caregivers = caregiverRepository.findCaregiversByStudentId(id);

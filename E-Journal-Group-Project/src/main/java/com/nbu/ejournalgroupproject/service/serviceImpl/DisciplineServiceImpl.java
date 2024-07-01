@@ -143,6 +143,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<DisciplineDto> getDisciplinesByStudentId(Long studentId) {
         List<Discipline> disciplines = disciplineRepository.findDisciplinesByStudentId(studentId);
@@ -151,6 +152,7 @@ public class DisciplineServiceImpl implements DisciplineService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER')")
     @Override
     public List<TeacherQualificationDto> getQualificationsByDisciplineId(Long disciplineId) {
         Discipline discipline = disciplineRepository.findById(disciplineId)

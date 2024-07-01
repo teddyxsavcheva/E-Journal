@@ -99,6 +99,7 @@ public class StudentServiceImpl implements StudentService {
         return studentMapper.toDTO(updatedStudent);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER')")
     @Override
     public List<StudentDTO> getStudentsFromClass(Long id) {
         List<Student> students = studentRepository.getStudentsBySchoolClassId(id);

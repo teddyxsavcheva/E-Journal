@@ -65,26 +65,31 @@ public class GradeServiceImpl implements GradeService {
         return gradeMapper.toDTO(savedGrade);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<String> getGradesByStudentAndDiscipline(Long studentId,Long disciplineId) {
         return gradeRepository.findGradeTypesByStudentAndDiscipline(studentId, disciplineId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public List<String> findAvgGradeForSchool(Long headmasterId){
         return gradeRepository.findAvgGradeForSchool(headmasterId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public List<String> findAvgGradeForDiscipline(Long headmasterId){
         return gradeRepository.findAvgGradeForDiscipline(headmasterId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public List<String> findAvgGradeForTeacherByDiscipline(Long headmasterId){
         return gradeRepository.findAvgGradeForTeacherByDiscipline(headmasterId);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<GradeDTO> getGradeObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
         return gradeRepository.getAllByStudentIdAndDisciplineId(studentId, disciplineId)
