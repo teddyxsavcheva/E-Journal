@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(SchoolController.class)
 public class SchoolControllerTests{
@@ -108,7 +110,7 @@ public class SchoolControllerTests{
         SchoolDTO invalidSchoolDTO = new SchoolDTO();
         invalidSchoolDTO.setId(1L);
         invalidSchoolDTO.setName("T");
-        invalidSchoolDTO.setAddress("");
+        invalidSchoolDTO.setAddress("A");
         invalidSchoolDTO.setSchoolTypeId(null);
 
         mockMvc.perform(post("/school/")
@@ -116,7 +118,7 @@ public class SchoolControllerTests{
                         .content(new ObjectMapper().writeValueAsString(invalidSchoolDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.name").value("Name must be between 2 and 200 characters"))
-                .andExpect(jsonPath("$.address").value("Address must not be blank"))
+                .andExpect(jsonPath("$.address").value("Address must be between 2 and 200 characters"))
                 .andExpect(jsonPath("$.schoolTypeId").value("School Type ID cannot be null"));
     }
 }
