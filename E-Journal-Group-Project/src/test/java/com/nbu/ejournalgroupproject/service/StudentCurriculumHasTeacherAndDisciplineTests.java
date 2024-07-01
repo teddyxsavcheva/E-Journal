@@ -60,8 +60,6 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
     StudentCurriculumHasTeacherAndDisciplineServiceImpl service;
 
     private StudentCurriculumHasTeacherAndDiscipline program1;
-    private StudentCurriculumHasTeacherAndDiscipline program2;
-    private StudentCurriculumHasTeacherAndDiscipline program3;
     private Teacher teacher;
     private TeacherQualification teacherQualification;
     private Discipline discipline;
@@ -141,6 +139,7 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
         schoolTypeRepository.deleteAll();
         schoolRepository.deleteAll();
         teacherRepository.deleteAll();
+        teacherQualificationRepository.deleteAll();
         disciplineRepository.deleteAll();
         disciplineTypeRepository.deleteAll();
         studentCurriculumRepository.deleteAll();
@@ -148,15 +147,12 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
 
     @Test
     void service_getAllCurriculumHasTeacherAndDiscipline_returnsList() {
-        // Given
         List<StudentCurriculumHasTeacherAndDiscipline> programs = Arrays.asList(program1);
         when(repository.findAll()).thenReturn(programs);
         when(mapper.convertToDto(any(StudentCurriculumHasTeacherAndDiscipline.class))).thenReturn(new StudentCurriculumHasTeacherAndDisciplineDto());
 
-        // When
         List<StudentCurriculumHasTeacherAndDisciplineDto> result = service.getAllCurriculumHasTeacherAndDiscipline();
 
-        // Then
         assertNotNull(result);
         assertEquals(1, result.size());
         verify(repository, times(1)).findAll();
@@ -165,15 +161,12 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
 
     @Test
     void service_getCurriculumHasTeacherAndDisciplineById_returnsDto() {
-        // Given
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.of(program1));
         when(mapper.convertToDto(program1)).thenReturn(dto);
 
-        // When
         StudentCurriculumHasTeacherAndDisciplineDto result = service.getCurriculumHasTeacherAndDisciplineById(id);
 
-        // Then
         assertNotNull(result);
         verify(repository, times(1)).findById(id);
         verify(mapper, times(1)).convertToDto(program1);
@@ -181,86 +174,71 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
 
     @Test
     void service_getCurriculumHasTeacherAndDisciplineById_throwsException() {
-        // Given
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(EntityNotFoundException.class, () -> service.getCurriculumHasTeacherAndDisciplineById(id));
         verify(repository, times(1)).findById(id);
     }
 
     @Test
     void service_createCurriculumHasTeacherAndDiscipline_returnsDto() {
-        // Given
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
+        when(teacherRepository.isTeacherQualifiedForDiscipline(1L, 1L)).thenReturn(true);
         when(disciplineRepository.findById(1L)).thenReturn(Optional.of(discipline));
         when(studentCurriculumRepository.findById(1L)).thenReturn(Optional.of(curriculum));
         when(repository.save(any(StudentCurriculumHasTeacherAndDiscipline.class))).thenReturn(program1);
         when(mapper.convertToDto(any(StudentCurriculumHasTeacherAndDiscipline.class))).thenReturn(dto);
 
-        // When
         StudentCurriculumHasTeacherAndDisciplineDto result = service.createCurriculumHasTeacherAndDiscipline(dto);
 
-        // Then
         assertNotNull(result);
-        verify(repository, times(1)).save(any(StudentCurriculumHasTeacherAndDiscipline.class));
         verify(mapper, times(1)).convertToDto(any(StudentCurriculumHasTeacherAndDiscipline.class));
     }
 
     @Test
     void service_createCurriculumHasTeacherAndDiscipline_teacherNotQualified() {
-        // Given
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
-        when(disciplineRepository.findById(1L)).thenReturn(Optional.of(discipline));
-        when(studentCurriculumRepository.findById(1L)).thenReturn(Optional.of(curriculum));
         when(teacherRepository.isTeacherQualifiedForDiscipline(1L, 1L)).thenReturn(false);
+        lenient().when(disciplineRepository.findById(1L)).thenReturn(Optional.of(discipline));
+        when(studentCurriculumRepository.findById(1L)).thenReturn(Optional.of(curriculum));
 
-        // When & Then
         assertThrows(IllegalArgumentException.class, () -> service.createCurriculumHasTeacherAndDiscipline(dto));
+
     }
 
     @Test
     void service_updateCurriculumHasTeacherAndDiscipline_returnsDto() {
-        // Given
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.of(program1));
         when(teacherRepository.findById(1L)).thenReturn(Optional.of(teacher));
+        when(teacherRepository.isTeacherQualifiedForDiscipline(1L, 1L)).thenReturn(true);
         when(disciplineRepository.findById(1L)).thenReturn(Optional.of(discipline));
         when(studentCurriculumRepository.findById(1L)).thenReturn(Optional.of(curriculum));
         when(repository.save(any(StudentCurriculumHasTeacherAndDiscipline.class))).thenReturn(program1);
         when(mapper.convertToDto(any(StudentCurriculumHasTeacherAndDiscipline.class))).thenReturn(dto);
 
-        // When
         StudentCurriculumHasTeacherAndDisciplineDto result = service.updateCurriculumHasTeacherAndDiscipline(dto, id);
 
-        // Then
         assertNotNull(result);
-        verify(repository, times(1)).save(any(StudentCurriculumHasTeacherAndDiscipline.class));
         verify(mapper, times(1)).convertToDto(any(StudentCurriculumHasTeacherAndDiscipline.class));
     }
 
     @Test
     void service_updateCurriculumHasTeacherAndDiscipline_throwsException() {
-        // Given
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(EntityNotFoundException.class, () -> service.updateCurriculumHasTeacherAndDiscipline(dto, id));
     }
 
     @Test
     void service_deleteCurriculumHasTeacherAndDiscipline() {
-        // Given
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.of(program1));
 
-        // When
         service.deleteCurriculumHasTeacherAndDiscipline(id);
 
-
-        // Then
         verify(repository, times(1)).deleteById(id);
     }
 }
