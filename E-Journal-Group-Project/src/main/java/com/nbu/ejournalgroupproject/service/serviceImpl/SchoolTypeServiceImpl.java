@@ -64,13 +64,4 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
 
         schoolTypeRepository.delete(schoolType);
     }
-
-//    @Override
-//    public void validateSchoolTypeDTO(SchoolTypeDTO schoolTypeDTO) {
-//
-//        if (schoolTypeDTO.getSchoolType() == null) {
-//            throw new IllegalArgumentException("The School Type cannot be null");
-//        }
-//
-//    }
 }

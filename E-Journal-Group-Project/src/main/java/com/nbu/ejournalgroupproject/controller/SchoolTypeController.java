@@ -49,9 +49,4 @@ public class SchoolTypeController {
         schoolTypeService.deleteSchoolType(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-
-
-
-
 }
