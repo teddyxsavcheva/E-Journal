@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../axiosInstance';
+import axios from '../axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 import './Grades.css'; // Import the CSS file
 
@@ -79,7 +79,6 @@ const Grades = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Grades for Class ID: {classId}, Teacher ID: {teacherId}, Discipline ID: {disciplineId}</h2>
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
@@ -96,7 +95,7 @@ const Grades = () => {
                 {students.length > 0 ? (
                     students.map((student) => (
                         <tr key={student.id}>
-                            <td className="name">{student.name}</td>
+                            <td className="name">{student.numberInClass}. {student.name}</td>
                             <td className="grades">
                                 {grades[student.id] && grades[student.id].length > 0 ? (
                                     grades[student.id].map((grade) => (

@@ -23,11 +23,11 @@ const EditTeacherDiscipline = ({ editTeacherDiscipline, teachers, disciplines, o
             <div className="card-body">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="teacherSelect">Select Teacher:</label>
+                        <label className="me-4" htmlFor="teacherSelect">Select Teacher:</label>
                         <select
                             id="teacherSelect"
                             name="teacherId"
-                            className="form-control mb-3"
+                            className="form-control mb-3 w-50"
                             value={teacherDiscipline.teacherId}
                             onChange={handleChange}
                         >
@@ -38,11 +38,11 @@ const EditTeacherDiscipline = ({ editTeacherDiscipline, teachers, disciplines, o
                         </select>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="disciplineSelect">Select Discipline:</label>
+                        <label className="me-3" htmlFor="disciplineSelect">Select Discipline:</label>
                         <select
                             id="disciplineSelect"
                             name="disciplineId"
-                            className="form-control mb-3"
+                            className="form-control mb-3 w-50"
                             value={teacherDiscipline.disciplineId}
                             onChange={handleChange}
                         >
@@ -52,8 +52,8 @@ const EditTeacherDiscipline = ({ editTeacherDiscipline, teachers, disciplines, o
                             ))}
                         </select>
                     </div>
-                    <button type="submit" className="btn btn-success">Save</button>
-                    <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
+                    <button type="submit" className="btn btn-success m-2">Save</button>
+                    <button type="button" className="btn btn-secondary m-2" onClick={onCancel}>Cancel</button>
                 </form>
             </div>
         </div>

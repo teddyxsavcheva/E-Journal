@@ -29,12 +29,14 @@ const SchoolClassDetails = () => {
     const [editCaregiver, setEditCaregiver] = useState(null);
     const [newCaregiver, setNewCaregiver] = useState({ name: '', email: '' });
 
-    const handleEditCaregiver = (caregiver) => setEditCaregiver({ ...caregiver });
+    const handleEditCaregiver = (caregiver) => {
+        setEditCaregiver({ ...caregiver });
+    };
 
     const handleChange = (e, setter) => {
         const { name, value } = e.target;
         setter((prev) => ({ ...prev, [name]: value }));
-    }
+    };
 
     const handleSaveCaregiver = async () => {
         try {
@@ -61,14 +63,28 @@ const SchoolClassDetails = () => {
 
     const handleAddCaregiver = async () => {
         try {
-            const response = await axios.post(`/caregivers/`, {
-                ...newCaregiver,
-            });
-            const newCaregiverId = response.data.id;
+            // Fetch all caregivers
+            const response = await axios.get('/caregivers/');
+            const existingCaregiver = response.data.find(caregiver => caregiver.email === newCaregiver.email);
 
-            await axios.post(`/caregivers/${newCaregiverId}/students/${studentId}`);
+            if (existingCaregiver) {
+                console.log("exist");
+                // If caregiver with the same email already exists, associate them with the student
+                await axios.post(`/students/${studentId}/caregivers/${existingCaregiver.id}`);
+            } else {
+                console.log("not exist")
+                // If caregiver doesn't exist, create a new one
+                const newCaregiverResponse = await axios.post(`/caregivers/`, {
+                    ...newCaregiver,
+                });
+                const newCaregiverId = newCaregiverResponse.data.id;
+                // Associate the new caregiver with the student
+                await axios.post(`/students/${studentId}/caregivers/${newCaregiverId}`);
+            }
 
+            // Clear the input fields after successful addition
             setNewCaregiver({ name: '', email: '' });
+            // Fetch caregivers again to update the list
             fetchCaregivers();
         } catch (error) {
             console.error("Error adding caregiver: ", error);
@@ -78,7 +94,6 @@ const SchoolClassDetails = () => {
     return (
         <div className="container mt-4">
             <div className="mb-4">
-                <h2>Caregivers for School ID: {schoolId}</h2>
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
 
@@ -156,11 +171,14 @@ const SchoolClassDetails = () => {
                                         </>
                                     )}
                                 </div>
-                                <div className="actions">
+                                <div className="actions d-flex">
                                     {editCaregiver && editCaregiver.id === caregiver.id ? (
-                                        <button className="btn btn-sm btn-success me-1" onClick={handleSaveCaregiver}>
-                                            Save
-                                        </button>
+                                        <div>
+                                            <button className="btn btn-sm btn-success me-1" onClick={handleSaveCaregiver}>
+                                                Save
+                                            </button>
+                                            <button className="btn btn-sm btn-secondary me-1" onClick={() => { setEditCaregiver(null); }}>Cancel</button>
+                                        </div>
                                     ) : (
                                         <button className="btn btn-sm btn-success me-1" onClick={() => handleEditCaregiver(caregiver)}>
                                             Edit

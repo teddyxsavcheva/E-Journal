@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from '../../axiosInstance';
+import axios from '../axiosInstance';
 import {Link, useParams} from 'react-router-dom';
 
 const useSchoolClasses = (schoolId) => {
@@ -30,7 +30,6 @@ const SchoolClasses = () => {
     return (
         <div className="container mt-4">
             <div className="mb-4">
-                <h2>School Classes for School ID: {schoolId}</h2>
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
 

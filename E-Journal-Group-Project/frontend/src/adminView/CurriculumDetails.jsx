@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../axiosInstance';
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import EditTeacherDiscipline from './EditTeacherDiscipline';
 import { fetchAllTeachersFromSchool, fetchAllDisciplines } from '../functions/fetchFunctions';
 import useCurriculum from '../functions/useCurriculum';
@@ -145,26 +145,30 @@ const CurriculumDetails = () => {
     // Helper function to find teacher or discipline by ID
     const findById = (id, array) => array.find(item => item.id === id);
 
+    // Function to filter out disciplines already assigned to teachers
+    const filterAssignedDisciplines = () => {
+        const assignedDisciplineIds = teachersAndDisciplines.map(item => item.disciplineId);
+        return disciplines.filter(discipline => !assignedDisciplineIds.includes(discipline.id));
+    };
+
     return (
         <div className="container mt-4">
-            <h2>Curriculum Details</h2>
-
             {curriculum && !editCurriculum ? (
                 <div className="card">
                     <div className="card-body">
                         <h3 className="card-title">Curriculum Information</h3>
                         <div className="list-group-item d-flex justify-content-between align-items-center">
-                        <div className="list-group-item d-flex align-items-center">
-                        <span className="me-3">Semester: {curriculum.semester}</span>
-                        <span>Year: {curriculum.year}</span>
-                        </div>
+                            <div className="list-group-item d-flex align-items-center">
+                                <span className="me-3">Semester: {curriculum.semester}</span>
+                                <span>Year: {curriculum.year}</span>
+                            </div>
                             <div>
-                        <button className="btn btn-primary me-2" onClick={() => handleEditCurriculum(curriculum)}>
-                            Edit Curriculum
-                        </button>
-                        {/*<button className="btn btn-danger me-2" onClick={() => handleDeleteCurriculum(curriculum.id)}>*/}
-                        {/*    Delete Curriculum*/}
-                        {/*</button>*/}
+                                <button className="btn btn-primary me-2" onClick={() => handleEditCurriculum(curriculum)}>
+                                    Edit Curriculum
+                                </button>
+                                {/*<button className="btn btn-danger me-2" onClick={() => handleDeleteCurriculum(curriculum.id)}>*/}
+                                {/*    Delete Curriculum*/}
+                                {/*</button>*/}
                             </div>
                         </div>
                     </div>
@@ -222,7 +226,7 @@ const CurriculumDetails = () => {
                                 onChange={(e) => setSelectedDisciplines([...e.target.selectedOptions].map(option => option.value))}
                             >
                                 <option value="">Select disciplines</option>
-                                {disciplines.map(discipline => (
+                                {filterAssignedDisciplines().map(discipline => (
                                     <option key={discipline.id} value={discipline.id}>
                                         {discipline.name}
                                     </option>
@@ -272,6 +276,52 @@ const CurriculumDetails = () => {
                 )
             )}
 
+            <div className="card mt-4">
+                {duplicateError && (
+                    <div className="alert alert-danger" role="alert">
+                        {duplicateError}
+                    </div>
+                )}
+                <h3 className="card-header">Add Teacher and Discipline</h3>
+                <div className="card-body">
+                    <div className="form-group">
+                        <label htmlFor="teacherSelect">Teacher:</label>
+                        <select
+                            id="teacherSelect"
+                            className="form-control m-3 w-50"
+                            value={newTeacherDiscipline.teacherId}
+                            onChange={(e) => setNewTeacherDiscipline({ ...newTeacherDiscipline, teacherId: e.target.value })}
+                        >
+                            <option value="">Select a teacher</option>
+                            {teachers.map(teacher => (
+                                <option key={teacher.id} value={teacher.id}>
+                                    {teacher.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="disciplineSelect">Discipline:</label>
+                        <select
+                            id="disciplineSelect"
+                            className="form-control m-3 w-50"
+                            value={newTeacherDiscipline.disciplineId}
+                            onChange={(e) => setNewTeacherDiscipline({ ...newTeacherDiscipline, disciplineId: e.target.value })}
+                        >
+                            <option value="">Select a discipline</option>
+                            {filterAssignedDisciplines().map(discipline => (
+                                <option key={discipline.id} value={discipline.id}>
+                                    {discipline.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <button className="btn btn-success" onClick={handleAddTeacherDiscipline}>
+                        Add Teacher and Discipline
+                    </button>
+                </div>
+            </div>
+
             {teachersAndDisciplines.length > 0 && (
                 <div className="card mt-4">
                     <h3 className="card-header">Teachers and Disciplines</h3>
@@ -287,8 +337,14 @@ const CurriculumDetails = () => {
 
                                 return (
                                     <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>{teacher.name} - {discipline.name}</span>
+                                        <span>{discipline.name} - {teacher.name}</span>
                                         <div>
+                                            <button className="btn btn-primary btn-sm me-2" onClick={() => handleEditTeacherDiscipline(item)}>
+                                                Edit
+                                            </button>
+                                            <button className="btn btn-danger btn-sm me-2" onClick={() => handleDeleteTeacherDiscipline(item.id)}>
+                                                Delete
+                                            </button>
                                             <Link
                                                 to={`/admin/school-class/${classId}/students-grades/teacher/${teacher.id}/discipline/${item.disciplineId}/absences`}
                                                 className="btn btn-info text-white btn-sm me-2"
@@ -297,16 +353,10 @@ const CurriculumDetails = () => {
                                             </Link>
                                             <Link
                                                 to={`/admin/school-class/${classId}/students-grades/teacher/${teacher.id}/discipline/${item.disciplineId}/grades`}
-                                                className="btn btn-success btn-sm me-2"
+                                                className="btn btn-info text-white btn-sm me-2"
                                             >
                                                 Grade
                                             </Link>
-                                            <button className="btn btn-primary btn-sm me-1" onClick={() => handleEditTeacherDiscipline(item)}>
-                                                Edit
-                                            </button>
-                                            <button className="btn btn-danger btn-sm me-1" onClick={() => handleDeleteTeacherDiscipline(item.id)}>
-                                                Delete
-                                            </button>
                                         </div>
                                     </li>
                                 );
@@ -325,52 +375,6 @@ const CurriculumDetails = () => {
                     onCancel={() => setEditTeacherDiscipline(null)}
                 />
             )}
-
-            <div className="card mt-4">
-                {duplicateError && (
-                    <div className="alert alert-danger" role="alert">
-                        {duplicateError}
-                    </div>
-                )}
-                <h3 className="card-header">Add Teacher and Discipline</h3>
-                <div className="card-body">
-                    <div className="form-group">
-                        <label htmlFor="teacherSelect">Select Teacher:</label>
-                        <select
-                            id="teacherSelect"
-                            className="form-control mb-3"
-                            value={newTeacherDiscipline.teacherId}
-                            onChange={(e) => setNewTeacherDiscipline({ ...newTeacherDiscipline, teacherId: e.target.value })}
-                        >
-                            <option value="">Select a teacher</option>
-                            {teachers.map(teacher => (
-                                <option key={teacher.id} value={teacher.id}>
-                                    {teacher.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="disciplineSelect">Select Discipline:</label>
-                        <select
-                            id="disciplineSelect"
-                            className="form-control mb-3"
-                            value={newTeacherDiscipline.disciplineId}
-                            onChange={(e) => setNewTeacherDiscipline({ ...newTeacherDiscipline, disciplineId: e.target.value })}
-                        >
-                            <option value="">Select a discipline</option>
-                            {disciplines.map(discipline => (
-                                <option key={discipline.id} value={discipline.id}>
-                                    {discipline.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <button className="btn btn-success" onClick={handleAddTeacherDiscipline}>
-                        Add Teacher and Discipline
-                    </button>
-                </div>
-            </div>
         </div>
     );
 };

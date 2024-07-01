@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from '../axiosInstance';
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const useTeachers = (schoolId) => {
     const [teachers, setTeachers] = useState([]);
@@ -42,13 +42,17 @@ const TeacherList = () => {
         try {
             await axios.put(`/teacher/${editTeacher.id}`, {
                 ...editTeacher,
-                schoolId: Number(schoolId)
+                schoolId: Number(schoolId),
             });
             setEditTeacher(null);
             fetchTeachers();
         } catch (error) {
             console.error('Error saving teacher:', error);
         }
+    };
+
+    const handleCancelEdit = () => {
+        setEditTeacher(null); // Reset the edit state
     };
 
     const handleDeleteTeacher = async (teacherId) => {
@@ -66,7 +70,7 @@ const TeacherList = () => {
         try {
             await axios.post('/teacher/', {
                 ...newTeacher,
-                schoolId: Number(schoolId)
+                schoolId: Number(schoolId),
             });
             setNewTeacher({ name: '', email: '' });
             fetchTeachers();
@@ -149,18 +153,28 @@ const TeacherList = () => {
                                 </div>
                                 <div className="actions">
                                     {editTeacher && editTeacher.id === teacher.id ? (
-                                        <button className="btn btn-sm btn-success me-1" onClick={handleSaveTeacher}>
-                                            Save
-                                        </button>
+                                        <>
+                                            <button className="btn btn-sm btn-success me-2" onClick={handleSaveTeacher}>
+                                                Save
+                                            </button>
+                                            <button className="btn btn-sm btn-secondary me-2" onClick={handleCancelEdit}>
+                                                Cancel
+                                            </button>
+                                        </>
                                     ) : (
-                                        <button className="btn btn-sm btn-success me-1" onClick={() => handleEditTeacher(teacher)}>
+                                        <button className="btn btn-sm btn-primary me-2" onClick={() => handleEditTeacher(teacher)}>
                                             Edit
                                         </button>
                                     )}
-                                    <Link to={`/admin/school/${schoolId}/teacher/${teacher.id}/qualifications`} className="btn btn-primary btn-sm me-1">Qualifications</Link>
-                                    <button className="btn btn-sm btn-danger me-1" onClick={() => handleDeleteTeacher(teacher.id)}>
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteTeacher(teacher.id)}>
                                         Delete
                                     </button>
+                                    <Link
+                                        to={`/admin/school/${schoolId}/teacher/${teacher.id}/qualifications`}
+                                        className="btn btn-info text-white btn-sm me-1"
+                                    >
+                                        Qualifications
+                                    </Link>
                                 </div>
                             </div>
                         </li>

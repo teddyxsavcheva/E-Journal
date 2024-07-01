@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from '../../axiosInstance';
+import axios from '../axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 
 const useCaregivers = (studentId) => {
@@ -30,7 +30,6 @@ const SchoolClassDetails = () => {
     return (
         <div className="container mt-4">
             <div className="mb-4">
-                <h2>Caregivers for School ID: {schoolId}</h2>
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
 

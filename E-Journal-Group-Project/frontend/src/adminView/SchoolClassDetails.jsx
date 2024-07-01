@@ -76,9 +76,8 @@ const SchoolClassDetails = () => {
     return (
         <div className="container mt-4">
             <div className="mb-4 d-flex justify-content-between align-items-center">
-                <h2 className="mb-0">School Class Details for School ID: {schoolId}</h2>
                 <Link to={`/admin/school/${schoolId}/class/${classId}/curriculum`}
-                      className="btn btn-primary">
+                      className="btn btn-info text-white w-100 p-3">
                     Curriculum
                 </Link>
             </div>
@@ -124,21 +123,13 @@ const SchoolClassDetails = () => {
             <ul className="list-group">
                 {students.length > 0 ? (
                     students.map((student) => (
-                        <li key={student.id} className="list-group-item mb-3">
+                        <li key={student.id} className="list-group-item p-3">
                             <div className="d-flex align-items-center justify-content-between">
                                 <div className="student-info">
                                     {editStudent && editStudent.id === student.id ? (
                                         <>
                                             <div className="mb-2">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="name"
-                                                    value={editStudent.name}
-                                                    onChange={(e) => handleChange(e, setEditStudent)}
-                                                />
-                                            </div>
-                                            <div className="mb-2">
+                                                <p>Number: </p>
                                                 <input
                                                     type="number"
                                                     className="form-control"
@@ -147,31 +138,40 @@ const SchoolClassDetails = () => {
                                                     onChange={(e) => handleChange(e, setEditStudent)}
                                                 />
                                             </div>
+                                            <div className="mb-2">
+                                                <p>Name: </p>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="name"
+                                                    value={editStudent.name}
+                                                    onChange={(e) => handleChange(e, setEditStudent)}
+                                                />
+                                            </div>
                                         </>
                                     ) : (
                                         <>
-                                            <span className="d-block mb-1">{student.name}</span>
-                                            <span>{student.numberInClass}</span>
+                                            <span className="d-block">{student.numberInClass}. {student.name}</span>
                                         </>
                                     )}
                                 </div>
                                 <div className="actions">
                                     {editStudent && editStudent.id === student.id ? (
-                                        <button className="btn btn-sm btn-success me-1" onClick={handleSaveStudent}>
+                                        <button className="btn btn-sm btn-success me-2" onClick={handleSaveStudent}>
                                             Save
                                         </button>
                                     ) : (
-                                        <button className="btn btn-sm btn-success me-1" onClick={() => handleEditStudent(student)}>
+                                        <button className="btn btn-sm btn-primary me-2" onClick={() => handleEditStudent(student)}>
                                             Edit
                                         </button>
                                     )}
-                                    <Link to={`/admin/school/${schoolId}/class/${classId}/student/${student.id}/caregivers`}
-                                          className="btn btn-primary btn-sm me-1">
-                                        Caregivers
-                                    </Link>
-                                    <button className="btn btn-sm btn-danger me-1" onClick={() => handleDeleteStudent(student.id)}>
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteStudent(student.id)}>
                                         Delete
                                     </button>
+                                    <Link to={`/admin/school/${schoolId}/class/${classId}/student/${student.id}/caregivers`}
+                                          className="btn btn-info text-white btn-sm me-2">
+                                        Caregivers
+                                    </Link>
                                 </div>
                             </div>
                         </li>

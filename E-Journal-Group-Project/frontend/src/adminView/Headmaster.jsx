@@ -15,6 +15,7 @@ const Headmaster = () => {
             const response = await axios.get(`/headmaster/school-id/${schoolId}`);
             if (response.data) {
                 setHeadmaster(response.data);
+                setEditHeadmaster(null); // Reset edit mode when fetching headmaster
             } else {
                 setHeadmaster(null);
             }
@@ -77,9 +78,9 @@ const Headmaster = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Headmaster for School ID: {schoolId}</h2>
             {error && <div className="alert alert-danger">Error: {error.message}</div>}
 
+            <button className="btn btn-secondary mb-4" onClick={() => navigate(-1)}>Back to School Details</button>
             <div className="mb-4">
                 <div className="card">
                     <h3 className="card-header">Headmaster</h3>
@@ -118,9 +119,14 @@ const Headmaster = () => {
                                     </div>
                                     <div className="actions">
                                         {editHeadmaster ? (
-                                            <button className="btn btn-sm btn-success me-1" onClick={handleSaveHeadmaster}>
-                                                Save
-                                            </button>
+                                            <>
+                                                <button className="btn btn-sm btn-success me-1" onClick={handleSaveHeadmaster}>
+                                                    Save
+                                                </button>
+                                                <button className="btn btn-sm btn-secondary me-1" onClick={() => setEditHeadmaster(null)}>
+                                                    Cancel
+                                                </button>
+                                            </>
                                         ) : (
                                             <button className="btn btn-sm btn-primary me-1" onClick={() => setEditHeadmaster(headmaster)}>
                                                 Edit
@@ -163,7 +169,6 @@ const Headmaster = () => {
                     </div>
                 </div>
             </div>
-            <button className="btn btn-secondary" onClick={() => navigate(-1)}>Back</button>
         </div>
     );
 };

@@ -17,15 +17,16 @@ import CurriculumDetails from "./adminView/CurriculumDetails";
 import HomePage from "./adminView/HomePage";
 import StudentsGrades from "./adminView/StudentsGrades";
 import StudentsAbsences from "./adminView/StudentsAbsences";
-import School from "./headmasterView/done/School";
-import Teachers from "./headmasterView/done/Teachers";
-import ViewTeacherQualifications from "./headmasterView/done/ViewTeacherQualifications";
-import SchoolClasses from "./headmasterView/done/SchoolClasses";
-import SchoolClass from "./headmasterView/done/SchoolClass";
-import SeeCaregivers from "./headmasterView/done/SeeCaregivers";
-import Curriculum from "./headmasterView/done/Curriculum";
-import Grades from "./headmasterView/done/Grades";
+import School from "./headmasterView/School";
+import Teachers from "./headmasterView/Teachers";
+import ViewTeacherQualifications from "./headmasterView/ViewTeacherQualifications";
+import SchoolClasses from "./headmasterView/SchoolClasses";
+import SchoolClass from "./headmasterView/SchoolClass";
+import SeeCaregivers from "./headmasterView/SeeCaregivers";
+import Curriculum from "./headmasterView/Curriculum";
+import Grades from "./headmasterView/Grades";
 import Absences from "./headmasterView/Absences";
+import EditSchool from "./adminView/EditSchool";
 
 function App() {
     return (
@@ -39,6 +40,7 @@ function App() {
                         <Route path="/" element={<HomePage/>} />
                         <Route path="/admin" element={<SchoolList />} />
                         <Route path="/admin/add-school" element={<AddSchool />} />
+                        <Route path="/admin/edit-school/:schoolId" element={<EditSchool />} />
                         <Route path="/admin/add-discipline" element={<AddDiscipline />} />
                         <Route path="/admin/school/:schoolId" element={<SchoolDetails />} />
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from '../../axiosInstance';
+import axios from '../axiosInstance';
 import { useParams, Link } from 'react-router-dom';
 
 const useStudents = (classId) => {
@@ -30,9 +30,8 @@ const SchoolClass = () => {
     return (
         <div className="container mt-4">
             <div className="mb-4 d-flex justify-content-between align-items-center">
-                <h2 className="mb-0">School Class Details for School ID: {schoolId}</h2>
                 <Link to={`/headmaster/${headmasterId}/school/${schoolId}/class/${classId}/curriculum`}
-                      className="btn btn-primary">
+                      className="btn btn-primary w-100">
                     Curriculum
                 </Link>
             </div>
@@ -48,8 +47,7 @@ const SchoolClass = () => {
                         <li key={student.id} className="list-group-item mb-3">
                             <div className="d-flex align-items-center justify-content-between">
                                 <div className="student-info">
-                                    <span className="d-block mb-1">{student.name}</span>
-                                    <span>{student.numberInClass}</span>
+                                    <span className="d-block mb-1">{student.numberInClass}. {student.name}</span>
                                 </div>
                                 <div className="actions">
                                     <Link to={`/headmaster/${headmasterId}/school/${schoolId}/class/${classId}/student/${student.id}/caregivers`}

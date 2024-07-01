@@ -98,8 +98,8 @@ const TeacherQualifications = () => {
                         ))}
                     </select>
                 </div>
-                <button type="submit" className="btn btn-primary me-2">Add Qualification</button>
-                <Link to={`/admin/school/${schoolId}`} className="btn btn-secondary">Back to Teacher List</Link>
+                <button type="submit" className="btn btn-success me-2">Add Qualification</button>
+                <Link to={`/admin/school/${schoolId}/teachers`} className="btn btn-secondary">Back to Teacher List</Link>
             </form>
 
             <ul className="list-group mt-4">

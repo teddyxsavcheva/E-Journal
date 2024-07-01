@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../axiosInstance';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-const AddSchool = () => {
+const EditSchool = () => {
+    const { schoolId } = useParams();
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
     const [schoolTypeId, setSchoolTypeId] = useState('');
@@ -11,6 +12,19 @@ const AddSchool = () => {
     const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
+        const fetchSchool = async () => {
+            try {
+                const response = await axios.get(`/school/${schoolId}`);
+                const { name, address, schoolTypeId } = response.data;
+                setName(name);
+                setAddress(address);
+                setSchoolTypeId(schoolTypeId);
+            } catch (error) {
+                console.error('Error fetching school:', error);
+                setError('Error fetching school');
+            }
+        };
+
         const fetchSchoolTypes = async () => {
             try {
                 const response = await axios.get('/school-type/');
@@ -21,34 +35,32 @@ const AddSchool = () => {
             }
         };
 
+        fetchSchool();
         fetchSchoolTypes();
-    }, []);
+    }, [schoolId]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('/school/', {
+            await axios.put(`/school/${schoolId}`, {
                 name,
                 address,
                 schoolTypeId
             });
-            setSuccessMessage('School added successfully!');
+            setSuccessMessage('School updated successfully!');
             // Optionally, you can redirect or set a timer to clear success message
             setTimeout(() => {
                 setSuccessMessage('');
             }, 3000); // Clear success message after 3 seconds
-            setName('');
-            setAddress('');
-            setSchoolTypeId('');
         } catch (error) {
-            setError('Error adding school');
-            console.error('Error adding school:', error);
+            setError('Error updating school');
+            console.error('Error updating school:', error);
         }
     };
 
     return (
         <div className="container mt-4">
-            <h2 className="mb-4">Add New School</h2>
+            <h2 className="mb-4">Edit School</h2>
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
             <form onSubmit={handleSubmit}>
@@ -70,7 +82,7 @@ const AddSchool = () => {
                     </select>
                 </div>
                 <div>
-                    <button type="submit" className="btn btn-success me-2">Add School</button>
+                    <button type="submit" className="btn btn-primary me-2">Update School</button>
                     <Link to="/admin" className="btn btn-secondary">Back to Schools</Link>
                 </div>
             </form>
@@ -78,4 +90,4 @@ const AddSchool = () => {
     );
 };
 
-export default AddSchool;
+export default EditSchool;

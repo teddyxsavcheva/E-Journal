@@ -177,7 +177,6 @@ const StudentsGrades = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Grades for Class ID: {classId}, Teacher ID: {teacherId}, Discipline ID: {disciplineId}</h2>
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
@@ -232,7 +231,7 @@ const StudentsGrades = () => {
                                                 <option key={grade.id} value={grade.id}>{grade.gradeTypeEnum}</option>
                                             ))}
                                         </select>
-                                        <button type="submit" className="btn btn-primary mx-2">Save</button>
+                                        <button type="submit" className="btn btn-success mx-2">Save</button>
                                         <button type="button" className="btn btn-secondary" onClick={() => setEditingGrade(null)}>Cancel</button>
                                     </form>
                                 )}
@@ -251,7 +250,7 @@ const StudentsGrades = () => {
                                                 <option key={grade.id} value={grade.id}>{grade.gradeTypeEnum}</option>
                                             ))}
                                         </select>
-                                        <button type="submit" className="btn btn-primary add-grade-btn">Add</button>
+                                        <button type="submit" className="btn btn-success add-grade-btn">Add</button>
                                     </div>
                                 </form>
                             </td>

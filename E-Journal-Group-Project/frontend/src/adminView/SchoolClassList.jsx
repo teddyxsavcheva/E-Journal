@@ -78,7 +78,6 @@ const SchoolClassList = () => {
     return (
         <div className="container mt-4">
             <div className="mb-4">
-                <h2>School Classes for School ID: {schoolId}</h2>
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
 
@@ -90,9 +89,9 @@ const SchoolClassList = () => {
                             <input
                                 type="text"
                                 className="form-control mb-3"
-                                placeholder="Name"
-                                name="name"
-                                value={newSchoolClass.name}
+                                placeholder="Year"
+                                name="year"
+                                value={newSchoolClass.year}
                                 onChange={(e) => handleChange(e, setNewSchoolClass)}
                             />
                         </div>
@@ -100,9 +99,9 @@ const SchoolClassList = () => {
                             <input
                                 type="text"
                                 className="form-control mb-3"
-                                placeholder="Year"
-                                name="year"
-                                value={newSchoolClass.year}
+                                placeholder="Name"
+                                name="name"
+                                value={newSchoolClass.name}
                                 onChange={(e) => handleChange(e, setNewSchoolClass)}
                             />
                         </div>
@@ -122,15 +121,7 @@ const SchoolClassList = () => {
                                     {editSchoolClass && editSchoolClass.id === schoolClass.id ? (
                                         <>
                                             <div className="mb-2">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    name="name"
-                                                    value={editSchoolClass.name}
-                                                    onChange={(e) => handleChange(e, setEditSchoolClass)}
-                                                />
-                                            </div>
-                                            <div className="mb-2">
+                                                <p>Year: </p>
                                                 <input
                                                     type="number" //TODO
                                                     className="form-control"
@@ -139,11 +130,20 @@ const SchoolClassList = () => {
                                                     onChange={(e) => handleChange(e, setEditSchoolClass)}
                                                 />
                                             </div>
+                                            <div className="mb-2">
+                                                <p>Name: </p>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name="name"
+                                                    value={editSchoolClass.name}
+                                                    onChange={(e) => handleChange(e, setEditSchoolClass)}
+                                                />
+                                            </div>
                                         </>
                                     ) : (
                                         <>
-                                            <span className="d-block mb-1">{schoolClass.name}</span>
-                                            <span>{schoolClass.year}</span>
+                                            <span className="d-block mb-1">{schoolClass.year}: {schoolClass.name}</span>
                                         </>
                                     )}
                                 </div>
@@ -153,14 +153,14 @@ const SchoolClassList = () => {
                                             Save
                                         </button>
                                     ) : (
-                                        <button className="btn btn-sm btn-success me-1" onClick={() => handleEditSchoolClass(schoolClass)}>
+                                        <button className="btn btn-sm btn-primary me-1" onClick={() => handleEditSchoolClass(schoolClass)}>
                                             Edit
                                         </button>
                                     )}
-                                    <Link to={`/admin/school/${schoolId}/class/${schoolClass.id}`} className="btn btn-sm btn-primary me-1">Details</Link>
                                     <button className="btn btn-sm btn-danger me-1" onClick={() => handleDeleteSchoolClass(schoolClass.id)}>
                                         Delete
                                     </button>
+                                    <Link to={`/admin/school/${schoolId}/class/${schoolClass.id}`} className="btn btn-sm btn-info text-white me-1">Details</Link>
                                 </div>
                             </div>
                         </li>

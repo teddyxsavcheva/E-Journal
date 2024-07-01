@@ -33,7 +33,7 @@
 
 /* Styling for badges */
 .badge {
-    cursor: pointer;
+    cursor: default;
     margin-right: 5px;
     padding: 4px 8px; /* Adjust padding for smaller badges */
 }
@@ -95,12 +95,20 @@
     width: 30%;
 }
 
+.edit {
+    width: 30%;
+}
+
 .add {
-    width: 50%;
+    width: 20%;
 }
 
 /* Optional: Adjust form select size */
 .form-select {
     font-size: 14px; /* Adjust font size for select dropdowns */
     padding: 5px; /* Adjust padding for select dropdowns */
+}
+
+.name{
+    text-decoration: none !important;
 }

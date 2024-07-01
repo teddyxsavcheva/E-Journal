@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {Link, useParams} from 'react-router-dom';
-import { fetchAllTeachersFromSchool, fetchAllDisciplines } from '../../functions/fetchFunctions';
-import useCurriculum from '../../functions/useCurriculum';
-import useTeachersAndDisciplines from '../../functions/useTeachersAndDisciplines';
+import { fetchAllTeachersFromSchool, fetchAllDisciplines } from '../functions/fetchFunctions';
+import useCurriculum from '../functions/useCurriculum';
+import useTeachersAndDisciplines from '../functions/useTeachersAndDisciplines';
 
 const Curriculum = () => {
     const { schoolId, classId, headmasterId } = useParams();
@@ -31,8 +31,6 @@ const Curriculum = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Curriculum Details</h2>
-
             {teachersAndDisciplines.length > 0 && (
                 <div className="card mt-4">
                     <h3 className="card-header">Teachers and Disciplines</h3>
@@ -48,7 +46,7 @@ const Curriculum = () => {
 
                                 return (
                                     <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>{teacher.name} - {discipline.name}</span>
+                                        <span>{discipline.name} - {teacher.name}</span>
                                         <div>
                                             <Link
                                                 to={`/headmaster/${headmasterId}/school/${schoolId}/school-class/${classId}/students-grades/teacher/${teacher.id}/discipline/${item.disciplineId}/absences`}

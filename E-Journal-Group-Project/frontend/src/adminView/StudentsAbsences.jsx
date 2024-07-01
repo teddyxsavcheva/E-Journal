@@ -14,12 +14,27 @@ const StudentsAbsences = () => {
     const [editingAbsence, setEditingAbsence] = useState(null);
     const [visibleAbsenceIds, setVisibleAbsenceIds] = useState({});
     const [editingAbsences, setEditingAbsences] = useState({});
+    const [editingAbsenceStatus, setEditingAbsenceStatus] = useState({});
     const [addingAbsences, setAddingAbsences] = useState({});
     const [addingAbsencesStatus, setAddingAbsencesStatus] = useState({});
     const [excusedAbsencesCount, setExcusedAbsencesCount] = useState({});
     const [notExcusedAbsencesCount, setNotExcusedAbsencesCount] = useState({});
+    const [selectedAbsences, setSelectedAbsences] = useState({});
 
-    // Fetch students in the class
+    useEffect(() => {
+        fetchStudents();
+        fetchAbsenceTypes();
+        fetchAbsenceStatuses();
+    }, [classId, teacherId, disciplineId]);
+
+    useEffect(() => {
+        if (students.length > 0) {
+            students.forEach(student => {
+                fetchAbsences(student.id);
+            });
+        }
+    }, [students, disciplineId]);
+
     const fetchStudents = async () => {
         try {
             const response = await axios.get(`/students/school-class/${classId}`);
@@ -30,43 +45,43 @@ const StudentsAbsences = () => {
         }
     };
 
-    // Fetch absences for each student
     const fetchAbsences = async (studentId) => {
         try {
             const response = await axios.get(`/students/${studentId}/discipline/${disciplineId}/absences`);
             const studentAbsences = response.data;
 
-            // Update absences and counts for the specific student
-            setAbsences(prevAbsences => ({
-                ...prevAbsences,
-                [studentId]: studentAbsences
-            }));
+            setAbsences(prevAbsences => {
+                const updatedAbsences = { ...prevAbsences, [studentId]: studentAbsences };
+                fetchAbsenceCount(studentId);
 
-            const counts = calculateAbsenceCounts(studentAbsences);
-
-            setExcusedAbsencesCount(prevCounts => ({
-                ...prevCounts,
-                [studentId]: counts.excusedCount
-            }));
-
-            setNotExcusedAbsencesCount(prevCounts => ({
-                ...prevCounts,
-                [studentId]: counts.notExcusedCount
-            }));
+                return updatedAbsences;
+            });
         } catch (error) {
             setError('Error fetching absences');
             console.error('Error fetching absences:', error);
         }
     };
 
-    // Calculate absence counts based on status
-    const calculateAbsenceCounts = (absences) => {
-        const excusedCount = absences.filter(absence => absence.absenceStatusId === 1).length;
-        const notExcusedCount = absences.filter(absence => absence.absenceStatusId === 2).length;
-        return { excusedCount, notExcusedCount };
+    const fetchAbsenceCount = async (studentId) => {
+        try {
+            const response = await axios.get(`/students/${studentId}/disciplines/${disciplineId}/absences`);
+            const [excusedCount, notExcusedCount] = response.data;
+
+            setExcusedAbsencesCount(prevCounts => ({
+                ...prevCounts,
+                [studentId]: excusedCount
+            }));
+
+            setNotExcusedAbsencesCount(prevCounts => ({
+                ...prevCounts,
+                [studentId]: notExcusedCount
+            }));
+        } catch (error) {
+            setError('Error fetching absence counts');
+            console.error('Error fetching absence counts:', error);
+        }
     };
 
-    // Fetch all absence types
     const fetchAbsenceTypes = async () => {
         try {
             const response = await axios.get('/absenceTypes/');
@@ -77,7 +92,6 @@ const StudentsAbsences = () => {
         }
     };
 
-    // Fetch all absence statuses
     const fetchAbsenceStatuses = async () => {
         try {
             const response = await axios.get('/absenceStatuses/');
@@ -88,21 +102,6 @@ const StudentsAbsences = () => {
         }
     };
 
-    // Fetch initial data on component mount
-    useEffect(() => {
-        fetchStudents();
-        fetchAbsenceTypes();
-        fetchAbsenceStatuses();
-    }, [classId, teacherId, disciplineId]);
-
-    // Effect to fetch absences whenever students or disciplineId change
-    useEffect(() => {
-        students.forEach(student => {
-            fetchAbsences(student.id);
-        });
-    }, [students, disciplineId]);
-
-    // Add absence to a student
     const handleAddAbsence = async (event, studentId) => {
         event.preventDefault();
         try {
@@ -113,75 +112,54 @@ const StudentsAbsences = () => {
             setSuccessMessage('Absence added successfully!');
             setTimeout(() => setSuccessMessage(''), 3000);
 
-            // Clear the form state
             setAddingAbsences(prevState => ({ ...prevState, [studentId]: '' }));
             setAddingAbsencesStatus(prevState => ({ ...prevState, [studentId]: '' }));
 
-            // Fetch updated absences and recalculate counts
             fetchAbsences(studentId);
+            fetchAbsenceCount(studentId);
         } catch (error) {
             setError('Error adding absence');
             console.error('Error adding absence:', error);
         }
     };
 
-    // Remove absence from a student
-    const handleRemoveAbsence = async (absenceId) => {
+    const handleRemoveAbsence = async (absenceId, studentId) => {
         try {
             await axios.delete(`/absences/${absenceId}`);
 
             setSuccessMessage('Absence removed successfully!');
             setTimeout(() => setSuccessMessage(''), 3000);
 
-            // Update local state to remove the deleted absence
-            const updatedAbsences = { ...absences };
-            Object.keys(updatedAbsences).forEach(studentId => {
-                updatedAbsences[studentId] = updatedAbsences[studentId].filter(absence => absence.id !== absenceId);
-            });
-            setAbsences(updatedAbsences);
+            fetchAbsences(studentId);
+            fetchAbsenceCount(studentId);
 
-            // Recalculate counts after removal
-            students.forEach(student => {
-                const counts = calculateAbsenceCounts(updatedAbsences[student.id] || []);
-                setExcusedAbsencesCount(prevCounts => ({
-                    ...prevCounts,
-                    [student.id]: counts.excusedCount
-                }));
-                setNotExcusedAbsencesCount(prevCounts => ({
-                    ...prevCounts,
-                    [student.id]: counts.notExcusedCount
-                }));
-            });
-
-            // Optionally, update visibleAbsenceIds if needed
             setVisibleAbsenceIds(prevState => {
                 const updatedVisibleAbsenceIds = { ...prevState };
                 delete updatedVisibleAbsenceIds[absenceId];
                 return updatedVisibleAbsenceIds;
             });
+
+            setSelectedAbsences({});
         } catch (error) {
             setError('Error removing absence');
             console.error('Error removing absence:', error);
         }
     };
 
-    // Start editing an absence
     const handleEditAbsence = (absence) => {
         setEditingAbsence(absence);
         setEditingAbsences(prevState => ({ ...prevState, [absence.studentId]: absence.absenceTypeId }));
+        setEditingAbsenceStatus(prevState => ({ ...prevState, [absence.studentId]: absence.absenceStatusId }));
         setVisibleAbsenceIds(prevState => ({ ...prevState, [absence.id]: true }));
     };
 
-    // Save edited absence
     const handleSaveAbsence = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.get(`/absences/${editingAbsence.id}`);
-            const existingAbsence = response.data;
-
             const updatedAbsence = {
-                ...existingAbsence,
-                absenceTypeId: parseInt(editingAbsences[editingAbsence.studentId], 10)
+                ...editingAbsence,
+                absenceTypeId: parseInt(editingAbsences[editingAbsence.studentId], 10),
+                absenceStatusId: parseInt(editingAbsenceStatus[editingAbsence.studentId], 10)
             };
 
             await axios.put(`/absences/${editingAbsence.id}`, updatedAbsence);
@@ -189,37 +167,55 @@ const StudentsAbsences = () => {
             setSuccessMessage('Absence updated successfully!');
             setTimeout(() => setSuccessMessage(''), 3000);
 
-            // Clear state and update visibility
             setEditingAbsences(prevState => ({ ...prevState, [editingAbsence.studentId]: '' }));
+            setEditingAbsenceStatus(prevState => ({ ...prevState, [editingAbsence.studentId]: '' }));
             setEditingAbsence(null);
             setVisibleAbsenceIds(prevState => ({ ...prevState, [editingAbsence.id]: false }));
 
-            // Fetch updated absences and recalculate counts
             fetchAbsences(editingAbsence.studentId);
+            setSelectedAbsences({});
         } catch (error) {
             setError('Error updating absence');
             console.error('Error updating absence:', error);
         }
     };
 
-    // Handle absence selection change for editing
     const handleEditAbsenceChange = (studentId, value) => {
         setEditingAbsences(prevState => ({ ...prevState, [studentId]: value }));
     };
 
-    // Handle absence selection change for adding
+    const handleEditAbsenceStatusChange = (studentId, value) => {
+        setEditingAbsenceStatus(prevState => ({ ...prevState, [studentId]: value }));
+    };
+
     const handleAddAbsenceChange = (studentId, value) => {
         setAddingAbsences(prevState => ({ ...prevState, [studentId]: value }));
     };
 
-    // Toggle visibility of absence details
     const toggleAbsenceVisibility = (absenceId) => {
         setVisibleAbsenceIds(prevState => ({ ...prevState, [absenceId]: !prevState[absenceId] }));
     };
 
+    const handleAbsenceClick = (studentId, absenceStatusId) => {
+        const filteredAbsences = absences[studentId].filter(absence => absence.absenceStatusId === absenceStatusId);
+        setSelectedAbsences(prevState => ({
+            ...prevState,
+            [studentId]: prevState[studentId]?.[absenceStatusId] ? null : { [absenceStatusId]: filteredAbsences }
+        }));
+    };
+
+    const getAbsenceTypeName = (absenceTypeId) => {
+        const absenceType = absenceTypes.find(type => type.id == absenceTypeId);
+        return absenceType ? absenceType.absenceTypeEnum : 'Unknown Type';
+    };
+
+    const getAbsenceStatusName = (absenceStatusId) => {
+        const absenceStatus = absenceStatuses.find(status => status.id == absenceStatusId);
+        return absenceStatus ? absenceStatus.absenceStatusEnum : 'Unknown Status';
+    };
+
     return (
         <div className="container mt-4">
-            <h2>Absences for Class ID: {classId}, Teacher ID: {teacherId}, Discipline ID: {disciplineId}</h2>
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
@@ -231,48 +227,160 @@ const StudentsAbsences = () => {
                     <th>Student</th>
                     <th>Excused</th>
                     <th>Not Excused</th>
-                    <th>Current Absence</th>
+                    <th>Add Absence</th>
                 </tr>
                 </thead>
                 <tbody>
                 {students.length > 0 ? (
                     students.map((student) => (
-                        <tr key={student.id}>
-                            <td className="name">{student.name}</td>
-                            <td>{excusedAbsencesCount[student.id] || 0}</td>
-                            <td>{notExcusedAbsencesCount[student.id] || 0}</td>
-                            <td className="add">
-                                <form onSubmit={(event) => handleAddAbsence(event, student.id)} className="add-grade-form">
-                                    <div className="form-group">
-                                        <select
-                                            className="form-select"
-                                            value={addingAbsences[student.id] || ''}
-                                            onChange={(e) => handleAddAbsenceChange(student.id, e.target.value)}
-                                            required
-                                        >
-                                            <option value="">Select Absence Type</option>
-                                            {absenceTypes.map((absence) => (
-                                                <option key={absence.id} value={absence.id}>{absence.absenceTypeEnum}</option>
-                                            ))}
-                                        </select>
+                        <React.Fragment key={student.id}>
+                            <tr>
+                                <td className="student m-3">{student.name}</td>
+                                <td className="name" onClick={() => handleAbsenceClick(student.id, 1)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                                    {excusedAbsencesCount[student.id] || 0}
+                                </td>
+                                <td className="name" onClick={() => handleAbsenceClick(student.id, 2)} style={{ cursor: 'pointer', color: 'red', textDecoration: 'underline' }}>
+                                    {notExcusedAbsencesCount[student.id] || 0}
+                                </td>
+                                <td className="add">
+                                    <form onSubmit={(event) => handleAddAbsence(event, student.id)} className="add-grade-form">
+                                        <div className="form-group">
+                                            <select
+                                                className="form-select m-1"
+                                                value={addingAbsences[student.id] || ''}
+                                                onChange={(e) => handleAddAbsenceChange(student.id, e.target.value)}
+                                                required
+                                            >
+                                                <option value="">Select Type</option>
+                                                {absenceTypes.map((absence) => (
+                                                    <option key={absence.id} value={absence.id}>{absence.absenceTypeEnum}</option>
+                                                ))}
+                                            </select>
 
-                                        <select
-                                            className="form-select"
-                                            value={addingAbsencesStatus[student.id] || ''}
-                                            onChange={(e) => setAddingAbsencesStatus(prevState => ({ ...prevState, [student.id]: e.target.value }))}
-                                            required
-                                        >
-                                            <option value="">Select Absence Status</option>
-                                            {absenceStatuses.map((status) => (
-                                                <option key={status.id} value={status.id}>{status.absenceStatusEnum}</option>
-                                            ))}
-                                        </select>
+                                            <select
+                                                className="form-select m-1"
+                                                value={addingAbsencesStatus[student.id] || ''}
+                                                onChange={(e) => setAddingAbsencesStatus(prevState => ({ ...prevState, [student.id]: e.target.value }))}
+                                                required
+                                            >
+                                                <option value="">Select Status</option>
+                                                {absenceStatuses.map((status) => (
+                                                    <option key={status.id} value={status.id}>{status.absenceStatusEnum}</option>
+                                                ))}
+                                            </select>
 
-                                        <button type="submit" className="btn btn-primary add-absence-btn">Add</button>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
+                                            <button type="submit" className="btn btn-success add-absence-btn">Add</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            {selectedAbsences[student.id] && selectedAbsences[student.id][1] && (
+                                <tr className="absence-details-row">
+                                    <td colSpan="4">
+                                        <ul className="absence-list">
+                                            {selectedAbsences[student.id][1].map(absence => (
+                                                <li className="absence-item" key={absence.id}>
+                                                    <div className="absence-info">
+                                                        {getAbsenceTypeName(absence.absenceTypeId)} : {absence.dateOfIssue}
+                                                    </div>
+                                                    <div className="absence-actions">
+                                                        {!visibleAbsenceIds[absence.id] && (
+                                                            <>
+                                                                <button onClick={() => handleEditAbsence(absence)} className="btn btn-primary btn-sm ms-2">Edit</button>
+                                                                <button onClick={() => handleRemoveAbsence(absence.id, student.id)} className="btn btn-danger btn-sm ms-2">Remove</button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                    {visibleAbsenceIds[absence.id] && (
+                                                        <form onSubmit={handleSaveAbsence} className="edit-absence-form mt-2">
+                                                            <select
+                                                                className="form-select"
+                                                                value={editingAbsences[absence.studentId] || ''}
+                                                                onChange={(e) => handleEditAbsenceChange(absence.studentId, e.target.value)}
+                                                                required
+                                                            >
+                                                                <option value="">Select Absence Type</option>
+                                                                {absenceTypes.map((absenceType) => (
+                                                                    <option key={absenceType.id} value={absenceType.id}>{absenceType.absenceTypeEnum}</option>
+                                                                ))}
+                                                            </select>
+
+                                                            <select
+                                                                className="form-select"
+                                                                value={editingAbsenceStatus[absence.studentId] || ''}
+                                                                onChange={(e) => handleEditAbsenceStatusChange(absence.studentId, e.target.value)}
+                                                                required
+                                                            >
+                                                                <option value="">Select Absence Status</option>
+                                                                {absenceStatuses.map((status) => (
+                                                                    <option key={status.id} value={status.id}>{status.absenceStatusEnum}</option>
+                                                                ))}
+                                                            </select>
+
+                                                            <button type="submit" className="btn btn-success btn-sm">Save</button>
+                                                        </form>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            )}
+
+                            {selectedAbsences[student.id] && selectedAbsences[student.id][2] && (
+                                <tr className="absence-details-row">
+                                    <td colSpan="4">
+                                        <ul className="absence-list">
+                                            {selectedAbsences[student.id][2].map(absence => (
+                                                <li className="absence-item" key={absence.id}>
+                                                    <div className="absence-info">
+                                                        {getAbsenceTypeName(absence.absenceTypeId)} : {absence.dateOfIssue}
+                                                    </div>
+                                                    <div className="absence-actions">
+                                                        {!visibleAbsenceIds[absence.id] && (
+                                                            <>
+                                                                <button onClick={() => handleEditAbsence(absence)} className="btn btn-primary btn-sm ms-2">Edit</button>
+                                                                <button onClick={() => handleRemoveAbsence(absence.id, student.id)} className="btn btn-danger btn-sm ms-2">Remove</button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                    {visibleAbsenceIds[absence.id] && (
+                                                        <form onSubmit={handleSaveAbsence} className="edit-absence-form mt-2">
+                                                            <select
+                                                                className="form-select"
+                                                                value={editingAbsences[absence.studentId] || ''}
+                                                                onChange={(e) => handleEditAbsenceChange(absence.studentId, e.target.value)}
+                                                                required
+                                                            >
+                                                                <option value="">Select Absence Type</option>
+                                                                {absenceTypes.map((absenceType) => (
+                                                                    <option key={absenceType.id} value={absenceType.id}>{absenceType.absenceTypeEnum}</option>
+                                                                ))}
+                                                            </select>
+
+                                                            <select
+                                                                className="form-select"
+                                                                value={editingAbsenceStatus[absence.studentId] || ''}
+                                                                onChange={(e) => handleEditAbsenceStatusChange(absence.studentId, e.target.value)}
+                                                                required
+                                                            >
+                                                                <option value="">Select Absence Status</option>
+                                                                {absenceStatuses.map((status) => (
+                                                                    <option key={status.id} value={status.id}>{status.absenceStatusEnum}</option>
+                                                                ))}
+                                                            </select>
+
+                                                            <button type="submit" className="btn btn-success btn-sm">Save</button>
+                                                        </form>
+                                                    )}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            )}
+
+                        </React.Fragment>
                     ))
                 ) : (
                     <tr>

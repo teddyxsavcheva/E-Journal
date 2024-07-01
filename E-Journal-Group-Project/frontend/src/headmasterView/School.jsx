@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../axiosInstance';
+import axios from '../axiosInstance';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const School = () => {
@@ -63,7 +63,6 @@ const School = () => {
 
     return (
         <div className="container mt-4">
-            <h2>School Details</h2>
             {error && <div className="alert alert-danger">Error: {error.message}</div>}
             {school ? (
                 <div className="card">

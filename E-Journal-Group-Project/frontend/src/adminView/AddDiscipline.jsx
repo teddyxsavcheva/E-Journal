@@ -130,6 +130,10 @@ const DisciplineManagement = () => {
         }
     };
 
+    const handleCancelEdit = () => {
+        setEditDiscipline(null);
+    };
+
     const handleDeleteDiscipline = async (disciplineId) => {
         if (window.confirm('Are you sure you want to delete this discipline?')) {
             try {
@@ -218,7 +222,7 @@ const DisciplineManagement = () => {
                             </select>
                         </div>
 
-                        <button className="btn btn-primary" onClick={handleAddDiscipline}>
+                        <button className="btn btn-success" onClick={handleAddDiscipline}>
                             Add Discipline
                         </button>
                     </div>
@@ -263,25 +267,30 @@ const DisciplineManagement = () => {
                                             <span className="d-block mb-1">{discipline.name}</span>
                                             <span>
                                                 {disciplineTypes.find((type) => type.id === discipline.disciplineTypeId)?.disciplineType}
-</span>
+                                            </span>
                                         </>
                                     )}
                                 </div>
                                 <div>
                                     {editDiscipline && editDiscipline.id === discipline.id ? (
-                                        <button className="btn btn-sm btn-success me-1" onClick={handleSaveDiscipline}>
-                                            Save
-                                        </button>
+                                        <>
+                                            <button className="btn btn-sm btn-success me-2" onClick={handleSaveDiscipline}>
+                                                Save
+                                            </button>
+                                            <button className="btn btn-sm btn-secondary me-2" onClick={handleCancelEdit}>
+                                                Cancel
+                                            </button>
+                                        </>
                                     ) : (
-                                        <button className="btn btn-sm btn-success me-1" onClick={() => handleEditDiscipline(discipline)}>
+                                        <button className="btn btn-sm btn-primary me-2" onClick={() => handleEditDiscipline(discipline)}>
                                             Edit
                                         </button>
                                     )}
-                                    <button className="btn btn-sm btn-danger me-1" onClick={() => handleDeleteDiscipline(discipline.id)}>
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteDiscipline(discipline.id)}>
                                         Delete
                                     </button>
                                     <button
-                                        className="btn btn-sm btn-secondary me-1"
+                                        className="btn btn-sm btn-secondary me-2"
                                         onClick={() => toggleQualifications(discipline.id)}
                                     >
                                         {showQualifications[discipline.id] ? 'Hide Qualifications' : 'Show Qualifications'}
