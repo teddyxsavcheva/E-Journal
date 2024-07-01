@@ -233,12 +233,136 @@ public class StudentCurriculumHasTeacherAndDisciplineTests {
     }
 
     @Test
-    void service_deleteCurriculumHasTeacherAndDiscipline() {
+    void service_deleteCurriculumHasTeacherAndDiscipline_returnsVoid() {
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.of(program1));
 
         service.deleteCurriculumHasTeacherAndDiscipline(id);
 
         verify(repository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void service_getAllCurriculumTeacherDisciplineByStudCurr_returnsDtoList() {
+        Long curriculumId = 1L;
+
+        StudentCurriculumHasTeacherAndDiscipline sctd1 = new StudentCurriculumHasTeacherAndDiscipline();
+        StudentCurriculumHasTeacherAndDiscipline sctd2 = new StudentCurriculumHasTeacherAndDiscipline();
+        when(repository.findAllByStudentCurriculumId(curriculumId)).thenReturn(Arrays.asList(sctd1, sctd2));
+
+        StudentCurriculumHasTeacherAndDisciplineDto dto1 = new StudentCurriculumHasTeacherAndDisciplineDto();
+        StudentCurriculumHasTeacherAndDisciplineDto dto2 = new StudentCurriculumHasTeacherAndDisciplineDto();
+        when(mapper.convertToDto(sctd1)).thenReturn(dto1);
+        when(mapper.convertToDto(sctd2)).thenReturn(dto2);
+
+        List<StudentCurriculumHasTeacherAndDisciplineDto> result = service.getAllCurriculumTeacherDisciplineByStudCurr(curriculumId);
+
+        assertEquals(2, result.size());
+        assertEquals(dto1, result.get(0));
+        assertEquals(dto2, result.get(1));
+        verify(repository, times(1)).findAllByStudentCurriculumId(curriculumId);
+        verify(mapper, times(1)).convertToDto(sctd1);
+        verify(mapper, times(1)).convertToDto(sctd2);
+    }
+
+    @Test
+    void service_getAllCurriculumTeacherDisciplineByStudCurr_returnsEmptyList() {
+        Long curriculumId = 1L;
+
+        when(repository.findAllByStudentCurriculumId(curriculumId)).thenReturn(Collections.emptyList());
+
+        List<StudentCurriculumHasTeacherAndDisciplineDto> result = service.getAllCurriculumTeacherDisciplineByStudCurr(curriculumId);
+
+        assertEquals(0, result.size());
+        verify(repository, times(1)).findAllByStudentCurriculumId(curriculumId);
+        verifyNoInteractions(mapper);
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsValidDto() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(1L);
+        dto.setTeacherId(1L);
+        dto.setCurriculumId(1L);
+
+        assertDoesNotThrow(() -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsNullDisciplineId() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(null);
+        dto.setTeacherId(1L);
+        dto.setCurriculumId(1L);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+        String expectedMessage = "The discipline id cannot be null or zero.";
+        String actualMessage = exception.getMessage();
+        assert actualMessage.contains(expectedMessage);
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsZeroDisciplineId() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(0L);
+        dto.setTeacherId(1L);
+        dto.setCurriculumId(1L);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+        String expectedMessage = "The discipline id cannot be null or zero.";
+        String actualMessage = exception.getMessage();
+        assert actualMessage.contains(expectedMessage);
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsNullTeacherId() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(1L);
+        dto.setTeacherId(null);
+        dto.setCurriculumId(1L);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+        String expectedMessage = "The teacher id cannot be null or zero.";
+        String actualMessage = exception.getMessage();
+        assert actualMessage.contains(expectedMessage);
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsZeroTeacherId() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(1L);
+        dto.setTeacherId(0L);
+        dto.setCurriculumId(1L);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+        String expectedMessage = "The teacher id cannot be null or zero.";
+        String actualMessage = exception.getMessage();
+        assert actualMessage.contains(expectedMessage);
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsNullCurriculumId() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(1L);
+        dto.setTeacherId(1L);
+        dto.setCurriculumId(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+        String expectedMessage = "The curriculum id cannot be null or zero.";
+        String actualMessage = exception.getMessage();
+        assert actualMessage.contains(expectedMessage);
+    }
+
+    @Test
+    void service_validateCurriculumHasTeacherAndDisciplineDto_returnsZeroCurriculumId() {
+        StudentCurriculumHasTeacherAndDisciplineDto dto = new StudentCurriculumHasTeacherAndDisciplineDto();
+        dto.setDisciplineId(1L);
+        dto.setTeacherId(1L);
+        dto.setCurriculumId(0L);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> service.validateCurriculumHasTeacherAndDisciplineDto(dto));
+        String expectedMessage = "The curriculum id cannot be null or zero.";
+        String actualMessage = exception.getMessage();
+        assert actualMessage.contains(expectedMessage);
     }
 }

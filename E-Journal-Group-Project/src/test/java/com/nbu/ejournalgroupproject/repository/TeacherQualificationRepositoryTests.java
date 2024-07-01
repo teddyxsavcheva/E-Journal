@@ -69,7 +69,7 @@ public class TeacherQualificationRepositoryTests {
 
     @Test
     public void teacherQualificationRepo_findById_throwsEntityNotFoundException() {
-        Long notFoundId = 10L;
+        Long notFoundId = 10000L;
         assertThrows(EntityNotFoundException.class, () ->
                 teacherQualificationRepository.findById(notFoundId)
                 .orElseThrow(EntityNotFoundException::new)
