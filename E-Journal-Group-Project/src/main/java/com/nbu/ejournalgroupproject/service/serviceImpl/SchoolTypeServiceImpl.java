@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
     private SchoolTypeRepository schoolTypeRepository;
     private SchoolTypeMapper schoolTypeMapper;
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<SchoolTypeDTO> getAllSchoolTypes() {
         List<SchoolType> schoolTypes = schoolTypeRepository.findAll();
@@ -28,6 +30,7 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public SchoolTypeDTO getSchoolTypeById(Long id) {
         SchoolType schoolType = schoolTypeRepository.findById(id)
@@ -35,6 +38,7 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
         return schoolTypeMapper.mapEntityToDto(schoolType);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolTypeDTO createSchoolType(@Valid SchoolTypeDTO schoolTypeDTO) {
 //        validateSchoolTypeDTO(schoolTypeDTO);
@@ -44,6 +48,7 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolTypeDTO updateSchoolType(@NotNull Long id, @Valid SchoolTypeDTO schoolTypeDTO) {
 //        validateSchoolTypeDTO(schoolTypeDTO);
@@ -57,6 +62,7 @@ public class SchoolTypeServiceImpl implements SchoolTypeService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteSchoolType(Long id) {
         SchoolType schoolType = schoolTypeRepository.findById(id)

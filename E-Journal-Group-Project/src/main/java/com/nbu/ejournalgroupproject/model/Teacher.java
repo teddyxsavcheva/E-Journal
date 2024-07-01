@@ -1,5 +1,6 @@
 package com.nbu.ejournalgroupproject.model;
 
+import com.nbu.ejournalgroupproject.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,10 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @NotBlank(message = "Name cannot be null")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")

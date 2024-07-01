@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class SchoolServiceImpl implements SchoolService {
     private final SchoolTypeRepository schoolTypeRepository;
     private final SchoolMapper schoolMapper;
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<SchoolDTO> getSchools() {
         List<School> schools = schoolRepository.findAll();
@@ -32,6 +34,7 @@ public class SchoolServiceImpl implements SchoolService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public SchoolDTO getSchool(Long id) {
         School school = schoolRepository.findById(id)
@@ -39,6 +42,7 @@ public class SchoolServiceImpl implements SchoolService {
         return schoolMapper.mapEntityToDto(school);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolDTO createSchool(@Valid SchoolDTO schoolDTO) {
         validateSchoolDTO(schoolDTO);
@@ -46,6 +50,7 @@ public class SchoolServiceImpl implements SchoolService {
         return schoolMapper.mapEntityToDto(schoolRepository.save(school));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public SchoolDTO updateSchool(@NotNull Long id, @Valid SchoolDTO newSchool) {
         validateSchoolDTO(newSchool);
@@ -62,6 +67,7 @@ public class SchoolServiceImpl implements SchoolService {
         return schoolMapper.mapEntityToDto(updatedSchool);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteSchool(Long schoolId) {
         School school = schoolRepository.findById(schoolId)

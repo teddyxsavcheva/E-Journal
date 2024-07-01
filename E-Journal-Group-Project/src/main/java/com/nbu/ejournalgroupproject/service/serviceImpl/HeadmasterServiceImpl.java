@@ -4,13 +4,16 @@ import com.nbu.ejournalgroupproject.dto.HeadmasterDTO;
 import com.nbu.ejournalgroupproject.mappers.HeadmasterMapper;
 import com.nbu.ejournalgroupproject.model.Headmaster;
 import com.nbu.ejournalgroupproject.model.School;
+import com.nbu.ejournalgroupproject.model.user.User;
 import com.nbu.ejournalgroupproject.repository.HeadmasterRepository;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
+import com.nbu.ejournalgroupproject.repository.UserRepository;
 import com.nbu.ejournalgroupproject.service.HeadmasterService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +28,9 @@ public class HeadmasterServiceImpl implements HeadmasterService {
     private final SchoolRepository schoolRepository;
 
     private final HeadmasterMapper headmasterMapper;
+    private final UserRepository userRepository;
 
-
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<HeadmasterDTO> getHeadmasters() {
         List<Headmaster> headmasters = headmasterRepository.findAll();
@@ -36,6 +40,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public HeadmasterDTO getHeadmaster(Long id) {
         Headmaster headmaster = headmasterRepository.findById(id)
@@ -43,12 +48,14 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         return headmasterMapper.mapEntityToDto(headmaster);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public HeadmasterDTO getHeadmasterBySchoolID(Long id) {
        Headmaster headmaster = headmasterRepository.findBySchoolId(id);
        return headmasterMapper.mapEntityToDto(headmaster);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public HeadmasterDTO createHeadmaster(@Valid HeadmasterDTO headmasterDTO) {
         validateHeadmasterDTO(headmasterDTO);
@@ -56,6 +63,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(headmaster));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public HeadmasterDTO updateHeadmaster(@NotNull Long id, @Valid HeadmasterDTO newHeadmaster) {
         validateHeadmasterDTO(newHeadmaster);
@@ -67,6 +75,11 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         existingHeadmaster.setEmail(newHeadmaster.getEmail());
 
         updateHeadmasterSchool(existingHeadmaster, newHeadmaster);
+
+        // Checking for user
+        User user = userRepository.findById(newHeadmaster.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + newHeadmaster.getUserId() + " not found"));
+        existingHeadmaster.setUser(user);
 
         return headmasterMapper.mapEntityToDto(headmasterRepository.save(existingHeadmaster));
     }
@@ -80,6 +93,7 @@ public class HeadmasterServiceImpl implements HeadmasterService {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteHeadmaster(Long id) {
         Headmaster headmaster = headmasterRepository.findById(id)

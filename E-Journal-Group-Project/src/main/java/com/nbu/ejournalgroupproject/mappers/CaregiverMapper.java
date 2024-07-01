@@ -1,9 +1,13 @@
 package com.nbu.ejournalgroupproject.mappers;
 
 import com.nbu.ejournalgroupproject.dto.CaregiverDTO;
+import com.nbu.ejournalgroupproject.dto.TeacherDTO;
 import com.nbu.ejournalgroupproject.model.Caregiver;
 import com.nbu.ejournalgroupproject.model.Student;
+import com.nbu.ejournalgroupproject.model.Teacher;
+import com.nbu.ejournalgroupproject.model.user.User;
 import com.nbu.ejournalgroupproject.repository.StudentRepository;
+import com.nbu.ejournalgroupproject.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 public class CaregiverMapper {
 
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
 
     public CaregiverDTO toDTO(Caregiver caregiver) {
         CaregiverDTO caregiverDTO = new CaregiverDTO();
@@ -28,6 +33,10 @@ public class CaregiverMapper {
                 .map(Student::getId)
                 .collect(Collectors.toSet());
         caregiverDTO.setStudentIds(studentIds);
+
+        // Checking if the user exists
+       caregiverDTO.setUserId(getUserId(caregiver));
+
         return caregiverDTO;
     }
 
@@ -46,6 +55,22 @@ public class CaregiverMapper {
             caregiver.setStudents(new HashSet<>(students));
         }
 
+        // Checking if the user exists
+        caregiver.setUser(getUser(caregiverDTO));
+
         return caregiver;
+    }
+
+    public Long getUserId(Caregiver caregiver) {
+        return caregiver.getUser() != null ? caregiver.getUser().getId() : null;
+    }
+
+    public User getUser(CaregiverDTO caregiverDTO) {
+        if (caregiverDTO.getUserId() != null) {
+            return userRepository.findById(caregiverDTO.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException("No User found with id " + caregiverDTO.getUserId()));
+        } else {
+            return null;
+        }
     }
 }
