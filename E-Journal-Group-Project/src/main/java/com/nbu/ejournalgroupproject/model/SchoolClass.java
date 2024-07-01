@@ -29,7 +29,7 @@ public class SchoolClass {
     private String name;
 
     @Min(value = 2000, message = "Year must be greater than or equal to 2000")
-    @Column(name = "year")
+    @Column(name = "years")
     private int year;
 
     @NotNull(message = "School ID cannot be null")

@@ -28,7 +28,7 @@ public class StudentCurriculum {
 
     @Min(value = 1, message = "Year must be at least 1")
     @Max(value = 12, message = "Year must be at most 12")
-    @Column(name = "year")
+    @Column(name = "years")
     private int year;
 
     @NotNull(message = "School class cannot be null")
