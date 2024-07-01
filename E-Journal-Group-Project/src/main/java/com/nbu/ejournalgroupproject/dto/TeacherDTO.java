@@ -2,6 +2,7 @@ package com.nbu.ejournalgroupproject.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,8 @@ public class TeacherDTO{
     @Email(message = "Email should be valid")
     private String email;
 
-    private Long schoolId; //TODO notnull?
+    @NotNull(message = "School ID cannot be null")
+    private Long schoolId;
 
     private List<Long> teacherQualificationIds;
 
