@@ -2,19 +2,19 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from '../axiosInstance';
 import {Link, useParams} from 'react-router-dom';
 
-const useSchoolClasses = (schoolId) => {
+const useSchoolClasses = (teacherId) => {
     const [schoolClasses, setSchoolClasses] = useState([]);
     const [error, setError] = useState(null);
 
     const fetchSchoolClasses = useCallback(async () => {
         try {
-            const response = await axios.get(`/school-class/school-id/${schoolId}`);
+            const response = await axios.get(`/school-class/teacher/${teacherId}`);
             setSchoolClasses(response.data);
         } catch (error) {
             setError(error);
             console.error('There was an error fetching the school Classes!', error);
         }
-    }, [schoolId]);
+    }, [teacherId]);
 
     useEffect(() => {
         fetchSchoolClasses();
@@ -23,17 +23,17 @@ const useSchoolClasses = (schoolId) => {
     return { schoolClasses, error, fetchSchoolClasses };
 };
 
-const SchoolClasses = () => {
-    const { schoolId, headmasterId } = useParams();
-    const { schoolClasses, error, fetchSchoolClasses } = useSchoolClasses(schoolId);
+const TSchoolClasses = () => {
+    const { schoolId, teacherId } = useParams();
+    const { schoolClasses, error, fetchSchoolClasses } = useSchoolClasses(teacherId);
 
     return (
         <div className="container mt-4">
             <div className="mb-4">
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
-            <h1>School Classes</h1>
 
+            <h1>Classes</h1>
             <ul className="list-group">
                 {schoolClasses.length > 0 ? (
                     schoolClasses.map((schoolClass) => (
@@ -43,7 +43,7 @@ const SchoolClasses = () => {
                                             <span className="d-block mb-1">{schoolClass.year}: {schoolClass.name}</span>
                                 </div>
                                 <div className="actions">
-                                    <Link to={`/headmaster/${headmasterId}/school/${schoolId}/class/${schoolClass.id}`} className="btn btn-sm btn-primary me-1">Details</Link>
+                                    <Link to={`/teacher/${teacherId}/class/${schoolClass.id}`} className="btn btn-sm btn-primary me-1">Details</Link>
                                 </div>
                             </div>
                         </li>
@@ -56,4 +56,4 @@ const SchoolClasses = () => {
     );
 };
 
-export default SchoolClasses;
+export default TSchoolClasses;

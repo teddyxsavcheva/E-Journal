@@ -119,8 +119,7 @@ const Absences = () => {
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
-            <Link to={`/admin/school/${classId}/classes`} className="btn btn-secondary mb-4">Back to Class List</Link>
-
+            <h1>Absences</h1>
             <table className="table table-striped">
                 <thead>
                 <tr>

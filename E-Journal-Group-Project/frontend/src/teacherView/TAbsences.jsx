@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../axiosInstance';
 import { useParams, Link } from 'react-router-dom';
-import './StudentsAbsences.css'; // Import the CSS file
+import './Absences.css'; // Import the CSS file
 
-const StudentsAbsences = () => {
+const TAbsences = () => {
     const { classId, teacherId, disciplineId } = useParams();
     const [students, setStudents] = useState([]);
     const [absences, setAbsences] = useState({});
@@ -218,7 +218,7 @@ const StudentsAbsences = () => {
         <div className="container mt-4">
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
-
+            <h1>Absences</h1>
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -281,14 +281,14 @@ const StudentsAbsences = () => {
                                                     <div className="absence-info">
                                                         {getAbsenceTypeName(absence.absenceTypeId)} : {absence.dateOfIssue}
                                                     </div>
-                                                    <div className="absence-actions">
-                                                        {!visibleAbsenceIds[absence.id] && (
-                                                            <>
-                                                                <button onClick={() => handleEditAbsence(absence)} className="btn btn-primary btn-sm ms-2">Edit</button>
-                                                                <button onClick={() => handleRemoveAbsence(absence.id, student.id)} className="btn btn-danger btn-sm ms-2">Remove</button>
-                                                            </>
-                                                        )}
-                                                    </div>
+                                                    {/*<div className="absence-actions">*/}
+                                                    {/*    {!visibleAbsenceIds[absence.id] && (*/}
+                                                    {/*        <>*/}
+                                                    {/*            <button onClick={() => handleEditAbsence(absence)} className="btn btn-primary btn-sm ms-2">Edit</button>*/}
+                                                    {/*            /!*<button onClick={() => handleRemoveAbsence(absence.id, student.id)} className="btn btn-danger btn-sm ms-2">Remove</button>*!/*/}
+                                                    {/*        </>*/}
+                                                    {/*    )}*/}
+                                                    {/*</div>*/}
                                                     {visibleAbsenceIds[absence.id] && (
                                                         <form onSubmit={handleSaveAbsence} className="edit-absence-form mt-2">
                                                             <select
@@ -336,25 +336,11 @@ const StudentsAbsences = () => {
                                                     </div>
                                                     <div className="absence-actions">
                                                         {!visibleAbsenceIds[absence.id] && (
-                                                            <>
-                                                                <button onClick={() => handleEditAbsence(absence)} className="btn btn-primary btn-sm ms-2">Edit</button>
-                                                                <button onClick={() => handleRemoveAbsence(absence.id, student.id)} className="btn btn-danger btn-sm ms-2">Remove</button>
-                                                            </>
+                                                            <button onClick={() => handleEditAbsence(absence)} className="btn btn-primary btn-sm ms-2">Excuse</button>
                                                         )}
                                                     </div>
                                                     {visibleAbsenceIds[absence.id] && (
                                                         <form onSubmit={handleSaveAbsence} className="edit-absence-form mt-2">
-                                                            <select
-                                                                className="form-select"
-                                                                value={editingAbsences[absence.studentId] || ''}
-                                                                onChange={(e) => handleEditAbsenceChange(absence.studentId, e.target.value)}
-                                                                required
-                                                            >
-                                                                <option value="">Select Absence Type</option>
-                                                                {absenceTypes.map((absenceType) => (
-                                                                    <option key={absenceType.id} value={absenceType.id}>{absenceType.absenceTypeEnum}</option>
-                                                                ))}
-                                                            </select>
 
                                                             <select
                                                                 className="form-select"
@@ -391,4 +377,4 @@ const StudentsAbsences = () => {
     );
 };
 
-export default StudentsAbsences;
+export default TAbsences;

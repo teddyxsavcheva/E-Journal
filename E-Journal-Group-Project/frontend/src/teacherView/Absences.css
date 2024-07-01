@@ -1,0 +1,96 @@
+.container {
+    margin-top: 20px;
+}
+
+.alert {
+    margin-top: 20px;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.add-grade-form {
+    display: flex;
+    align-items: center;
+}
+
+.add-absence-btn {
+    margin-left: 10px;
+}
+
+.absence-details-row {
+    background-color: #f9f9f9;
+}
+
+.absence-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.absence-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    width: 95%;
+}
+
+.absence-info {
+    flex: 1;
+}
+
+.absence-actions {
+    display: flex;
+    align-items: center;
+}
+
+.edit-absence-form {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.edit-absence-form .form-select {
+    margin-right: 10px;
+}
+
+/* Styling for specific cells in the table */
+td.student{
+    width: 25%;
+}
+
+.name {
+    cursor: pointer;
+    text-decoration: underline;
+    width: 15%;
+}
+
+td.add {
+    padding-top: 20px;
+    width: 60%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .add-grade-form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .add-absence-btn {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .absence-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .absence-info {
+        margin-bottom: 10px;
+    }
+}

@@ -33,6 +33,7 @@ const SchoolClassDetails = () => {
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
 
+            <h1>Caregivers</h1>
             <ul className="list-group">
                 {caregivers.length > 0 ? (
                     caregivers.map((caregiver) => (

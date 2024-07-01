@@ -1,61 +1,85 @@
 import React, { useState, useEffect } from 'react';
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import axios from '../axiosInstance';
 import { fetchAllTeachersFromSchool, fetchAllDisciplines } from '../functions/fetchFunctions';
 import useCurriculum from '../functions/useCurriculum';
 import useTeachersAndDisciplines from '../functions/useTeachersAndDisciplines';
 
-const Curriculum = () => {
-    const { schoolId, classId, headmasterId } = useParams();
+const TCurriculum = () => {
+    const { teacherId, classId } = useParams();
     const { curriculum, error, fetchCurriculum, setCurriculum } = useCurriculum(classId);
     const { teachersAndDisciplines, error: teachersError, fetchTeachersAndDisciplines } = useTeachersAndDisciplines(curriculum?.id);
     const [teachers, setTeachers] = useState([]);
+    const [teacher, setTeacher] = useState(null);
     const [disciplines, setDisciplines] = useState([]);
+    const [filteredDisciplines, setFilteredDisciplines] = useState([]);
     const [duplicateError, setDuplicateError] = useState('');
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchTeacher = async () => {
             try {
-                const fetchedTeachers = await fetchAllTeachersFromSchool(schoolId);
-                const fetchedDisciplines = await fetchAllDisciplines();
-                setTeachers(fetchedTeachers);
-                setDisciplines(fetchedDisciplines);
+                const response = await axios.get(`/teacher/${teacherId}`);
+                if (response.data) {
+                    setTeacher(response.data);
+                    console.log(response.data);
+                } else {
+                    setTeacher(null);
+                }
             } catch (error) {
-                console.error('Error fetching teachers and disciplines:', error);
+                console.error('There was an error fetching the teacher!', error);
+            }
+        };
+        fetchTeacher();
+    }, [teacherId]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (teacher && teacher.schoolId) {
+                try {
+                    const fetchedTeachers = await fetchAllTeachersFromSchool(teacher.schoolId);
+                    const fetchedDisciplines = await fetchAllDisciplines();
+                    setTeachers(fetchedTeachers);
+                    setDisciplines(fetchedDisciplines);
+
+                    const filtered = teachersAndDisciplines.filter(item => item.teacherId === parseInt(teacherId));
+                    setFilteredDisciplines(filtered);
+                } catch (error) {
+                    console.error('Error fetching teachers and disciplines:', error);
+                }
             }
         };
 
         fetchData();
-    }, [schoolId]);
+    }, [teacher, teachersAndDisciplines]);
 
     const findById = (id, array) => array.find(item => item.id === id);
 
     return (
         <div className="container mt-4">
-            {teachersAndDisciplines.length > 0 && (
+            {filteredDisciplines.length > 0 && (
                 <div className="card mt-4">
-                    <h3 className="card-header">Curriculum</h3>
+                    <h3 className="card-header">Disciplines for Teacher {teacher ? teacher.name : ''}</h3>
                     <div className="card-body">
                         <ul className="list-group">
-                            {teachersAndDisciplines.map((item) => {
-                                const teacher = findById(item.teacherId, teachers);
+                            {filteredDisciplines.map((item) => {
                                 const discipline = findById(item.disciplineId, disciplines);
 
-                                if (!teacher || !discipline) {
+                                if (!discipline) {
                                     return null;
                                 }
 
                                 return (
                                     <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>{discipline.name} - {teacher.name}</span>
+                                        <span>{discipline.name}</span>
                                         <div>
                                             <Link
-                                                to={`/headmaster/${headmasterId}/school/${schoolId}/school-class/${classId}/students-grades/teacher/${teacher.id}/discipline/${item.disciplineId}/absences`}
+                                                to={`/teacher/${teacher.id}/class/${classId}/discipline/${item.disciplineId}/absences`}
                                                 className="btn btn-info text-white btn-sm me-2"
                                             >
                                                 Absence
                                             </Link>
                                             <Link
-                                                to={`/headmaster/${headmasterId}/school/${schoolId}/school-class/${classId}/students-grades/teacher/${teacher.id}/discipline/${item.disciplineId}/grades`}
+                                                to={`/teacher/${teacher.id}/class/${classId}/discipline/${item.disciplineId}/grades`}
                                                 className="btn btn-success btn-sm me-2"
                                             >
                                                 Grade
@@ -80,4 +104,4 @@ const Curriculum = () => {
     );
 };
 
-export default Curriculum;
+export default TCurriculum;

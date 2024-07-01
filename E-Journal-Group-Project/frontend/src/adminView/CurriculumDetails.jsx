@@ -160,7 +160,7 @@ const CurriculumDetails = () => {
                         <div className="list-group-item d-flex justify-content-between align-items-center">
                             <div className="list-group-item d-flex align-items-center">
                                 <span className="me-3">Semester: {curriculum.semester}</span>
-                                <span>Year: {curriculum.year}</span>
+                                <span>Class Year: {curriculum.year}</span>
                             </div>
                             <div>
                                 <button className="btn btn-primary me-2" onClick={() => handleEditCurriculum(curriculum)}>
@@ -183,56 +183,56 @@ const CurriculumDetails = () => {
                                 type="text"
                                 id="semester"
                                 name="semester"
-                                className="form-control"
+                                className="form-control m-3"
                                 value={newCurriculum.semester}
                                 onChange={(e) => handleChange(e, setNewCurriculum)}
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="year">Year:</label>
+                            <label htmlFor="year">Class Year:</label>
                             <input
-                                type="text"
+                                type="number"
                                 id="year"
                                 name="year"
-                                className="form-control"
+                                className="form-control m-3"
                                 value={newCurriculum.year}
                                 onChange={(e) => handleChange(e, setNewCurriculum)}
                             />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="teacherSelect">Select Teachers:</label>
-                            <select
-                                id="teacherSelect"
-                                className="form-control mb-3"
-                                multiple
-                                value={selectedTeachers}
-                                onChange={(e) => setSelectedTeachers([...e.target.selectedOptions].map(option => option.value))}
-                            >
-                                <option value="">Select teachers</option>
-                                {teachers.map(teacher => (
-                                    <option key={teacher.id} value={teacher.id}>
-                                        {teacher.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="disciplineSelect">Select Disciplines:</label>
-                            <select
-                                id="disciplineSelect"
-                                className="form-control mb-3"
-                                multiple
-                                value={selectedDisciplines}
-                                onChange={(e) => setSelectedDisciplines([...e.target.selectedOptions].map(option => option.value))}
-                            >
-                                <option value="">Select disciplines</option>
-                                {filterAssignedDisciplines().map(discipline => (
-                                    <option key={discipline.id} value={discipline.id}>
-                                        {discipline.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        {/*<div className="form-group">*/}
+                        {/*    <label htmlFor="teacherSelect">Select Teachers:</label>*/}
+                        {/*    <select*/}
+                        {/*        id="teacherSelect"*/}
+                        {/*        className="form-control mb-3"*/}
+                        {/*        multiple*/}
+                        {/*        value={selectedTeachers}*/}
+                        {/*        onChange={(e) => setSelectedTeachers([...e.target.selectedOptions].map(option => option.value))}*/}
+                        {/*    >*/}
+                        {/*        <option value="">Select teachers</option>*/}
+                        {/*        {teachers.map(teacher => (*/}
+                        {/*            <option key={teacher.id} value={teacher.id}>*/}
+                        {/*                {teacher.name}*/}
+                        {/*            </option>*/}
+                        {/*        ))}*/}
+                        {/*    </select>*/}
+                        {/*</div>*/}
+                        {/*<div className="form-group">*/}
+                        {/*    <label htmlFor="disciplineSelect">Select Disciplines:</label>*/}
+                        {/*    <select*/}
+                        {/*        id="disciplineSelect"*/}
+                        {/*        className="form-control mb-3"*/}
+                        {/*        multiple*/}
+                        {/*        value={selectedDisciplines}*/}
+                        {/*        onChange={(e) => setSelectedDisciplines([...e.target.selectedOptions].map(option => option.value))}*/}
+                        {/*    >*/}
+                        {/*        <option value="">Select disciplines</option>*/}
+                        {/*        {filterAssignedDisciplines().map(discipline => (*/}
+                        {/*            <option key={discipline.id} value={discipline.id}>*/}
+                        {/*                {discipline.name}*/}
+                        {/*            </option>*/}
+                        {/*        ))}*/}
+                        {/*    </select>*/}
+                        {/*</div>*/}
                         <button className="btn btn-success" onClick={handleAddCurriculum}>
                             Add Curriculum
                         </button>
@@ -249,26 +249,26 @@ const CurriculumDetails = () => {
                                     type="text"
                                     id="semester"
                                     name="semester"
-                                    className="form-control"
+                                    className="form-control m-2"
                                     value={editCurriculum.semester}
                                     onChange={(e) => handleChange(e, setEditCurriculum)}
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="year">Year:</label>
+                                <label htmlFor="year">Class Year:</label>
                                 <input
                                     type="text"
                                     id="year"
                                     name="year"
-                                    className="form-control"
+                                    className="form-control m-2"
                                     value={editCurriculum.year}
                                     onChange={(e) => handleChange(e, setEditCurriculum)}
                                 />
                             </div>
-                            <button className="btn btn-success btn-sm me-1" onClick={handleSaveCurriculum}>
+                            <button className="btn btn-success btn-sm mt-2 me-2" onClick={handleSaveCurriculum}>
                                 Save Curriculum
                             </button>
-                            <button className="btn btn-secondary btn-sm me-1" onClick={() => setEditCurriculum(null)}>
+                            <button className="btn btn-secondary btn-sm mt-2 me-2" onClick={() => setEditCurriculum(null)}>
                                 Cancel
                             </button>
                         </div>

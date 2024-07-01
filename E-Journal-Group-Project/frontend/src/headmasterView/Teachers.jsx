@@ -34,6 +34,7 @@ const Teachers = () => {
             <div className="mb-4">
                 {error && <div className="alert alert-danger">Error: {error.message}</div>}
             </div>
+            <h1>Teachers</h1>
 
             <ul className="list-group">
                 {teachers.length > 0 ? (
@@ -46,7 +47,9 @@ const Teachers = () => {
                                             <span>{teacher.email}</span>
                                         </>
                                 </div>
+                                <div>
                                     <Link to={`/headmaster/${headmasterId}/school/${schoolId}/teacher/${teacher.id}/qualifications`} className="btn btn-primary btn-sm me-1">Qualifications</Link>
+                                </div>
                             </div>
                         </li>
                     ))

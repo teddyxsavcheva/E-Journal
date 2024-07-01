@@ -29,6 +29,7 @@ const SchoolClass = () => {
 
     return (
         <div className="container mt-4">
+                <h1>Students</h1>
             <div className="mb-4 d-flex justify-content-between align-items-center">
                 <Link to={`/headmaster/${headmasterId}/school/${schoolId}/class/${classId}/curriculum`}
                       className="btn btn-primary w-100">

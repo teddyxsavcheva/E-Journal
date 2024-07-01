@@ -38,7 +38,6 @@ const ViewTeacherQualifications = () => {
             {error && <div className="alert alert-danger">Error: {error}</div>}
             {successMessage && <div className="alert alert-success">{successMessage}</div>}
 
-            <h1>Qualifications</h1>
             <ul className="list-group mt-4">
                 {qualifications.length > 0 ? (
                     qualifications.map((qualification) => (

@@ -93,7 +93,6 @@ const School = () => {
                                 <p className="average-school">School Average: {average}</p>
                                 <button className="btn btn-primary me-1" onClick={() => navigate(`/headmaster/${headmasterId}/school/${school.id}/teachers`)}>Teachers</button>
                                 <button className="btn btn-primary me-1" onClick={() => navigate(`/headmaster/${headmasterId}/school/${school.id}/classes`)}>School Classes</button>
-                                <button className="btn btn-primary me-1" onClick={() => navigate(`/headmaster/${headmasterId}/statistics`)}>Statistics</button>
                             </>
                     </div>
                 </div>

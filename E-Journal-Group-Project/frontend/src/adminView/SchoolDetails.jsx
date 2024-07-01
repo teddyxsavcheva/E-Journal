@@ -137,7 +137,7 @@ const SchoolDetails = () => {
                                 <button className="btn btn-info text-white me-2" onClick={() => navigate(`/admin/school/${schoolId}/headmaster`)}>Headmaster</button>
                                 <button className="btn btn-info text-white me-2" onClick={() => navigate(`/admin/school/${schoolId}/teachers`)}>Teachers</button>
                                 <button className="btn btn-info text-white me-2" onClick={() => navigate(`/admin/school/${schoolId}/classes`)}>School Classes</button>
-                                <button className="btn btn-primary text-white me-2" onClick={handleEditClick}>Edit</button>
+                                {/*<button className="btn btn-primary text-white me-2" onClick={handleEditClick}>Edit</button>*/}
                                 {/*<button className="btn btn-danger me-1" onClick={handleDeleteClick}>Delete</button>*/}
                             </>
                         )}

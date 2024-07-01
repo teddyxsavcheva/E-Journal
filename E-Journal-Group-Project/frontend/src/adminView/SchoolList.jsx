@@ -38,6 +38,7 @@ const SchoolList = () => {
             <div className="mb-3">
                 <Link to="/admin/add-school" className="btn btn-success me-2">Add School</Link>
                 <Link to="/admin/add-discipline" className="btn btn-success me-2">Add Discipline</Link>
+                <Link to={`/admin/statistics`} className="btn btn-success me-2">Statistics</Link>
             </div>
             <ul className="list-group">
                 {schools.length > 0 ? (

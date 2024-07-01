@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from '../axiosInstance';
 import { useParams, Link } from 'react-router-dom';
-import './StudentsGrades.css'; // Import the CSS file
+import './Grades.css'; // Import the CSS file
 
 const StudentsGrades = () => {
     const { classId, teacherId, disciplineId } = useParams();
@@ -86,30 +86,29 @@ const StudentsGrades = () => {
         }
     };
 
+    // Remove grade from a student
     const handleRemoveGrade = async (gradeId) => {
-        if (window.confirm('Are you sure you want to delete this grade?')) {
-            try {
-                await axios.delete(`/grades/${gradeId}`);
-                setSuccessMessage('Grade removed successfully!');
-                setTimeout(() => setSuccessMessage(''), 3000);
+        try {
+            await axios.delete(`/grades/${gradeId}`);
+            setSuccessMessage('Grade removed successfully!');
+            setTimeout(() => setSuccessMessage(''), 3000);
 
-                // Update local state to remove the deleted grade
-                const updatedGrades = { ...grades };
-                Object.keys(updatedGrades).forEach(studentId => {
-                    updatedGrades[studentId] = updatedGrades[studentId].filter(grade => grade.id !== gradeId);
-                });
-                setGrades(updatedGrades);
+            // Update local state to remove the deleted grade
+            const updatedGrades = { ...grades };
+            Object.keys(updatedGrades).forEach(studentId => {
+                updatedGrades[studentId] = updatedGrades[studentId].filter(grade => grade.id !== gradeId);
+            });
+            setGrades(updatedGrades);
 
-                // Optionally, you can also update visibleGradeIds if needed
-                setVisibleGradeIds(prevState => {
-                    const updatedVisibleGradeIds = { ...prevState };
-                    delete updatedVisibleGradeIds[gradeId];
-                    return updatedVisibleGradeIds;
-                });
-            } catch (error) {
-                setError('Error removing grade');
-                console.error('Error removing grade:', error);
-            }
+            // Optionally, you can also update visibleGradeIds if needed
+            setVisibleGradeIds(prevState => {
+                const updatedVisibleGradeIds = { ...prevState };
+                delete updatedVisibleGradeIds[gradeId];
+                return updatedVisibleGradeIds;
+            });
+        } catch (error) {
+            setError('Error removing grade');
+            console.error('Error removing grade:', error);
         }
     };
 
