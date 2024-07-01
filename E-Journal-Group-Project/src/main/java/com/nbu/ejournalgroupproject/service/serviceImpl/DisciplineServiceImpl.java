@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     private final DisciplineMapper disciplineMapper;
     private final TeacherQualificationMapper teacherQualificationMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<DisciplineDto> getAllDisciplines() {
 
@@ -41,6 +43,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public DisciplineDto getDisciplineById(@NotNull Long id) {
 
@@ -51,6 +54,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public DisciplineDto createDiscipline(@Valid DisciplineDto disciplineDto) {
 
@@ -63,6 +67,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public DisciplineDto updateDiscipline(@Valid DisciplineDto disciplineDto, @NotNull Long id) {
 
@@ -82,6 +87,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteDiscipline(@NotNull Long id) {
 
@@ -105,6 +111,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public DisciplineDto  addQualificationToDiscipline(@NotNull Long disciplineId,@NotNull Long qualificationId) {
 
@@ -120,6 +127,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public DisciplineDto  removeQualificationFromDiscipline(@NotNull Long disciplineId,@NotNull Long qualificationId) {
 
@@ -135,6 +143,7 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<DisciplineDto> getDisciplinesByStudentId(Long studentId) {
         List<Discipline> disciplines = disciplineRepository.findDisciplinesByStudentId(studentId);
@@ -143,6 +152,7 @@ public class DisciplineServiceImpl implements DisciplineService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER')")
     @Override
     public List<TeacherQualificationDto> getQualificationsByDisciplineId(Long disciplineId) {
         Discipline discipline = disciplineRepository.findById(disciplineId)

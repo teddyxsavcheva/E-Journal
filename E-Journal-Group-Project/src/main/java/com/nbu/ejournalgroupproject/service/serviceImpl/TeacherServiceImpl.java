@@ -7,13 +7,16 @@ import com.nbu.ejournalgroupproject.mappers.TeacherQualificationMapper;
 import com.nbu.ejournalgroupproject.model.SchoolClass;
 import com.nbu.ejournalgroupproject.model.Teacher;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
+import com.nbu.ejournalgroupproject.model.user.User;
 import com.nbu.ejournalgroupproject.repository.TeacherQualificationRepository;
 import com.nbu.ejournalgroupproject.repository.TeacherRepository;
+import com.nbu.ejournalgroupproject.repository.UserRepository;
 import com.nbu.ejournalgroupproject.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +32,9 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherQualificationRepository teacherQualificationRepository;
     private final TeacherQualificationMapper teacherQualificationMapper;
 
+    private final UserRepository userRepository;
+
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER','TEACHER')")
     @Override
     public TeacherDTO getTeacherById(Long teacherId) {
        Teacher teacher = teacherRepository.findById(teacherId)
@@ -36,6 +42,7 @@ public class TeacherServiceImpl implements TeacherService {
        return teacherMapper.EntityToDto(teacher);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER')")
     @Override
     public List<TeacherDTO> getTeachersFromSchool(Long schoolId) {
         List<Teacher> teachers = teacherRepository.findAllBySchoolId(schoolId);
@@ -45,6 +52,7 @@ public class TeacherServiceImpl implements TeacherService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public List<TeacherDTO> getTeachers() {
         List<Teacher> teacherEntities = teacherRepository.findAll();
@@ -54,6 +62,7 @@ public class TeacherServiceImpl implements TeacherService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherDTO createTeacher(@Valid TeacherDTO teacherDTO) {
         validateTeacherDTO(teacherDTO);
@@ -61,6 +70,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherMapper.EntityToDto(teacherRepository.save(teacher));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherDTO updateTeacher(@NotNull Long teacherId, @Valid TeacherDTO teacherDTO) {
         validateTeacherDTO(teacherDTO);
@@ -69,11 +79,18 @@ public class TeacherServiceImpl implements TeacherService {
 
         existingTeacher.setName(teacherDTO.getName());
         existingTeacher.setEmail(teacherDTO.getEmail());
+
+        // Checking for user
+        User user = userRepository.findById(teacherDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + teacherDTO.getUserId() + " not found"));
+        existingTeacher.setUser(user);
+
         teacherMapper.mapSchoolIdToEntity(teacherDTO, existingTeacher);
         Teacher updatedTeacher = teacherRepository.save(existingTeacher);
         return teacherMapper.EntityToDto(updatedTeacher);
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public void deleteTeacher(Long teacherId) {
        Teacher teacher = teacherRepository.findById(teacherId)
@@ -94,6 +111,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherDTO addQualificationToTeacher(Long teacherId, Long qualificationId) {
        Teacher teacher = teacherRepository.findById(teacherId)
@@ -107,6 +125,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherMapper.EntityToDto(teacherRepository.save(teacher));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @Override
     public TeacherDTO deleteQualificationFromTeacher(Long teacherId, Long qualificationId) {
         Teacher teacher = teacherRepository.findById(teacherId)
@@ -120,6 +139,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherMapper.EntityToDto(teacherRepository.save(teacher));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER')")
     @Override
     public List<TeacherQualificationDto> getQualificationsByTeacherId(Long teacherId) {
         Teacher teacher = teacherRepository.findById(teacherId)

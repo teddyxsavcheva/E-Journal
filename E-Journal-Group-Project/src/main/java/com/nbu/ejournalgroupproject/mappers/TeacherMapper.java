@@ -4,7 +4,9 @@ import com.nbu.ejournalgroupproject.dto.TeacherDTO;
 import com.nbu.ejournalgroupproject.model.School;
 import com.nbu.ejournalgroupproject.model.Teacher;
 import com.nbu.ejournalgroupproject.model.TeacherQualification;
+import com.nbu.ejournalgroupproject.model.user.User;
 import com.nbu.ejournalgroupproject.repository.SchoolRepository;
+import com.nbu.ejournalgroupproject.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class TeacherMapper {
 
     private final SchoolRepository schoolRepository;
+    private final UserRepository userRepository;
 
     public TeacherDTO EntityToDto(Teacher teacher) {
         TeacherDTO teacherDTO = new TeacherDTO();
@@ -28,6 +31,7 @@ public class TeacherMapper {
 
         teacherDTO.setSchoolId(getSchoolId(teacher));
         teacherDTO.setTeacherQualificationIds(getTeacherQualificationIds(teacher));
+        teacherDTO.setUserId(getUserId(teacher));
 
         return teacherDTO;
     }
@@ -41,8 +45,22 @@ public class TeacherMapper {
 
         teacher.setSchool(getSchool(teacherDTO));
         teacher.setTeacherQualifications(getQualifications(teacherDTO));
+        teacher.setUser(getUser(teacherDTO));
 
         return teacher;
+    }
+
+    public Long getUserId(Teacher teacher) {
+        return teacher.getUser() != null ? teacher.getUser().getId() : null;
+    }
+
+    public User getUser(TeacherDTO teacherDTO) {
+        if (teacherDTO.getUserId() != null) {
+            return userRepository.findById(teacherDTO.getUserId())
+                    .orElseThrow(() -> new EntityNotFoundException("No User found with id " + teacherDTO.getUserId()));
+        } else {
+            return null;
+        }
     }
 
     public Long getSchoolId(Teacher teacher) {

@@ -8,6 +8,7 @@ import com.nbu.ejournalgroupproject.service.AbsenceService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class AbsenceServiceImpl implements AbsenceService {
     private final AbsenceRepository absenceRepository;
     private final AbsenceMapper absenceMapper;
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','HEADMASTER', 'TEACHER', 'STUDENT', 'CAREGIVER')")
     @Override
     public AbsenceDTO getAbsenceById(Long id) {
         Absence absence = absenceRepository.findById(id)
@@ -28,6 +30,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(absence);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR')")
     @Override
     public List<AbsenceDTO> getAllAbsences() {
         List<Absence> absences = absenceRepository.findAll();
@@ -36,6 +39,7 @@ public class AbsenceServiceImpl implements AbsenceService {
                 .collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public AbsenceDTO createAbsence(@Valid AbsenceDTO absenceDTO) {
         Absence absence = absenceMapper.toEntity(absenceDTO);
@@ -43,11 +47,13 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(createdAbsence);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public void deleteAbsence(Long id) {
         absenceRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public AbsenceDTO updateAbsence(Long id, @Valid AbsenceDTO absenceDTO) {
         Absence existingAbsence = absenceRepository.findById(id)
@@ -60,6 +66,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return absenceMapper.toDTO(savedAbsence);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<Long> getAbsencesByStudentAndDiscipline(Long studentId, Long disciplineId) {
         List<Long> counts = new ArrayList<>();
@@ -72,6 +79,7 @@ public class AbsenceServiceImpl implements AbsenceService {
         return counts;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER','HEADMASTER','CAREGIVER', 'STUDENT')")
     @Override
     public List<AbsenceDTO> getAbsenceObjectsByStudentAndDiscipline(Long studentId, Long disciplineId) {
         return absenceRepository.getAllByDisciplineIdAndStudentId(studentId, disciplineId)
