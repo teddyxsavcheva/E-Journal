@@ -50,6 +50,9 @@ public class AbsenceServiceImpl implements AbsenceService {
     @PreAuthorize("hasAnyAuthority('ADMINISTRATOR','TEACHER')")
     @Override
     public void deleteAbsence(Long id) {
+        if (!absenceRepository.existsById(id)) {
+            throw new EntityNotFoundException("Absence not found with id " + id);
+        }
         absenceRepository.deleteById(id);
     }
 
