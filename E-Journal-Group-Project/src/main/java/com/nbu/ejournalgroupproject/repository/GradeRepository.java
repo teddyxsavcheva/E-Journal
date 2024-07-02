@@ -60,6 +60,7 @@ public interface GradeRepository extends JpaRepository<Grade, Long> {
             "JOIN sc.school sch " +
             "JOIN Headmaster h ON sch.id = h.school.id " +
             "WHERE h.id = :headmasterId " +
+            "AND t.school.id = sch.id " +
             "GROUP BY t.name, d.name")
     List<String> findAvgGradeForTeacherByDiscipline(@Param("headmasterId") Long headmasterId);
 
