@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    @Query("SELECT CASE WHEN COUNT(cs) <= 1 THEN true ELSE false END FROM Student s JOIN s.caregivers cs WHERE s.id = :studentId GROUP BY s.id")
-    boolean hasLessThenTwoCaregivers(@Param("studentId") Long studentId);
+    @Query("SELECT CASE WHEN COUNT(sc) <= 1 THEN TRUE ELSE FALSE END FROM Student s JOIN s.caregivers sc WHERE s.id = :studentId")
+    Boolean hasLessThenTwoCaregivers(@Param("studentId") Long studentId);
 
     List<Student> getStudentsBySchoolClassId(Long id);
 }
